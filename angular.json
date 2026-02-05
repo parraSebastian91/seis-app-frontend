@@ -41,7 +41,7 @@
 						"target": "seis-portal:serve-original:development",
 						"rebuildDelay": 0,
 						"dev": true,
-						"port": 0
+						"port": 4200
 					}
 				},
 				"extract-i18n": {
@@ -170,7 +170,7 @@
 						"target": "seis-mfe-gestion-usuario:serve-original:development",
 						"rebuildDelay": 0,
 						"dev": true,
-						"port": 0
+						"port": 4201
 					}
 				},
 				"extract-i18n": {
