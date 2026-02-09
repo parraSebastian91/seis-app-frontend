@@ -5,12 +5,15 @@ WORKDIR /app
 
 COPY package.json package-lock.json ./
 RUN npm cache clean --force && \
-    npm ci --legacy-peer-deps
+    npm ci --legacy-peer-deps && \
+    rm -rf node_modules/esbuild node_modules/@esbuild && \
+    npm install esbuild --force --legacy-peer-deps
 
 COPY . .
 RUN rm -rf node_modules/.cache && \
+    rm -rf node_modules/.vite && \
     npm run build -- shared-utils && \
-    npm run build -- --configuration production --project seis-mfe-gestion-usuario
+    npm run build -- --configuration production --project seis-mfe-gestion-usuario --base-href=/mfe-gestion-usuario/
 
 # Stage 2: Nginx
 FROM nginx:alpine

@@ -5,18 +5,26 @@ WORKDIR /app
 
 COPY package.json package-lock.json ./
 RUN npm cache clean --force && \
-    npm ci --legacy-peer-deps
+    npm ci --legacy-peer-deps && \
+    rm -rf node_modules/esbuild node_modules/@esbuild && \
+    npm install esbuild --force --legacy-peer-deps
 
 COPY . . 
 RUN rm -rf node_modules/.cache && \
+    rm -rf node_modules/.vite && \
     npm run build -- shared-utils && \
     npm run build -- --configuration production --project seis-portal --base-href=/portal/
+
+# Copiar manifest de producción
+RUN cp projects/seis-portal/public/federation.manifest.prod.json dist/seis-portal/browser/federation.manifest.json
 
 # 🔍 DEBUG: Ver qué se generó
 RUN echo "=== Contenido de dist/ ===" && \
     ls -la /app/dist/ && \
     echo "=== Buscando index.html ===" && \
-    find /app/dist -name "index.html" -type f
+    find /app/dist -name "index.html" -type f && \
+    echo "=== Verificando federation.manifest.json ===" && \
+    cat /app/dist/seis-portal/browser/federation.manifest.json
 
 # Stage 2: Nginx
 FROM nginx:alpine
