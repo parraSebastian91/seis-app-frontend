@@ -1,0 +1,9 @@
+[submodule "projects/seis-mfe-gestion-usuario"]
+	path = projects/seis-mfe-gestion-usuario
+	url = https://github.com/parraSebastian91/seis-mfe-gestion-usuario.git
+	branch = main
+
+[submodule "projects/seis-portal"]
+	path = projects/seis-portal
+	url = https://github.com/parraSebastian91/seis-portal.git
+	branch = main
