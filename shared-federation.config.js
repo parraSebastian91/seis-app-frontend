@@ -7,7 +7,7 @@ module.exports = {
     '@angular/material/menu': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
     '@angular/material/divider': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
 
-    // 'shared-utils': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    'shared-utils': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
     // '@angular/core': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
     // '@angular/common': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
     // '@angular/router': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
