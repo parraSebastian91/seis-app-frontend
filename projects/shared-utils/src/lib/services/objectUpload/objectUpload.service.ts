@@ -10,11 +10,12 @@ import { UserProfile } from "../types/userProfile.type";
     providedIn: 'root'
 })
 export class ObjectUploadService {
+    
 
     constructor(private http: HttpClient) { }
 
-    async getPresignedUrl(apiBase: string, typeUpload: string): Promise<{ url: string, key: string }> {
-        const response = this.http.get<ApiResponse<{ url: string, key: string }>>(`${apiBase}/api/bff/object/presigned-url/${typeUpload}`);
+    async getPresignedPutUrl(apiBase: string, typeUpload: string, fileName: string, fileType: string): Promise<{ url: string, key: string }> {
+        const response = this.http.get<ApiResponse<{ url: string, key: string }>>(`${apiBase}/api/bff/object/presigned-url/${typeUpload}?fileName=${fileName}_${Date.now()}&fileType=${fileType}`);
         try {
             const res = await firstValueFrom(response);
             console.log('Presigned URL response:', res);
@@ -28,17 +29,15 @@ export class ObjectUploadService {
 
     async uploadToPresignedUrl(presignedUrl: string, file: File): Promise<void> {
         try {
-            console.log(file);
+            const buffer = await file.arrayBuffer();
             const response = await fetch(presignedUrl, {
                 method: 'PUT',
-                body: file,
-                headers: {
-                    'Content-Type': file.type || 'application/octet-stream'
-                }
+                body: buffer,
             });
 
             if (!response.ok) {
-                throw new Error(`Upload to presigned URL failed: ${response.status} ${response.statusText}`);
+                const errorBody = await response.text();
+                throw new Error(`Upload to presigned URL failed: ${response.status} ${response.statusText}. Body: ${errorBody}`);
             }
         } catch (err) {
             console.error('Error uploading to presigned URL:');
