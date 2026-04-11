@@ -60,4 +60,8 @@ export class ObjectUploadService {
         }
     }
 
+    // EjecutarResizeImagen(file: File, maxWidth: number, maxHeight: number): Promise<Blob> {
+
+    // }
+
 }
