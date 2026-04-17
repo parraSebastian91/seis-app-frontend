@@ -11,7 +11,9 @@
     "build:all": "npm run build:shared-utils && ng build",
     "watch": "ng build --watch --configuration development",
     "watch:shared-utils": "ng build shared-utils --watch",
-    "test": "ng test"
+    "test": "ng test",
+    "docker:build-portal":"npm run build:shared-utils && docker-compose -f ./../../docker-compose-app-frontend.yml up --build app-portal",
+    "docker:build-usuario":"npm run build:shared-utils && docker-compose -f ./../../docker-compose-app-frontend.yml up --build app-mfe-gestion-usuario"
   },
   "private": true,
   "dependencies": {

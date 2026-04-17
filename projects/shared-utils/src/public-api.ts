@@ -7,7 +7,8 @@ export * from './lib/theme/theme.interface';
 export * from './lib/interceptors/correlation-id.interceptor';
 export * from './lib/services/UserProfile/userProfile.service';
 export * from './lib/services/objectUpload/objectUpload.service';
+export * from './lib/services/states/userstate.service';
 
-export * from './lib/services/types/userProfile.type';      
-
+export * from './lib/services/types/userProfile.type';    
+export * from './lib/services/types/imageProfile.type';    
 

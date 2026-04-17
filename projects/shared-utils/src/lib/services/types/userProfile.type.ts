@@ -1,3 +1,5 @@
+import { UserImageProfile } from "./imageProfile.type";
+
 export interface UserProfile {
   username: string;
   nombreCompleto: string;
@@ -20,14 +22,7 @@ export interface UserProfile {
     tipo: string;
     enlace: string;
   }[];
-  avatar: {
-    name: string;
-    urls: {
-      sm: string;
-      md: string;
-      lg: string;
-    };
-  };
+  assets: UserImageProfile;
   cargo: string;
   telefono: string;
   ubicacion: string;
