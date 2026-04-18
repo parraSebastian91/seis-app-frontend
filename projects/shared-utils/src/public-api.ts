@@ -8,6 +8,8 @@ export * from './lib/interceptors/correlation-id.interceptor';
 export * from './lib/services/UserProfile/userProfile.service';
 export * from './lib/services/objectUpload/objectUpload.service';
 export * from './lib/services/states/userstate.service';
+export * from './lib/services/layout/layout-state.service';
+export * from './lib/services/notifications/notification-center.service';
 
 export * from './lib/services/types/userProfile.type';    
 export * from './lib/services/types/imageProfile.type';    

@@ -266,39 +266,297 @@
 				}
 			}
     },
-    "shared-utils": {
-      "projectType": "library",
-      "root": "projects/shared-utils",
-      "sourceRoot": "projects/shared-utils/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "project": "projects/shared-utils/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/shared-utils/tsconfig.lib.prod.json"
-            },
-            "development": {
-              "tsConfig": "projects/shared-utils/tsconfig.lib.json"
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "tsConfig": "projects/shared-utils/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
-          }
-        }
-      }
-    }
+		"shared-utils": {
+			"projectType": "library",
+			"root": "projects/shared-utils",
+			"sourceRoot": "projects/shared-utils/src",
+			"prefix": "lib",
+			"architect": {
+				"build": {
+					"builder": "@angular-devkit/build-angular:ng-packagr",
+					"options": {
+						"project": "projects/shared-utils/ng-package.json"
+					},
+					"configurations": {
+						"production": {
+							"tsConfig": "projects/shared-utils/tsconfig.lib.prod.json"
+						},
+						"development": {
+							"tsConfig": "projects/shared-utils/tsconfig.lib.json"
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"test": {
+					"builder": "@angular-devkit/build-angular:karma",
+					"options": {
+						"tsConfig": "projects/shared-utils/tsconfig.spec.json",
+						"polyfills": [
+							"zone.js",
+							"zone.js/testing"
+						]
+					}
+				}
+			}
+		},
+		"seis-mfe-dashboard-facturas": {
+			"projectType": "application",
+			"schematics": {
+				"@schematics/angular:component": {
+					"style": "scss",
+					"standalone": false
+				},
+				"@schematics/angular:directive": {
+					"standalone": false
+				},
+				"@schematics/angular:pipe": {
+					"standalone": false
+				}
+			},
+			"root": "projects/seis-mfe-dashboard-facturas",
+			"sourceRoot": "projects/seis-mfe-dashboard-facturas/src",
+			"prefix": "app",
+			"architect": {
+				"build": {
+					"builder": "@angular-architects/native-federation:build",
+					"options": {},
+					"configurations": {
+						"production": {
+							"target": "seis-mfe-dashboard-facturas:esbuild:production"
+						},
+						"development": {
+							"target": "seis-mfe-dashboard-facturas:esbuild:development",
+							"dev": true
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"serve": {
+					"builder": "@angular-architects/native-federation:build",
+					"options": {
+						"target": "seis-mfe-dashboard-facturas:serve-original:development",
+						"rebuildDelay": 0,
+						"dev": true,
+						"port": 4202
+					}
+				},
+				"extract-i18n": {
+					"builder": "@angular-devkit/build-angular:extract-i18n"
+				},
+				"test": {
+					"builder": "@angular-devkit/build-angular:karma",
+					"options": {
+						"polyfills": [
+							"zone.js",
+							"zone.js/testing"
+						],
+						"tsConfig": "projects/seis-mfe-dashboard-facturas/tsconfig.spec.json",
+						"inlineStyleLanguage": "scss",
+						"assets": [
+							{
+								"glob": "**/*",
+								"input": "projects/seis-mfe-dashboard-facturas/public"
+							}
+						],
+						"styles": [
+							"projects/seis-mfe-dashboard-facturas/src/styles.scss"
+						],
+						"scripts": []
+					}
+				},
+				"esbuild": {
+					"builder": "@angular-devkit/build-angular:application",
+					"options": {
+						"outputPath": "dist/seis-mfe-dashboard-facturas",
+						"index": "projects/seis-mfe-dashboard-facturas/src/index.html",
+						"browser": "projects/seis-mfe-dashboard-facturas/src/main.ts",
+						"polyfills": [
+							"zone.js",
+							"es-module-shims"
+						],
+						"tsConfig": "projects/seis-mfe-dashboard-facturas/tsconfig.app.json",
+						"inlineStyleLanguage": "scss",
+						"assets": [
+							{
+								"glob": "**/*",
+								"input": "projects/seis-mfe-dashboard-facturas/public"
+							}
+						],
+						"styles": [
+							"projects/seis-mfe-dashboard-facturas/src/styles.scss"
+						],
+						"scripts": []
+					},
+					"configurations": {
+						"production": {
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "500kB",
+									"maximumError": "1MB"
+								},
+								{
+									"type": "anyComponentStyle",
+									"maximumWarning": "4kB",
+									"maximumError": "8kB"
+								}
+							],
+							"outputHashing": "all"
+						},
+						"development": {
+							"optimization": false,
+							"extractLicenses": false,
+							"sourceMap": true
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"serve-original": {
+					"builder": "@angular-devkit/build-angular:dev-server",
+					"configurations": {
+						"production": {
+							"buildTarget": "seis-mfe-dashboard-facturas:esbuild:production"
+						},
+						"development": {
+							"buildTarget": "seis-mfe-dashboard-facturas:esbuild:development"
+						}
+					},
+					"defaultConfiguration": "development",
+					"options": {
+						"port": 4202
+					}
+				}
+			}
+		},
+		"seis-mfe-publicador-facturas": {
+			"projectType": "application",
+			"schematics": {
+				"@schematics/angular:component": {
+					"style": "scss",
+					"standalone": false
+				},
+				"@schematics/angular:directive": {
+					"standalone": false
+				},
+				"@schematics/angular:pipe": {
+					"standalone": false
+				}
+			},
+			"root": "projects/seis-mfe-publicador-facturas",
+			"sourceRoot": "projects/seis-mfe-publicador-facturas/src",
+			"prefix": "app",
+			"architect": {
+				"build": {
+					"builder": "@angular-architects/native-federation:build",
+					"options": {},
+					"configurations": {
+						"production": {
+							"target": "seis-mfe-publicador-facturas:esbuild:production"
+						},
+						"development": {
+							"target": "seis-mfe-publicador-facturas:esbuild:development",
+							"dev": true
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"serve": {
+					"builder": "@angular-architects/native-federation:build",
+					"options": {
+						"target": "seis-mfe-publicador-facturas:serve-original:development",
+						"rebuildDelay": 0,
+						"dev": true,
+						"port": 4203
+					}
+				},
+				"extract-i18n": {
+					"builder": "@angular-devkit/build-angular:extract-i18n"
+				},
+				"test": {
+					"builder": "@angular-devkit/build-angular:karma",
+					"options": {
+						"polyfills": [
+							"zone.js",
+							"zone.js/testing"
+						],
+						"tsConfig": "projects/seis-mfe-publicador-facturas/tsconfig.spec.json",
+						"inlineStyleLanguage": "scss",
+						"assets": [
+							{
+								"glob": "**/*",
+								"input": "projects/seis-mfe-publicador-facturas/public"
+							}
+						],
+						"styles": [
+							"projects/seis-mfe-publicador-facturas/src/styles.scss"
+						],
+						"scripts": []
+					}
+				},
+				"esbuild": {
+					"builder": "@angular-devkit/build-angular:application",
+					"options": {
+						"outputPath": "dist/seis-mfe-publicador-facturas",
+						"index": "projects/seis-mfe-publicador-facturas/src/index.html",
+						"browser": "projects/seis-mfe-publicador-facturas/src/main.ts",
+						"polyfills": [
+							"zone.js",
+							"es-module-shims"
+						],
+						"tsConfig": "projects/seis-mfe-publicador-facturas/tsconfig.app.json",
+						"inlineStyleLanguage": "scss",
+						"assets": [
+							{
+								"glob": "**/*",
+								"input": "projects/seis-mfe-publicador-facturas/public"
+							}
+						],
+						"styles": [
+							"projects/seis-mfe-publicador-facturas/src/styles.scss"
+						],
+						"scripts": []
+					},
+					"configurations": {
+						"production": {
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "500kB",
+									"maximumError": "1MB"
+								},
+								{
+									"type": "anyComponentStyle",
+									"maximumWarning": "4kB",
+									"maximumError": "8kB"
+								}
+							],
+							"outputHashing": "all"
+						},
+						"development": {
+							"optimization": false,
+							"extractLicenses": false,
+							"sourceMap": true
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"serve-original": {
+					"builder": "@angular-devkit/build-angular:dev-server",
+					"configurations": {
+						"production": {
+							"buildTarget": "seis-mfe-publicador-facturas:esbuild:production"
+						},
+						"development": {
+							"buildTarget": "seis-mfe-publicador-facturas:esbuild:development"
+						}
+					},
+					"defaultConfiguration": "development",
+					"options": {
+						"port": 4203
+					}
+				}
+			}
+		}
   },
   "cli": {
     "analytics": "c35662f3-48fd-4c1c-a122-2cf39a4fd072"
