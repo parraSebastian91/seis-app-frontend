@@ -7,3 +7,8 @@
 	path = projects/seis-portal
 	url = https://github.com/parraSebastian91/seis-portal.git
 	branch = main
+
+[submodule "projects/seis-mfe-dashboard-facturas"]
+	path = projects/seis-mfe-dashboard-facturas
+	url = https://github.com/parraSebastian91/seis-mfe-dashboard-facturas.git
+	branch = main
