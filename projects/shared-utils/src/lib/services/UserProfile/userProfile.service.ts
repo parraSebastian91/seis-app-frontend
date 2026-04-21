@@ -4,6 +4,8 @@ import { firstValueFrom } from "rxjs";
 import { ApiResponse } from "../types/api-response.model";
 import { UserProfile } from "../types/userProfile.type";
 import { UserImageProfile } from "../types/imageProfile.type";
+import { userOrgProfile } from "../types/userOrgProfile.type";
+
 
 export interface UserProfileServiceConfig {
   apiBase?: string;
@@ -110,5 +112,21 @@ export class UserProfileService {
     }
   }
 
-
+  async getUserOrganizationProfile(apiBase?: string): Promise<userOrgProfile> {
+    const base = this.resolveApiBase(apiBase);
+    const orgProfileUrl = this.joinUrl(base, "api/bff/usuario/profile/organizacion");
+    try {
+      const response = await firstValueFrom(this.http.get<ApiResponse<userOrgProfile>>(orgProfileUrl, {
+        observe: 'response'
+      }));
+      if (response.status !== 200 || !response.body?.data) {
+        throw new Error('Perfil de organización sin contenido.');
+      }
+      return response.body.data;
+    } catch (err) {
+      console.error('Error fetching user organization profile:');
+      console.error(err);
+      throw err;
+    }
+  }
 }

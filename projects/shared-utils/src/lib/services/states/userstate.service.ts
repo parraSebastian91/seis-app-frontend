@@ -4,26 +4,15 @@ https://docs.nestjs.com/providers#services
 
 import { computed, signal } from '@angular/core';
 import { Injectable } from "@angular/core";
+import { UserState } from '../types/states/UserState.type';
+import { UserOrgProfileState } from '../types/states/userOrgProfile.type';
+import { UserImageSet } from 'shared-utils';
 
-export interface UserImageSet {
-    small: string;
-    medium: string;
-    large: string;
-}
 
 const DEFAULT_AVATAR = 'assets/placeholders/user.png';
 const DEFAULT_BANNER = 'assets/placeholders/banner.png';
 
-export interface UserState {
-    id: string;
-    username: string;
-    NombreCompleto: string;
-    email: string;
-    avatarUrl: UserImageSet | string;
-    bannerUrl: UserImageSet | string;
-    role: string;
-    status: 'LOADING' | 'READY' | 'ERROR';
-}
+
 
 @Injectable({ providedIn: 'root' })
 export class UserStateService {
@@ -33,9 +22,23 @@ export class UserStateService {
         username: '',
         NombreCompleto: '',
         email: '',
-        avatarUrl: DEFAULT_AVATAR,
-        bannerUrl: DEFAULT_BANNER,
+        avatarUrl: {
+            small: DEFAULT_AVATAR,
+            medium: DEFAULT_AVATAR,
+            large: DEFAULT_AVATAR
+        },
+        bannerUrl: {
+            small: DEFAULT_BANNER,
+            medium: DEFAULT_BANNER,
+            large: DEFAULT_BANNER
+        },
+        sidebarMenus: [],
         role: '',
+        organizationProfile: [{
+            razonSocial: '',
+            uuid: ''
+        }],
+        orgSelected: '',
         status: 'LOADING'
     });
 
@@ -54,7 +57,10 @@ export class UserStateService {
     isLoading = computed(() => this._state().status === 'LOADING');
     isReady = computed(() => this._state().status === 'READY');
     isError = computed(() => this._state().status === 'ERROR');
-    
+    sidebarMenus = computed(() => this._state().sidebarMenus);
+    organizationProfile = computed(() => this._state().organizationProfile);
+    orgSelected = computed(() => this._state().orgSelected);
+
 
     // Método para cargar datos iniciales (desde el Shell o el MFE de Auth)
     initialize(userData: Partial<UserState>) {
@@ -70,37 +76,52 @@ export class UserStateService {
     }
 
     // Método específico para el "hot-swap" del avatar cuando Rust termine
-    setAvatar(url: UserImageSet | string) {
-        if (typeof url === 'string') {
-            // Si es una URL directa, convertimos a formato de objeto para mantener consistencia
-            this._state.update(current => ({ ...current, avatarUrl: url }));
-        } else {
-            this._state.update(current => ({
-                ...current,
-                avatarUrl: {
-                    small: url.small,
-                    medium: url.medium,
-                    large: url.large
-                }
-            }));
-        }
-
+    setAvatar(url: UserImageSet) {
+        this._state.update(current => ({
+            ...current,
+            avatarUrl: {
+                small: url.small,
+                medium: url.medium,
+                large: url.large
+            }
+        }));
     }
 
-    setBanner(url: UserImageSet | string) {
-        if (typeof url === 'string') {
-            this._state.update(current => ({ ...current, bannerUrl: url }));
-        } else {
-            this._state.update(current => ({
-                ...current,
-                bannerUrl: {
-                    small: url.small,
-                    medium: url.medium,
-                    large: url.large
-                }
-            }));
-        }
+    setBanner(url: UserImageSet) {
+        this._state.update(current => ({
+            ...current,
+            bannerUrl: {
+                small: url.small,
+                medium: url.medium,
+                large: url.large
+            }
+        }));
     }
+
+    setBasicInfo(id: string, username: string, fullName: string, email: string, role: string) {
+        this._state.update(current => ({
+            ...current,
+            id,
+            username,
+            NombreCompleto: fullName,
+            email,
+            role
+        }));
+    }
+
+    setOrganizationProfile(profile: UserOrgProfileState[]) {
+        this._state.update(current => ({
+            ...current,
+            organizationProfile: profile
+        }));
+    }
+
+    setOrgSelected(orgSelected: string) {
+        this._state.update(current => ({
+            ...current,
+            orgSelected
+        }));
+    }    
 
     reset() {
         this._state.set({
@@ -108,18 +129,28 @@ export class UserStateService {
             username: '',
             NombreCompleto: '',
             email: '',
-            avatarUrl: DEFAULT_AVATAR,
-            bannerUrl: DEFAULT_BANNER,
+            avatarUrl: {
+                small: DEFAULT_AVATAR,
+                medium: DEFAULT_AVATAR,
+                large: DEFAULT_AVATAR
+            },
+            bannerUrl: {
+                small: DEFAULT_BANNER,
+                medium: DEFAULT_BANNER,
+                large: DEFAULT_BANNER
+            },
+            sidebarMenus: [],
             role: '',
+            organizationProfile: [{
+                razonSocial: '',
+                uuid: ''
+            }],
+            orgSelected: '',
             status: 'LOADING'
         });
     }
 
-    private toImageSrc(image: UserImageSet | string, fallback: string): string {
-        if (typeof image === 'string') {
-            return image || fallback;
-        }
-
+    private toImageSrc(image: UserImageSet, fallback: string): string {
         return image.medium || image.small || image.large || fallback;
     }
 }
