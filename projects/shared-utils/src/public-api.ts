@@ -18,4 +18,5 @@ export * from './lib/services/types/imageProfile.type';
 export * from './lib/services/types/states/userImageState.type';
 export * from './lib/services/types/states/userOrgProfile.type';
 export * from './lib/services/types/states/UserState.type';
+export * from './lib/services/upload-modal/upload-modal.service';
 

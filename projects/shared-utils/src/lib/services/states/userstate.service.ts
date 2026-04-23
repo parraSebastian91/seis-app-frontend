@@ -6,7 +6,7 @@ import { computed, signal } from '@angular/core';
 import { Injectable } from "@angular/core";
 import { UserState } from '../types/states/UserState.type';
 import { UserOrgProfileState } from '../types/states/userOrgProfile.type';
-import { UserImageSet } from 'shared-utils';
+import { UserImageSet } from '../types/states/userImageState.type';
 
 
 const DEFAULT_AVATAR = 'assets/placeholders/user.png';
