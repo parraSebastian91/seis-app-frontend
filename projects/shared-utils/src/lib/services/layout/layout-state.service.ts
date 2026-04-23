@@ -8,6 +8,8 @@ import { BehaviorSubject } from 'rxjs';
 export class LayoutStateService {
   private readonly notificationsPanelOpenSubject = new BehaviorSubject<boolean>(false);
   readonly notificationsPanelOpen$ = this.notificationsPanelOpenSubject.asObservable();
+  private readonly sidebarClosedSubject = new BehaviorSubject<boolean>(false);
+  readonly sidebarClosed$ = this.sidebarClosedSubject.asObservable();
 
   constructor(@Inject(DOCUMENT) private document: Document) {}
 
@@ -29,5 +31,14 @@ export class LayoutStateService {
 
   toggleNotificationsPanelState(): void {
     this.setNotificationsPanelState(!this.notificationsPanelOpenSubject.value);
+  }
+
+  setSidebarClosedState(closed: boolean): void {
+    this.sidebarClosedSubject.next(closed);
+    this.setClassOnSelector('.body', 'sidebar-closed', closed);
+  }
+
+  toggleSidebarState(): void {
+    this.setSidebarClosedState(!this.sidebarClosedSubject.value);
   }
 }

@@ -14,11 +14,11 @@
     "watch": "ng build --watch --configuration development",
     "watch:shared-utils": "ng build shared-utils --watch",
     "test": "ng test",
-    "docker:build-portal":"npm run build:shared-utils && docker-compose -f ./../../docker-compose-app-frontend.yml up --build app-portal",
-    "docker:build-usuario":"npm run build:shared-utils && docker-compose -f ./../../docker-compose-app-frontend.yml up --build app-mfe-gestion-usuario",
-    "docker:build-dashboard":"npm run build:shared-utils && docker-compose -f ./../../docker-compose-app-frontend.yml up --build app-mfe-dashboard-facturas",
-    "docker:build-publicador":"npm run build:shared-utils && docker-compose -f ./../../docker-compose-app-frontend.yml up --build app-mfe-publicador-facturas",
-    "docker:build-mfes":"npm run build:shared-utils && docker-compose -f ./../../docker-compose-app-frontend.yml up --build app-mfe-gestion-usuario app-mfe-dashboard-facturas app-mfe-publicador-facturas"
+    "docker:build-portal": "npm run build:shared-utils && docker-compose -f ./../../docker-compose-app-frontend.yml up --build app-portal",
+    "docker:build-usuario": "npm run build:shared-utils && docker-compose -f ./../../docker-compose-app-frontend.yml up --build app-mfe-gestion-usuario",
+    "docker:build-dashboard": "npm run build:shared-utils && docker-compose -f ./../../docker-compose-app-frontend.yml up --build app-mfe-dashboard-facturas",
+    "docker:build-publicador": "npm run build:shared-utils && docker-compose -f ./../../docker-compose-app-frontend.yml up --build app-mfe-publicador-facturas",
+    "docker:build-mfes": "npm run build:shared-utils && docker-compose -f ./../../docker-compose-app-frontend.yml up --build app-mfe-gestion-usuario app-mfe-dashboard-facturas app-mfe-publicador-facturas"
   },
   "private": true,
   "dependencies": {
@@ -37,6 +37,7 @@
     "@softarc/native-federation-node": "^2.0.10",
     "es-module-shims": "^1.5.12",
     "ngx-dropzone": "^3.1.0",
+    "ngx-extended-pdf-viewer": "^22.3.9",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

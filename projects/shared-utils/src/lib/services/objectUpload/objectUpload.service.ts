@@ -29,10 +29,12 @@ export class ObjectUploadService {
 
     async uploadToPresignedUrl(presignedUrl: string, file: File): Promise<void> {
         try {
-            const buffer = await file.arrayBuffer();
             const response = await fetch(presignedUrl, {
                 method: 'PUT',
-                body: buffer,
+                headers: {
+                    'Content-Type': file.type || 'application/octet-stream',
+                },
+                body: file,
             });
 
             if (!response.ok) {
@@ -44,6 +46,21 @@ export class ObjectUploadService {
             console.error(err);
             throw err;
         }
+    }
+
+    async uploadFileUsingPresignedUrl(apiBase: string, typeUpload: string, file: File): Promise<{ key: string, objectUrl: string }> {
+        const presigned = await this.getPresignedPutUrl(apiBase, typeUpload, file.name, file.type);
+
+        if (!presigned?.url) {
+            throw new Error('Presigned URL not received from API.');
+        }
+
+        await this.uploadToPresignedUrl(presigned.url, file);
+
+        return {
+            key: presigned.key,
+            objectUrl: presigned.url.split('?')[0]
+        };
     }
 
 
