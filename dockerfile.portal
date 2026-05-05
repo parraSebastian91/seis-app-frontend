@@ -32,15 +32,7 @@ FROM nginx:alpine
 RUN rm -rf /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# 🔧 AJUSTA ESTA RUTA según el output del comando find arriba
-# Opción 1: Si el index.html está en dist/seis-portal/browser/
 COPY --from=builder /app/dist/seis-portal/browser /usr/share/nginx/html
-
-# Opción 2: Si está en dist/browser/
-# COPY --from=builder /app/dist/browser /usr/share/nginx/html
-
-# Opción 3: Si está directamente en dist/
-# COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Verificar que se copió correctamente
 RUN echo "=== Archivos en nginx html ===" && \
