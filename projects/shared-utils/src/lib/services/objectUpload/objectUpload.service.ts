@@ -14,14 +14,15 @@ export class ObjectUploadService {
 
     constructor(private http: HttpClient) { }
 
-    async getPresignedPutUrl(apiBase: string, typeUpload: string, fileName: string, fileType: string): Promise<{ url: string, key: string }> {
-        const response = this.http.get<ApiResponse<{ url: string, key: string }>>(`${apiBase}/api/bff/object/presigned-url/${typeUpload}?fileName=${fileName}_${Date.now()}&fileType=${fileType}`);
+    async getPresignedPutUrl(apiBase: string, typeUpload: string, fileName: string, fileType: string, organization?: string): Promise<{ url: string, key: string }> {
+        console.log('[UPLOAD] getPresignedPutUrl - Organization recibida:', organization);
+        const response = this.http.get<ApiResponse<{ url: string, key: string }>>(`${apiBase}/api/bff/object/presigned-url/${typeUpload}?fileName=${fileName}_${Date.now()}&fileType=${fileType}${organization ? `&organization=${organization}` : ''}`);
         try {
             const res = await firstValueFrom(response);
-            console.log('Presigned URL response:', res);
+            console.log('[UPLOAD] Presigned URL response:', res);
             return res.data as any;
         } catch (err) {
-            console.error('Error fetching presigned URL:');
+            console.error('[UPLOAD] Error fetching presigned URL:');
             console.error(err);
             throw err;
         }
@@ -48,8 +49,9 @@ export class ObjectUploadService {
         }
     }
 
-    async uploadFileUsingPresignedUrl(apiBase: string, typeUpload: string, file: File): Promise<{ key: string, objectUrl: string }> {
-        const presigned = await this.getPresignedPutUrl(apiBase, typeUpload, file.name, file.type);
+    async uploadFileUsingPresignedUrl(apiBase: string, typeUpload: string, file: File, organization?: string): Promise<{ key: string, objectUrl: string }> {
+        console.log('[UPLOAD] uploadFileUsingPresignedUrl - Organization recibida:', organization);
+        const presigned = await this.getPresignedPutUrl(apiBase, typeUpload, file.name, file.type, organization);
 
         if (!presigned?.url) {
             throw new Error('Presigned URL not received from API.');
