@@ -14,9 +14,9 @@ export class ObjectUploadService {
 
     constructor(private http: HttpClient) { }
 
-    async getPresignedPutUrl(apiBase: string, typeUpload: string, fileName: string, fileType: string, organization?: string): Promise<{ url: string, key: string }> {
+    async getPresignedPutUrl(apiBase: string, typeUpload: string, fileName: string, fileType: string, userName: string, organization?: string): Promise<{ url: string, key: string }> {
         console.log('[UPLOAD] getPresignedPutUrl - Organization recibida:', organization);
-        const response = this.http.get<ApiResponse<{ url: string, key: string }>>(`${apiBase}/api/bff/object/presigned-url/${typeUpload}?fileName=${fileName}_${Date.now()}&fileType=${fileType}${organization ? `&organization=${organization}` : ''}`);
+        const response = this.http.get<ApiResponse<{ url: string, key: string }>>(`${apiBase}/api/bff/object/presigned-url/${typeUpload}?fileName=${fileName}_${Date.now()}&fileType=${fileType}&userName=${userName}${organization ? `&organization=${organization}` : ''}`);
         try {
             const res = await firstValueFrom(response);
             console.log('[UPLOAD] Presigned URL response:', res);
@@ -49,9 +49,9 @@ export class ObjectUploadService {
         }
     }
 
-    async uploadFileUsingPresignedUrl(apiBase: string, typeUpload: string, file: File, organization?: string): Promise<{ key: string, objectUrl: string }> {
+    async uploadFileUsingPresignedUrl(apiBase: string, typeUpload: string, file: File, userName: string, organization?: string): Promise<{ key: string, objectUrl: string }> {
         console.log('[UPLOAD] uploadFileUsingPresignedUrl - Organization recibida:', organization);
-        const presigned = await this.getPresignedPutUrl(apiBase, typeUpload, file.name, file.type, organization);
+        const presigned = await this.getPresignedPutUrl(apiBase, typeUpload, file.name, file.type, userName, organization);
 
         if (!presigned?.url) {
             throw new Error('Presigned URL not received from API.');
