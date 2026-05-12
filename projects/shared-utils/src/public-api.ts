@@ -22,3 +22,4 @@ export * from './lib/services/types/states/userOrgProfile.type';
 export * from './lib/services/types/states/UserState.type';
 export * from './lib/services/upload-modal/upload-modal.service';
 export * from './lib/services/types/constantes.type';
+export * from './lib/services/types/factura.type';
