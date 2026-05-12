@@ -1,5 +1,6 @@
 
 export enum facturaEstado {
+  PROCESANDO = "PROCESANDO",
   PENDIENTE_VALIDACION = "PENDIENTE_VALIDACION",
   PUBLICADA = "PUBLICADA",
   OFERTADA = "OFERTADA",
@@ -24,4 +25,5 @@ export interface FacturaType {
   fechaVencimiento: Date;
   status: facturaEstado;
   correlationId: string;
+  storage_key: string;
 }

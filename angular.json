@@ -485,6 +485,11 @@
 							{
 								"glob": "**/*",
 								"input": "projects/seis-mfe-publicador-facturas/public"
+							},
+							{
+								"glob": "**/*",
+								"input": "node_modules/ngx-extended-pdf-viewer/assets",
+								"output": "assets/"
 							}
 						],
 						"styles": [
@@ -509,6 +514,11 @@
 							{
 								"glob": "**/*",
 								"input": "projects/seis-mfe-publicador-facturas/public"
+							},
+							{
+								"glob": "**/*",
+								"input": "node_modules/ngx-extended-pdf-viewer/assets",
+								"output": "assets/"
 							}
 						],
 						"styles": [
