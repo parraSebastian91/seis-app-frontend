@@ -33,8 +33,7 @@
 							"target": "seis-portal:esbuild:production"
 						},
 						"development": {
-							"target": "seis-portal:esbuild:development",
-							"dev": true
+							"target": "seis-portal:esbuild:development"
 						}
 					},
 					"defaultConfiguration": "production"
@@ -80,6 +79,7 @@
 						"index": "projects/seis-portal/src/index.html",
 						"browser": "projects/seis-portal/src/main.ts",
 						"polyfills": [
+							"@angular/localize/init",
 							"zone.js",
 							"es-module-shims"
 						],
@@ -209,6 +209,7 @@
 						"index": "projects/seis-mfe-gestion-usuario/src/index.html",
 						"browser": "projects/seis-mfe-gestion-usuario/src/main.ts",
 						"polyfills": [
+							"@angular/localize/init",
 							"zone.js",
 							"es-module-shims"
 						],
@@ -371,6 +372,7 @@
 						"index": "projects/seis-mfe-dashboard-facturas/src/index.html",
 						"browser": "projects/seis-mfe-dashboard-facturas/src/main.ts",
 						"polyfills": [
+							"@angular/localize/init",
 							"zone.js",
 							"es-module-shims"
 						],
@@ -454,8 +456,7 @@
 							"target": "seis-mfe-publicador-facturas:esbuild:production"
 						},
 						"development": {
-							"target": "seis-mfe-publicador-facturas:esbuild:development",
-							"dev": true
+							"target": "seis-mfe-publicador-facturas:esbuild:development"
 						}
 					},
 					"defaultConfiguration": "production"
@@ -505,6 +506,7 @@
 						"index": "projects/seis-mfe-publicador-facturas/src/index.html",
 						"browser": "projects/seis-mfe-publicador-facturas/src/main.ts",
 						"polyfills": [
+							"@angular/localize/init",
 							"zone.js",
 							"es-module-shims"
 						],

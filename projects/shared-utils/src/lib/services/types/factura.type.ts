@@ -26,4 +26,15 @@ export interface FacturaType {
   status: facturaEstado;
   correlationId: string;
   storage_key: string;
+  ofertas: string;
+}
+
+export interface FacturaOfertaType {
+  assetId: string;
+  ofertaId: string;
+  montoOferta: number;
+  plazoOferta: number;
+  tasaInteres: number;
+  fechaOferta: Date;
+  estadoOferta: string;
 }
