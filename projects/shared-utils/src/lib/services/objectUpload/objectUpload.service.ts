@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { firstValueFrom } from "rxjs";
 import { ApiResponse } from "../types/api-response.model";
@@ -16,7 +16,25 @@ export class ObjectUploadService {
 
     async getPresignedPutUrl(apiBase: string, typeUpload: string, fileName: string, fileType: string, userName: string, organization?: string): Promise<{ url: string, key: string }> {
         console.log('[UPLOAD] getPresignedPutUrl - Organization recibida:', organization);
-        const response = this.http.get<ApiResponse<{ url: string, key: string }>>(`${apiBase}/api/bff/object/presigned-url/${typeUpload}?fileName=${fileName}_${Date.now()}&fileType=${fileType}&userName=${userName}${organization ? `&organization=${organization}` : ''}`);
+        const safeUserName = (userName || '').trim();
+        if (!safeUserName) {
+            throw new Error('[UPLOAD] userName is required to request a presigned URL.');
+        }
+
+        let params = new HttpParams()
+            .set('fileName', `${fileName}_${Date.now()}`)
+            .set('fileType', fileType)
+            .set('userName', safeUserName);
+
+        const safeOrganization = (organization || '').trim();
+        if (safeOrganization) {
+            params = params.set('organization', safeOrganization);
+        }
+
+        const response = this.http.get<ApiResponse<{ url: string, key: string }>>(`${apiBase}/api/bff/object/presigned-url/${typeUpload}`, {
+            params,
+            withCredentials: true
+        });
         try {
             const res = await firstValueFrom(response);
             console.log('[UPLOAD] Presigned URL response:', res);
@@ -51,7 +69,12 @@ export class ObjectUploadService {
 
     async uploadFileUsingPresignedUrl(apiBase: string, typeUpload: string, file: File, userName: string, organization?: string): Promise<{ key: string, objectUrl: string }> {
         console.log('[UPLOAD] uploadFileUsingPresignedUrl - Organization recibida:', organization);
-        const presigned = await this.getPresignedPutUrl(apiBase, typeUpload, file.name, file.type, userName, organization);
+        const safeUserName = (userName || '').trim();
+        if (!safeUserName) {
+            throw new Error('[UPLOAD] Cannot upload without a valid userName.');
+        }
+
+        const presigned = await this.getPresignedPutUrl(apiBase, typeUpload, file.name, file.type, safeUserName, organization);
 
         if (!presigned?.url) {
             throw new Error('Presigned URL not received from API.');

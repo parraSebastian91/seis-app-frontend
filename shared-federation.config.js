@@ -3,9 +3,6 @@ const { shareAll } = require('@angular-architects/native-federation/config');
 module.exports = {
   sharedConfig: {
     ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
-    '@angular/material/icon': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
-    '@angular/material/menu': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
-    '@angular/material/divider': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
 
     'shared-utils': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
     // '@angular/core': { singleton: true, strictVersion: true, requiredVersion: 'auto' },

@@ -4,7 +4,7 @@ import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import type { ApiResponse } from '../types/api-response.model';
 import { USER_PROFILE_SERVICE_CONFIG, UserProfileServiceConfig } from '../UserProfile/userProfile.service';
 import { HttpClient } from '@angular/common/http';
-import { FacturaType } from '../types/factura.type';
+import { FacturaCreateRequestDto, FacturaRequestDTO, FacturaResponseUpdateDTO, FacturaType } from '../types/factura.type';
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +38,63 @@ export class FacturasService {
       return response.body.data;
     } catch (err) {
       console.error('Error fetching facturas:');
+      console.error(err);
+      throw err;
+    }
+  }
+
+  async updateFactura(factura: FacturaType, nombreCampo: string, valorCampo: string): Promise<FacturaResponseUpdateDTO> {
+    const body: FacturaRequestDTO = {
+      id: factura.facturaId,
+      ownerUUID: factura.ownerUUID,
+      gestor: {
+        uuid: factura.gestor.uuid,
+        username: factura.gestor.username
+      },
+      campoEditado: {
+        nombre: nombreCampo,
+        valor: valorCampo
+      }
+    }
+    const apiBase = this.config?.apiBase || '';
+    const updateFacturaUrl = `${apiBase}/api/bff/facturas`;
+
+    const facturasUpdateRequest = this.http.patch<ApiResponse<FacturaResponseUpdateDTO>>(updateFacturaUrl, body, {
+      observe: 'response'
+    });
+
+    try {
+      const response = await firstValueFrom(facturasUpdateRequest);
+
+      // 2xx llega aquí; status fuera de 2xx cae en catch como HttpErrorResponse.
+      if (response.status !== 200 || !response.body?.data) {
+        throw new Error('Error updating factura.');
+      }
+
+      return response.body.data;
+    } catch (err) {
+      console.error('Error updating factura:');
+      console.error(err);
+      throw err;
+    }
+  }
+
+  async publicarFactura(factura: FacturaCreateRequestDto): Promise<FacturaType> {
+    const apiBase = this.config?.apiBase || '';
+    const publicarFacturaUrl = `${apiBase}/api/bff/facturas`;
+    try {
+      const response = await firstValueFrom(this.http.post<ApiResponse<FacturaType>>(publicarFacturaUrl, factura, {
+        observe: 'response'
+      }));
+
+      // 2xx llega aquí; status fuera de 2xx cae en catch como HttpErrorResponse.
+      if (response.status !== 201 || !response.body?.data) {
+        throw new Error('Error publishing factura.');
+      }
+      
+      return response.body.data;
+    } catch (err) {
+      console.error('Error publishing factura:');
       console.error(err);
       throw err;
     }

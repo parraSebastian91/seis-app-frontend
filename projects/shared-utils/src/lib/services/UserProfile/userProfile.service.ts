@@ -55,7 +55,8 @@ export class UserProfileService {
     const profileUrl = this.joinUrl(this.joinUrl(base, bffPath), "api/bff/usuario/profile");
 
     const userProfile = this.http.get<ApiResponse<UserProfile>>(profileUrl, {
-      observe: 'response'
+      observe: 'response',
+      withCredentials: true
     });
     try {
       const response = await firstValueFrom(userProfile);
@@ -76,7 +77,8 @@ export class UserProfileService {
   async getUserImage(apiBase?: string): Promise<UserImageProfile> {
     const base = this.resolveApiBase(apiBase);
     const userProfile = this.http.get<ApiResponse<UserImageProfile> | UserImageProfile>(this.joinUrl(base, "api/bff/usuario/profile/img"), {
-      observe: 'response'
+      observe: 'response',
+      withCredentials: true
     });
     try {
       const response = await firstValueFrom(userProfile);
@@ -101,7 +103,8 @@ export class UserProfileService {
     console.log('Updating user profile with data:', profileData);
     try {
       const response = await firstValueFrom(this.http.put(this.joinUrl(base, "api/bff/usuario/profile"), profileData, {
-        observe: 'response'
+        observe: 'response',
+        withCredentials: true
       }));
       if (response.status !== 200) {
         throw new Error('Error al actualizar el perfil del usuario.');
@@ -117,7 +120,8 @@ export class UserProfileService {
     const orgProfileUrl = this.joinUrl(base, "api/bff/usuario/profile/organizacion");
     try {
       const response = await firstValueFrom(this.http.get<ApiResponse<userOrgProfile>>(orgProfileUrl, {
-        observe: 'response'
+        observe: 'response',
+        withCredentials: true
       }));
       if (response.status !== 200 || !response.body?.data) {
         throw new Error('Perfil de organización sin contenido.');

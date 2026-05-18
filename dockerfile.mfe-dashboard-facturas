@@ -13,7 +13,7 @@ COPY . .
 RUN rm -rf node_modules/.cache && \
     rm -rf node_modules/.vite && \
     npm run build -- shared-utils && \
-    npm run build -- --configuration production --project seis-mfe-dashboard-facturas --base-href=/mfe-dashboard-facturas/
+    npx ng build seis-mfe-dashboard-facturas --configuration production --base-href=/mfe-dashboard-facturas/
 
 # Stage 2: Nginx
 FROM nginx:alpine

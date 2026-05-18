@@ -121,7 +121,7 @@ export class UserStateService {
             ...current,
             orgSelected
         }));
-    }    
+    }
 
     reset() {
         this._state.set({
