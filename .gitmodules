@@ -16,3 +16,8 @@
 	path = projects/seis-mfe-publicador-facturas
 	url = https://github.com/parraSebastian91/seis-mfe-publicador-facturas.git
 	branch = main
+
+[submodule "projects/seis-mfe-ofertador-facturas"]
+	path = projects/seis-mfe-ofertador-facturas
+	url = https://github.com/parraSebastian91/seis-mfe-ofertador-facturas.git
+	branch = main

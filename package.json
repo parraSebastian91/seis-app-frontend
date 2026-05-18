@@ -7,7 +7,8 @@
     "start:mfe": "ng serve seis-mfe-gestion-usuario",
     "start:mfe:dashboard": "ng serve seis-mfe-dashboard-facturas",
     "start:mfe:publicador": "ng serve seis-mfe-publicador-facturas",
-    "start:all": "ng serve seis-portal & ng serve seis-mfe-gestion-usuario & ng serve seis-mfe-dashboard-facturas & ng serve seis-mfe-publicador-facturas",
+    "start:mfe:ofertador": "ng serve seis-mfe-ofertador-facturas",
+    "start:all": "ng serve seis-portal & ng serve seis-mfe-gestion-usuario & ng serve seis-mfe-dashboard-facturas & ng serve seis-mfe-publicador-facturas & ng serve seis-mfe-ofertador-facturas",
     "build": "ng build",
     "build:shared-utils": "ng build shared-utils",
     "build:all": "npm run build:shared-utils && ng build",
@@ -18,7 +19,8 @@
     "docker:build-usuario": "npm run build:shared-utils && docker-compose -f ./../../docker-compose-app-frontend.yml build --no-cache app-mfe-gestion-usuario && docker-compose -f ./../../docker-compose-app-frontend.yml up app-mfe-gestion-usuario",
     "docker:build-dashboard": "npm run build:shared-utils && docker-compose -f ./../../docker-compose-app-frontend.yml build --no-cache app-mfe-dashboard-facturas && docker-compose -f ./../../docker-compose-app-frontend.yml up app-mfe-dashboard-facturas",
     "docker:build-publicador": "npm run build:shared-utils && docker-compose -f ./../../docker-compose-app-frontend.yml build --no-cache app-mfe-publicador-facturas &&  docker-compose -f ./../../docker-compose-app-frontend.yml up app-mfe-publicador-facturas",
-    "docker:build-mfes": "npm run build:shared-utils && docker-compose -f ./../../docker-compose-app-frontend.yml up --build app-mfe-gestion-usuario app-mfe-dashboard-facturas app-mfe-publicador-facturas"
+    "docker:build-ofertador": "npm run build:shared-utils && docker-compose -f ./../../docker-compose-app-frontend.yml build --no-cache app-mfe-ofertador-facturas &&  docker-compose -f ./../../docker-compose-app-frontend.yml up app-mfe-ofertador-facturas",
+    "docker:build-mfes": "npm run build:shared-utils && docker-compose -f ./../../docker-compose-app-frontend.yml up --build app-mfe-gestion-usuario app-mfe-dashboard-facturas app-mfe-publicador-facturas app-mfe-ofertador-facturas"
   },
   "private": true,
   "dependencies": {
