@@ -20,7 +20,12 @@
     "docker:build-dashboard": "npm run build:shared-utils && docker-compose -f ./../../docker-compose-app-frontend.yml build --no-cache app-mfe-dashboard-facturas && docker-compose -f ./../../docker-compose-app-frontend.yml up app-mfe-dashboard-facturas",
     "docker:build-publicador": "npm run build:shared-utils && docker-compose -f ./../../docker-compose-app-frontend.yml build --no-cache app-mfe-publicador-facturas &&  docker-compose -f ./../../docker-compose-app-frontend.yml up app-mfe-publicador-facturas",
     "docker:build-ofertador": "npm run build:shared-utils && docker-compose -f ./../../docker-compose-app-frontend.yml build --no-cache app-mfe-ofertador-facturas &&  docker-compose -f ./../../docker-compose-app-frontend.yml up app-mfe-ofertador-facturas",
-    "docker:build-mfes": "npm run build:shared-utils && docker-compose -f ./../../docker-compose-app-frontend.yml up --build app-mfe-gestion-usuario app-mfe-dashboard-facturas app-mfe-publicador-facturas app-mfe-ofertador-facturas"
+    "docker:build-mfes": "npm run build:shared-utils && docker-compose -f ./../../docker-compose-app-frontend.yml up --build app-mfe-gestion-usuario app-mfe-dashboard-facturas app-mfe-publicador-facturas app-mfe-ofertador-facturas",
+    "codegraph:index": "npx @colbymchenry/codegraph index --force",
+    "codegraph:status": "npx @colbymchenry/codegraph status",
+    "codegraph:sync": "npx @colbymchenry/codegraph sync",
+    "codegraph:query": "npx @colbymchenry/codegraph query",
+    "codegraph:affected": "npx @colbymchenry/codegraph affected"
   },
   "private": true,
   "dependencies": {
@@ -49,6 +54,7 @@
     "rxjs": "7.8.0",
     "socket.io": "4.8.3",
     "socket.io-client": "4.8.3",
+    "sweetalert2": "^11.26.24",
     "tslib": "2.3.0",
     "zone.js": "0.15.0"
   },

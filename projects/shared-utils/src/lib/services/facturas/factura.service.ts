@@ -4,7 +4,7 @@ import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import type { ApiResponse } from '../types/api-response.model';
 import { USER_PROFILE_SERVICE_CONFIG, UserProfileServiceConfig } from '../UserProfile/userProfile.service';
 import { HttpClient } from '@angular/common/http';
-import { FacturaCreateRequestDto, FacturaRequestDTO, FacturaResponseUpdateDTO, FacturaType } from '../types/factura.type';
+import { FacturaCreateRequestDto, facturaEstado, FacturaRequestDTO, FacturaResponseUpdateDTO, FacturaType } from '../types/factura.type';
 
 @Injectable({
   providedIn: 'root'
@@ -91,13 +91,35 @@ export class FacturasService {
       if (response.status !== 201 || !response.body?.data) {
         throw new Error('Error publishing factura.');
       }
-      
+
       return response.body.data;
     } catch (err) {
       console.error('Error publishing factura:');
       console.error(err);
       throw err;
     }
+  }
+
+  resolveEstadoFromAuthorization(isAuthorized: boolean): facturaEstado {
+    return isAuthorized ? facturaEstado.PROCESANDO : facturaEstado.PENDIENTE_AUTORIZACION;
+  }
+
+  async actualizarEstadoFactura(factura: FacturaType, estado: facturaEstado): Promise<FacturaResponseUpdateDTO> {
+    const response = await this.updateFactura(factura, 'status', estado);
+
+    if (!this.isUpdateAccepted(response)) {
+      throw new Error('Estado de factura no confirmado por backend.');
+    }
+
+    return response;
+  }
+
+  private isUpdateAccepted(response: FacturaResponseUpdateDTO | undefined): boolean {
+    if (!response) {
+      return false;
+    }
+
+    return response.isUpdate === true || response.isUpdate === 'true' || response.isUpdate === 1 || response.isUpdate === '1';
   }
 
   setNotificationsPanelOpen(isOpen: boolean): void {

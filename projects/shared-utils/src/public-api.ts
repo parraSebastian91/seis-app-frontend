@@ -17,7 +17,7 @@ export * from './lib/services/types/api-response.model';
 export * from './lib/services/types/SidebarMenu.type';
 export * from './lib/services/types/userOrgProfile.type';
 export * from './lib/services/types/userProfile.type';
-export * from './lib/services/types/imageProfile.type';   
+export * from './lib/services/types/imageProfile.type';
 export * from './lib/services/types/states/userImageState.type';
 export * from './lib/services/types/states/userOrgProfile.type';
 export * from './lib/services/types/states/UserState.type';

@@ -1,5 +1,6 @@
 
 export enum facturaEstado {
+  PENDIENTE_AUTORIZACION = "PENDIENTE_AUTORIZACION",
   PROCESANDO = "PROCESANDO",
   PENDIENTE_VALIDACION = "PENDIENTE_VALIDACION",
   PUBLICADA = "PUBLICADA",
@@ -10,6 +11,20 @@ export enum facturaEstado {
   CANCELADA = "CANCELADA",
   VENCIDA = "VENCIDA",
   DENUNCIADA = "DENUNCIADA",
+}
+
+export enum facturaEstadoDescripcion {
+  PENDIENTE_AUTORIZACION = "Pendiente de autorización",
+  PROCESANDO = "Procesando",
+  PENDIENTE_VALIDACION = "Pendiente de validación",
+  PUBLICADA = "Publicada",
+  OFERTADA = "Ofertada",
+  FINANCIADA = "Financiada",
+  PAGADA = "Pagada",
+  RECHAZADA = "Rechazada",
+  CANCELADA = "Cancelada",
+  VENCIDA = "Vencida",
+  DENUNCIADA = "Denunciada"
 }
 
 export interface FacturaType {
@@ -53,6 +68,7 @@ export interface FacturaCreateRequestDto {
   correlationId: string;
   montoTotal: number;
   fechaVencimiento: Date;
+  status: facturaEstado;
   gestor: {
     uuid: string;
     username: string;
