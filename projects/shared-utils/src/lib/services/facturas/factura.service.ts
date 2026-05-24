@@ -100,8 +100,10 @@ export class FacturasService {
     }
   }
 
-  resolveEstadoFromAuthorization(isAuthorized: boolean): facturaEstado {
-    return isAuthorized ? facturaEstado.PROCESANDO : facturaEstado.PENDIENTE_AUTORIZACION;
+  resolveEstadoFromAuthorization(isAuthorized: { isConfirmed: boolean, isDenied: boolean, isDismissed: boolean, dismiss?: 'cancel', value?: boolean }): facturaEstado {
+    console.log('Resolviendo estado de factura a partir de autorización:', isAuthorized);
+
+    return isAuthorized.isConfirmed ? facturaEstado.PUBLICADA : facturaEstado.PENDIENTE_AUTORIZACION;
   }
 
   async actualizarEstadoFactura(factura: FacturaType, estado: facturaEstado): Promise<FacturaResponseUpdateDTO> {
