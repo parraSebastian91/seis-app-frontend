@@ -4,7 +4,7 @@ import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import type { ApiResponse } from '../types/api-response.model';
 import { USER_PROFILE_SERVICE_CONFIG, UserProfileServiceConfig } from '../UserProfile/userProfile.service';
 import { HttpClient } from '@angular/common/http';
-import { FacturaCreateRequestDto, facturaEstado, FacturaRequestDTO, FacturaResponseUpdateDTO, FacturaType } from '../types/factura.type';
+import { AutorizacionPublicacionDto, FacturaCreateRequestDto, facturaEstado, FacturaRequestDTO, FacturaResponseUpdateDTO, FacturaType, VersionTerminos } from '../types/factura.type';
 
 @Injectable({
   providedIn: 'root'
@@ -126,5 +126,35 @@ export class FacturasService {
 
   setNotificationsPanelOpen(isOpen: boolean): void {
     this.notificationsPanelOpenSubject.next(isOpen);
+  }
+
+  async obtenerVersionTerminosActiva(): Promise<VersionTerminos> {
+    const apiBase = this.config?.apiBase || '';
+    const url = `${apiBase}/api/bff/terminos/activo`;
+    try {
+      const response = await firstValueFrom(
+        this.http.get<ApiResponse<VersionTerminos>>(url, { observe: 'response' })
+      );
+      if (!response.body?.data) {
+        throw new Error('Sin versión de términos activa.');
+      }
+      return response.body.data;
+    } catch (err) {
+      console.error('Error al obtener versión de términos:', err);
+      throw err;
+    }
+  }
+
+  async registrarAutorizacion(payload: AutorizacionPublicacionDto): Promise<void> {
+    const apiBase = this.config?.apiBase || '';
+    const url = `${apiBase}/api/bff/facturas/autorizacion`;
+    try {
+      await firstValueFrom(
+        this.http.post<ApiResponse<void>>(url, payload, { observe: 'response' })
+      );
+    } catch (err) {
+      console.error('Error al registrar autorización:', err);
+      throw err;
+    }
   }
 }

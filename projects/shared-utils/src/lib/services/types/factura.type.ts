@@ -91,3 +91,18 @@ export interface CampoEditado {
 }
 
 export interface FacturaResponseUpdateDTO { campo: string, id: string, valor: any, isUpdate: any, mensaje: string }
+
+export interface VersionTerminos {
+  id: string;
+  codigo: string;
+  descripcion: string;
+  textCompleto: string;
+  hashSha256: string;
+}
+
+export interface AutorizacionPublicacionDto {
+  facturaId: string;
+  versionTerminosId: string;
+  acepto: boolean;
+  correlationId?: string;
+}
