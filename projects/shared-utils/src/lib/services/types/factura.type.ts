@@ -47,6 +47,7 @@ export interface FacturaType {
   correlationId: string;
   storage_key: string;
   ofertas: string;
+  notas?: string[];
 }
 
 export interface FacturaOfertaType {
