@@ -30,14 +30,13 @@ export enum facturaEstadoDescripcion {
 export interface FacturaType {
   facturaId: string;
   assetId: string;
-  ownerUUID: string;
-  nombre_mandante: string;
-  rut_mandante: string;
+  ownerUUID: string; // cedente_org_id
   gestor: {
     uuid: string;
     username: string;
   };
-  gestorUUID: string;
+  nombre_cliente_cedente: string; // deudor_nombre
+  rut_cliente_cedente: string; // deudor_rut
   deudorNombre: string;
   deudorRut: string;
   facturaNumero: string;
@@ -45,8 +44,12 @@ export interface FacturaType {
   fechaVencimiento: Date;
   status: facturaEstado;
   correlationId: string;
-  storage_key: string;
-  ofertas: string;
+  total_ofertas: number;
+  ofertas_enviadas: number;
+  ofertas_revisadas: number;
+  ofertas_aceptadas: number;
+  ofertas_rechazadas: number;
+  url_factura: string | null;
   notas?: string[];
 }
 

@@ -2,6 +2,7 @@ import { UserImageProfile } from "./imageProfile.type";
 
 export interface UserProfile {
   username: string;
+  usuarioUUID: string;
   nombreCompleto: string;
   nombre: {
     nombres: string;

@@ -14,12 +14,12 @@ export class ObjectUploadService {
 
     constructor(private http: HttpClient) { }
 
-    async getPresignedPutUrl(apiBase: string, typeUpload: string, fileName: string, fileType: string, userName: string, organization?: string, idFactura?: string): Promise<{ url: string, key: string }> {
+    async getPresignedPutUrl(apiBase: string, typeUpload: string, fileName: string, fileType: string, userUuid: string, organization?: string, idFactura?: string): Promise<{ url: string, key: string }> {
         console.log('[UPLOAD] getPresignedPutUrl - Organization recibida:', organization);
-        const safeUserName = (userName || '').trim();
+        const safeUserUuid = (userUuid || '').trim();
         const safeTypeUpload = (typeUpload || '').trim();
-        if (!safeUserName) {
-            throw new Error('[UPLOAD] userName is required to request a presigned URL.');
+        if (!safeUserUuid) {
+            throw new Error('[UPLOAD] userUuid is required to request a presigned URL.');
         }
         if (!safeTypeUpload) {
             throw new Error('[UPLOAD] typeUpload is required to request a presigned URL.');
@@ -28,9 +28,9 @@ export class ObjectUploadService {
         let params = new HttpParams()
             .set('fileName', `${fileName}_${Date.now()}`)
             .set('fileType', fileType)
-            .set('userName', safeUserName);
+            .set('userName', safeUserUuid);
 
-            
+
         const safeOrganization = (organization || '').trim();
         if (safeOrganization) {
             params = params.set('organization', safeOrganization);
@@ -76,18 +76,18 @@ export class ObjectUploadService {
         }
     }
 
-    async uploadFileUsingPresignedUrl(apiBase: string, typeUpload: string, file: File, userName: string, organization?: string, idFactura?: string): Promise<{ key: string, objectUrl: string }> {
+    async uploadFileUsingPresignedUrl(apiBase: string, typeUpload: string, file: File, useruuid: string, organization?: string, idFactura?: string): Promise<{ key: string, objectUrl: string }> {
         console.log('[UPLOAD] uploadFileUsingPresignedUrl - Organization recibida:', organization);
-        const safeUserName = (userName || '').trim();
+        const safeUserUuid = (useruuid || '').trim();
         const safeTypeUpload = (typeUpload || '').trim();
-        if (!safeUserName) {
-            throw new Error('[UPLOAD] Cannot upload without a valid userName.');
+        if (!safeUserUuid) {
+            throw new Error('[UPLOAD] Cannot upload without a valid userUuid.');
         }
         if (!safeTypeUpload) {
             throw new Error('[UPLOAD] Cannot upload without a valid typeUpload.');
         }
 
-        const presigned = await this.getPresignedPutUrl(apiBase, safeTypeUpload, file.name, file.type, safeUserName, organization, idFactura);
+        const presigned = await this.getPresignedPutUrl(apiBase, safeTypeUpload, file.name, file.type, safeUserUuid, organization, idFactura);
 
         if (!presigned?.url) {
             throw new Error('Presigned URL not received from API.');
