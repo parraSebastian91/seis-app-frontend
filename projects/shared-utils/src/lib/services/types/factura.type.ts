@@ -13,6 +13,13 @@ export enum facturaEstado {
   DENUNCIADA = "DENUNCIADA",
 }
 
+export enum createdBy{
+    FORM = "FORM",
+    OCR = "OCR",
+    AGENT = "AGENT"
+}
+
+
 export enum facturaEstadoDescripcion {
   PENDIENTE_AUTORIZACION = "Pendiente de autorización",
   PROCESANDO = "Procesando",
@@ -50,6 +57,7 @@ export interface FacturaType {
   ofertas_aceptadas: number;
   ofertas_rechazadas: number;
   url_factura: string | null;
+  createdBy: createdBy;
   notas?: string[];
 }
 
