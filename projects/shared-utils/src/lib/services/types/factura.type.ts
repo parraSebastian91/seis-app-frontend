@@ -79,6 +79,7 @@ export interface FacturaCreateRequestDto {
   nombreDeudor: string;
   correlationId: string;
   montoTotal: number;
+  fechaEmision?: Date;
   fechaVencimiento: Date;
   status: facturaEstado;
   gestor: {
