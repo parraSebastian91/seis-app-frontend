@@ -40,6 +40,10 @@ export * from './lib/interceptors/error.interceptor';
 export * from './lib/services/auth/auth-refresh.service';
 export * from './lib/services/error/app-error.service';
 
+// OCR notes (HU-24 / HU-28)
+export * from './lib/types/ocr-nota.type';
+export * from './lib/components/ocr-notes-list/ocr-notes-list.component';
+
 // Chat (HU-26)
 export * from './lib/services/types/chat.type';
 export * from './lib/services/chat/chat.service';

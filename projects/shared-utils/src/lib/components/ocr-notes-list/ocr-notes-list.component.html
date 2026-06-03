@@ -1,0 +1,19 @@
+<ng-container *ngIf="notas.length > 0">
+  <div class="ocr-notes" role="list" [attr.aria-label]="'Notas del sistema (' + notas.length + ')'">
+
+    <div class="ocr-notes__header">
+      <span class="ocr-notes__icon" aria-hidden="true">⚠</span>
+      <span class="ocr-notes__title">Notas del sistema ({{ notas.length }})</span>
+    </div>
+
+    <div class="ocr-notes__item"
+         *ngFor="let nota of notas; let last = last"
+         role="listitem"
+         [class.ocr-notes__item--last]="last"
+         [class.ocr-notes__item--alta]="nota.prioridad === 'alta'">
+      <span class="ocr-notes__campo">Campo "{{ nota.campo }}"</span>
+      <span class="ocr-notes__desc">{{ nota.descripcion }}</span>
+    </div>
+
+  </div>
+</ng-container>
