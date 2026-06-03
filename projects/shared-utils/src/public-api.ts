@@ -31,3 +31,11 @@ export * from './lib/models/user.model';
 export * from './lib/models/organization.model';
 export * from './lib/models/session.model';
 export * from './lib/services/session/session.service';
+
+// HTTP interceptors & tokens (HU-14)
+export * from './lib/tokens/auth.tokens';
+export * from './lib/interceptors/credentials.interceptor';
+export * from './lib/interceptors/auth-refresh.interceptor';
+export * from './lib/interceptors/error.interceptor';
+export * from './lib/services/auth/auth-refresh.service';
+export * from './lib/services/error/app-error.service';
