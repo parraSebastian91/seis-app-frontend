@@ -1,0 +1,83 @@
+<div class="sc-select" [class.sc-open]="isOpen">
+
+  <!-- Trigger (CA-02) — siempre solo lectura -->
+  <button
+    type="button"
+    class="sc-trigger"
+    (click)="toggle()"
+    [attr.aria-expanded]="isOpen"
+    aria-haspopup="listbox"
+    [attr.aria-label]="selectedItem?.name ?? placeholder"
+  >
+    <span class="sc-trigger-icon material-icons" aria-hidden="true">{{ icon }}</span>
+    <span class="sc-trigger-label">{{ selectedItem?.name ?? placeholder }}</span>
+    <svg class="sc-chevron" [class.sc-chevron--up]="isOpen" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+  </button>
+
+  <!-- Panel flotante (CA-03, CA-04) -->
+  @if (isOpen) {
+    <div class="sc-panel" role="listbox" [attr.aria-label]="searchPlaceholder">
+
+      <!-- Input de búsqueda sticky (CA-04) -->
+      <div class="sc-search-wrap">
+        <svg class="sc-search-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+        </svg>
+        <input
+          #searchInput
+          type="text"
+          class="sc-search-input"
+          [placeholder]="searchPlaceholder"
+          [value]="searchQuery"
+          [disabled]="items.length === 0"
+          (input)="onSearchInput($event)"
+          aria-label="Buscar"
+          autocomplete="off"
+        />
+      </div>
+
+      <!-- Lista de tarjetas (CA-05, CA-06) -->
+      <ul class="sc-list" role="presentation">
+        @if (filteredItems.length === 0) {
+          <li class="sc-empty" aria-live="polite" aria-atomic="true">Sin resultados.</li>
+        }
+        @for (item of filteredItems; track item.id; let i = $index) {
+          <li
+            class="sc-item"
+            [class.sc-item--focused]="focusedIndex === i"
+            [class.sc-item--selected]="item.id === selectedId"
+            role="option"
+            [attr.aria-selected]="item.id === selectedId"
+            (click)="selectItem(item)"
+            (mouseenter)="focusedIndex = i"
+          >
+            <div class="sc-item-info">
+              <span class="sc-item-name">{{ item.name }}</span>
+              @if (item.meta) {
+                <span class="sc-item-meta">{{ item.meta }}</span>
+              }
+            </div>
+            <div class="sc-avatar" aria-hidden="true">
+              @if (!showInitials(item)) {
+                <img
+                  class="sc-avatar-img"
+                  [src]="item.avatarUrl"
+                  [alt]="item.name"
+                  (error)="onAvatarError(item.id)"
+                />
+              } @else {
+                <span class="sc-avatar-initials">{{ initials(item.name) }}</span>
+              }
+            </div>
+          </li>
+        }
+      </ul>
+
+    </div>
+  }
+
+</div>

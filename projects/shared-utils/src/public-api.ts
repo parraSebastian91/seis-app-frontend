@@ -48,3 +48,7 @@ export * from './lib/components/ocr-notes-list/ocr-notes-list.component';
 export * from './lib/services/types/chat.type';
 export * from './lib/services/chat/chat.service';
 export * from './lib/components/negotiation-chat/negotiation-chat.component';
+
+// SearchableCardSelect (HU-35)
+export * from './lib/components/searchable-card-select/searchable-card-item.type';
+export * from './lib/components/searchable-card-select/searchable-card-select.component';
