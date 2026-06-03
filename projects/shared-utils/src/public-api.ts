@@ -39,3 +39,8 @@ export * from './lib/interceptors/auth-refresh.interceptor';
 export * from './lib/interceptors/error.interceptor';
 export * from './lib/services/auth/auth-refresh.service';
 export * from './lib/services/error/app-error.service';
+
+// Chat (HU-26)
+export * from './lib/services/types/chat.type';
+export * from './lib/services/chat/chat.service';
+export * from './lib/components/negotiation-chat/negotiation-chat.component';

@@ -1,0 +1,237 @@
+<div class="chat-panel">
+
+  <!-- ── CA-02: Header ──────────────────────────────────────────────────── -->
+  <div class="chat-header">
+    <div class="chat-interlocutor">
+      <div class="interlocutor-avatar">
+        <img *ngIf="interlocutorAvatarUrl"
+          [src]="interlocutorAvatarUrl"
+          [alt]="interlocutorNombre"
+          width="38" height="38"
+          class="avatar-img">
+        <div *ngIf="!interlocutorAvatarUrl" class="avatar-placeholder">
+          <span>{{ interlocutorNombre.charAt(0) | uppercase }}</span>
+        </div>
+      </div>
+      <div class="interlocutor-info">
+        <span class="interlocutor-nombre">{{ interlocutorNombre }}</span>
+        <span class="interlocutor-sub" *ngIf="interlocutorSubtitle">{{ interlocutorSubtitle }}</span>
+        <span class="oferta-summary" *ngIf="oferta">
+          Anticipo: {{ formatCLP(oferta.montoAnticipo) }}
+          &middot; Tasa: {{ oferta.tasaMensual }}%
+          &middot;
+          <span [ngClass]="{ 'vigencia-urgente': getDiasRestantes(oferta.fechaVigencia) <= 2 }">
+            {{ getDiasRestantes(oferta.fechaVigencia) }} días
+          </span>
+        </span>
+      </div>
+    </div>
+    <button type="button" class="chat-close-btn" aria-label="Cerrar chat" (click)="close()">✕</button>
+  </div>
+
+  <!-- ── CA-03: Context card ─────────────────────────────────────────────── -->
+  <div class="chat-context-card" *ngIf="factura && oferta">
+    <button type="button" class="context-toggle" (click)="toggleContext()">
+      <span class="context-summary-text">
+        Factura #{{ factura.facturaNumero }} &middot; Oferta de {{ oferta.ejecutivoNombre }}
+      </span>
+      <span class="context-toggle-label">{{ contextExpanded ? '▲ Ocultar' : '▼ Ver' }}</span>
+    </button>
+
+    <div class="context-body" [ngClass]="{ 'context-expanded': contextExpanded }">
+      <!-- Bloque factura -->
+      <div class="context-section">
+        <h4 class="context-section-title">Factura</h4>
+        <div class="context-grid">
+          <div class="ctx-field">
+            <span class="ctx-label">Número</span>
+            <span class="ctx-val mono">#{{ factura.facturaNumero }}</span>
+          </div>
+          <div class="ctx-field">
+            <span class="ctx-label">Cedente</span>
+            <span class="ctx-val">{{ factura.nombre_cliente_cedente }}</span>
+          </div>
+          <div class="ctx-field">
+            <span class="ctx-label">Deudor</span>
+            <span class="ctx-val">{{ factura.deudorNombre }}</span>
+          </div>
+          <div class="ctx-field">
+            <span class="ctx-label">Monto total</span>
+            <span class="ctx-val mono">{{ formatCLP(factura.montoTotal) }}</span>
+          </div>
+          <div class="ctx-field">
+            <span class="ctx-label">Vencimiento</span>
+            <span class="ctx-val">
+              {{ factura.fechaVencimiento | date:'dd/MM/yyyy' }}
+              <small [ngClass]="{ 'vigencia-urgente': getDiasRestantes(factura.fechaVencimiento) <= 5 }">
+                ({{ getDiasRestantes(factura.fechaVencimiento) }} días)
+              </small>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="context-divider"></div>
+
+      <!-- Bloque oferta -->
+      <div class="context-section">
+        <h4 class="context-section-title">Oferta</h4>
+        <div class="context-grid">
+          <div class="ctx-field">
+            <span class="ctx-label">Ejecutivo</span>
+            <span class="ctx-val">{{ oferta.ejecutivoNombre }}</span>
+          </div>
+          <div class="ctx-field">
+            <span class="ctx-label">Anticipo</span>
+            <span class="ctx-val mono">
+              {{ formatCLP(oferta.montoAnticipo) }}
+              <small>({{ oferta.porcentajeAnticipo }}%)</small>
+            </span>
+          </div>
+          <div class="ctx-field">
+            <span class="ctx-label">Tasa mensual</span>
+            <span class="ctx-val mono">{{ oferta.tasaMensual }}%</span>
+          </div>
+          <div class="ctx-field">
+            <span class="ctx-label">Gastos op.</span>
+            <span class="ctx-val mono">{{ formatCLP(oferta.gastosOperacionales) }}</span>
+          </div>
+          <div class="ctx-field">
+            <span class="ctx-label">Líquido a recibir</span>
+            <span class="ctx-val mono">{{ formatCLP(oferta.liquidoRecibir) }}</span>
+          </div>
+          <div class="ctx-field">
+            <span class="ctx-label">Vigencia</span>
+            <span class="ctx-val" [ngClass]="{ 'vigencia-urgente': getDiasRestantes(oferta.fechaVigencia) <= 2 }">
+              {{ getDiasRestantes(oferta.fechaVigencia) }} días
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CA-04: Messages area ─────────────────────────────────────────────── -->
+  <div class="chat-messages" #scrollContainer (scroll)="onScroll()">
+    <!-- Paginación por cursor (EB-03) -->
+    <div class="load-more-wrap" *ngIf="nextCursor">
+      <button type="button" class="load-more-btn" (click)="loadMoreHistory()" [disabled]="isLoadingMore">
+        {{ isLoadingMore ? 'Cargando...' : '↑ Cargar historial anterior' }}
+      </button>
+    </div>
+
+    <!-- Loading -->
+    <div class="messages-loading" *ngIf="isLoadingHistory">
+      <div class="loading-dots"><span></span><span></span><span></span></div>
+      <p>Cargando historial...</p>
+    </div>
+
+    <!-- Error -->
+    <div class="messages-error" *ngIf="historyError">{{ historyError }}</div>
+
+    <!-- Empty state -->
+    <div class="messages-empty" *ngIf="!isLoadingHistory && !historyError && messages.length === 0">
+      Sin mensajes aún. Inicia la negociación.
+    </div>
+
+    <!-- Messages -->
+    <ng-container *ngFor="let msg of messages; let i = index; trackBy: trackByMessageId">
+
+      <!-- Date separator -->
+      <div class="date-separator"
+        *ngIf="i === 0 || !isSameDay(messages[i - 1].timestamp, msg.timestamp)">
+        <span class="date-separator-label">── {{ getDateLabel(msg.timestamp) }} ──</span>
+      </div>
+
+      <!-- System message -->
+      <div class="system-message" *ngIf="isSystemMessage(msg)"
+        [ngClass]="getSystemClass(msg.type)">
+        {{ getSystemLabel(msg) }}
+      </div>
+
+      <!-- Text message -->
+      <div class="message-row" *ngIf="!isSystemMessage(msg)"
+        [ngClass]="{ 'mine': isMine(msg), 'theirs': !isMine(msg) }">
+        <div class="message-bubble">
+          <div class="message-content">{{ msg.content }}</div>
+          <div class="message-meta">
+            <span class="message-time">{{ formatTime(msg.timestamp) }}</span>
+            <span class="read-status" *ngIf="isMine(msg)">
+              <span *ngIf="msg.status === ChatMessageStatus.SENT" title="Enviado">✓</span>
+              <span *ngIf="msg.status === ChatMessageStatus.DELIVERED" class="status-delivered" title="Entregado">✓✓</span>
+              <span *ngIf="msg.status === ChatMessageStatus.READ" class="status-read" title="Leído">✓✓</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </ng-container>
+  </div>
+
+  <!-- ── New messages indicator (CA-08) ─────────────────────────────────── -->
+  <button type="button" class="new-messages-btn"
+    *ngIf="newMessageCount > 0 && !isAtBottom"
+    (click)="scrollToBottom()">
+    ⬇ {{ newMessageCount }} mensaje{{ newMessageCount === 1 ? '' : 's' }} nuevo{{ newMessageCount === 1 ? '' : 's' }}
+  </button>
+
+  <!-- ── CA-06: Client-only action footer ─────────────────────────────────── -->
+  <div class="chat-actions-footer" *ngIf="isClient">
+    <!-- Inline reject form -->
+    <div class="reject-inline" *ngIf="showRejectForm">
+      <label class="reject-label" for="reject-motivo-chat">Motivo del rechazo (opcional)</label>
+      <textarea
+        id="reject-motivo-chat"
+        class="reject-textarea"
+        [value]="rejectMotivo"
+        (input)="onRejectMotivoChange($event)"
+        placeholder="Describe brevemente el motivo..."
+        rows="2"
+        [disabled]="isRejecting"></textarea>
+      <p class="reject-error" *ngIf="rejectError" role="alert">{{ rejectError }}</p>
+      <div class="reject-btns">
+        <button type="button" class="btn-cancel-reject" (click)="cancelReject()" [disabled]="isRejecting">
+          Cancelar
+        </button>
+        <button type="button" class="btn-confirm-reject" (click)="confirmarRechazar()" [disabled]="isRejecting">
+          {{ isRejecting ? 'Rechazando...' : 'Confirmar rechazo' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="action-buttons" *ngIf="!showRejectForm">
+      <button type="button" class="btn-rechazar-oferta"
+        [disabled]="!isOfertaActiva"
+        (click)="openRejectForm()">
+        Rechazar oferta
+      </button>
+      <button type="button" class="btn-aceptar-oferta-chat"
+        [disabled]="!isOfertaActiva"
+        (click)="onAceptar()">
+        Aceptar oferta →
+      </button>
+    </div>
+  </div>
+
+  <!-- ── CA-07: Message input ─────────────────────────────────────────────── -->
+  <div class="chat-input-area">
+    <textarea
+      #msgInput
+      class="msg-textarea"
+      [value]="inputText"
+      (input)="onInputChange($event)"
+      (keydown)="onInputKeydown($event)"
+      [disabled]="!isOfertaActiva || isSending"
+      [placeholder]="isOfertaActiva ? 'Escribe un mensaje... (Enter para enviar, Shift+Enter para salto de línea)' : 'Chat cerrado.'"
+      rows="1"
+      aria-label="Mensaje"></textarea>
+    <button type="button" class="btn-send"
+      [disabled]="!inputText.trim() || isSending || !isOfertaActiva"
+      (click)="sendMessage()"
+      aria-label="Enviar mensaje">
+      ▶
+    </button>
+  </div>
+
+</div>
