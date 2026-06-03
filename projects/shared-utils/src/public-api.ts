@@ -25,3 +25,9 @@ export * from './lib/services/upload-modal/upload-modal.service';
 export * from './lib/services/types/constantes.type';
 export * from './lib/services/facturas/factura.service';
 export * from './lib/services/types/factura.type';
+
+// Session & models (HU-13)
+export * from './lib/models/user.model';
+export * from './lib/models/organization.model';
+export * from './lib/models/session.model';
+export * from './lib/services/session/session.service';
