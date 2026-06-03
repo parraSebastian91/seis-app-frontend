@@ -1,0 +1,240 @@
+// =============================================================================
+// FACTOR DESIGN SYSTEM — TOKENS
+// HU-37 · CA-01 Arquitectura de tres capas de tokens CSS
+// =============================================================================
+//
+// REGLA: los componentes solo consumen tokens semánticos (--color-*).
+//        Nunca usar --ref-* directamente en componentes (viola Capa 1).
+//
+// Importar en el shell global styles:  @import 'path/to/_tokens.scss';
+// =============================================================================
+
+
+// =============================================================================
+// CAPA 1 — Paleta de referencia (inmutable, nunca usar en componentes)
+// =============================================================================
+:root {
+  --ref-navy-deep:      #0D1655;  // fondo más oscuro de identidad Factor
+  --ref-navy:           #1A237E;  // azul marino principal
+  --ref-navy-mid:       #1E2A8A;  // azul marino elevado
+  --ref-teal:           #00BFA5;  // teal primario (acento de marca)
+  --ref-teal-dim:       #00897B;  // teal oscurecido (hover / dim)
+  --ref-teal-bright:    #64FFDA;  // teal luminoso (highlight en dark)
+  --ref-white:          #FFFFFF;  // blanco puro
+  --ref-ink:            #0A0D1A;  // negro absoluto (texto sobre teal)
+  --ref-surface-light:  #F5F5F0;  // superficie clara
+  --ref-gray-100:       #F0F2F5;  // fondo light base
+  --ref-gray-300:       #C7CDD8;  // bordes y divisores light
+  --ref-gray-500:       #8E97A8;  // texto secundario light
+  --ref-gray-700:       #4A5568;  // texto secundario medio
+}
+
+
+// =============================================================================
+// CAPA 2 — Tokens semánticos (redefinidos por [data-theme])
+// Todos los componentes consumen SOLO estos tokens.
+// =============================================================================
+
+// --- Tema DARK (default MVP) -------------------------------------------------
+[data-theme="dark"] {
+  --color-bg-base:           #0D1655;              // fondo raíz de la app
+  --color-bg-surface:        #1A237E;              // tarjetas, paneles
+  --color-bg-elevated:       #1E2A8A;              // dropdowns, tooltips
+  --color-text-primary:      #FFFFFF;              // texto principal
+  --color-text-secondary:    rgba(255,255,255,.55); // texto de apoyo
+  --color-text-disabled:     rgba(255,255,255,.25); // texto deshabilitado
+  --color-border:            rgba(255,255,255,.08); // separadores y bordes
+  --color-brand-primary:     var(--org-brand-primary);     // acento principal
+  --color-brand-primary-dim: var(--org-brand-primary-dim); // acento hover/dim
+  --color-brand-on-primary:  var(--org-brand-on-primary);  // texto sobre acento
+}
+
+// --- Tema LIGHT (post-MVP v1) ------------------------------------------------
+[data-theme="light"] {
+  --color-bg-base:           #F0F2F5;
+  --color-bg-surface:        #FFFFFF;
+  --color-bg-elevated:       #FFFFFF;
+  --color-text-primary:      #0A0D1A;
+  --color-text-secondary:    #4A5568;
+  --color-text-disabled:     #C7CDD8;
+  --color-border:            rgba(0,0,0,.10);
+  --color-brand-primary:     var(--org-brand-primary);
+  --color-brand-primary-dim: var(--org-brand-primary-dim);
+  --color-brand-on-primary:  var(--org-brand-on-primary);
+}
+
+
+// =============================================================================
+// CAPA 3 — Tokens de organización (Capa 3, personalización runtime)
+// Solo estos 3 tokens pueden ser sobreescritos por la organización activa.
+// Sobreescritura: element.style.setProperty('--org-brand-primary', value)
+// Validación: contraste WCAG AA mínimo (4.5:1) antes de persistir.
+// =============================================================================
+:root {
+  // Defaults — marca Factor (teal sobre ink)
+  --org-brand-primary:      var(--ref-teal);      // #00BFA5
+  --org-brand-primary-dim:  var(--ref-teal-dim);  // #00897B
+  --org-brand-on-primary:   var(--ref-ink);       // #0A0D1A
+}
+
+
+// =============================================================================
+// CA-04 — Tokens de estado (constantes en ambos temas, no personalizables)
+// =============================================================================
+:root {
+  --color-success: #22C55E;  // confirmaciones, estados completados
+  --color-warning: #F59E0B;  // alertas, notas OCR pendientes
+  --color-error:   #EF4444;  // errores, logout, acciones destructivas
+  --color-info:    #3B82F6;  // notificaciones informativas
+}
+
+
+// =============================================================================
+// CA-07 — Variables de fuentes
+// =============================================================================
+:root {
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+
+// =============================================================================
+// CA-08 — Escala tipográfica
+// =============================================================================
+:root {
+  // Display & Headings (font-sans)
+  --text-display-size:   clamp(2rem, 4vw, 3rem);
+  --text-display-weight: 800;
+
+  --text-h1-size:   clamp(1.75rem, 3vw, 2.25rem);
+  --text-h1-weight: 800;
+
+  --text-h2-size:   1.5rem;
+  --text-h2-weight: 700;
+
+  --text-h3-size:   1.25rem;
+  --text-h3-weight: 700;
+
+  // Body (font-sans)
+  --text-body-lg-size:   1rem;
+  --text-body-lg-weight: 400;
+
+  --text-body-size:   0.875rem;
+  --text-body-weight: 400;
+
+  --text-body-sm-size:   0.75rem;
+  --text-body-sm-weight: 400;
+
+  // Label (font-sans, uppercase)
+  --text-label-size:   0.75rem;
+  --text-label-weight: 700;
+
+  // Data — financial figures (font-mono, tabular-nums)
+  --text-data-lg-size:   1.25rem;
+  --text-data-lg-weight: 700;
+
+  --text-data-size:   0.875rem;
+  --text-data-weight: 500;
+
+  --text-data-sm-size:   0.75rem;
+  --text-data-sm-weight: 400;
+}
+
+
+// =============================================================================
+// CA-08 — Clases de utilidad tipográfica
+// =============================================================================
+
+// --- Sans-serif roles --------------------------------------------------------
+.text-display {
+  font-family: var(--font-sans);
+  font-size: var(--text-display-size);
+  font-weight: var(--text-display-weight);
+  line-height: 1.1;
+}
+
+.text-h1 {
+  font-family: var(--font-sans);
+  font-size: var(--text-h1-size);
+  font-weight: var(--text-h1-weight);
+  line-height: 1.15;
+}
+
+.text-h2 {
+  font-family: var(--font-sans);
+  font-size: var(--text-h2-size);
+  font-weight: var(--text-h2-weight);
+  line-height: 1.25;
+}
+
+.text-h3 {
+  font-family: var(--font-sans);
+  font-size: var(--text-h3-size);
+  font-weight: var(--text-h3-weight);
+  line-height: 1.3;
+}
+
+.text-body-lg {
+  font-family: var(--font-sans);
+  font-size: var(--text-body-lg-size);
+  font-weight: var(--text-body-lg-weight);
+  line-height: 1.6;
+}
+
+.text-body {
+  font-family: var(--font-sans);
+  font-size: var(--text-body-size);
+  font-weight: var(--text-body-weight);
+  line-height: 1.55;
+}
+
+.text-body-sm {
+  font-family: var(--font-sans);
+  font-size: var(--text-body-sm-size);
+  font-weight: var(--text-body-sm-weight);
+  line-height: 1.5;
+}
+
+.text-label {
+  font-family: var(--font-sans);
+  font-size: var(--text-label-size);
+  font-weight: var(--text-label-weight);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1;
+}
+
+// --- Mono roles (financial data) ---------------------------------------------
+.text-data-lg {
+  font-family: var(--font-mono);
+  font-size: var(--text-data-lg-size);
+  font-weight: var(--text-data-lg-weight);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+.text-data {
+  font-family: var(--font-mono);
+  font-size: var(--text-data-size);
+  font-weight: var(--text-data-weight);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+.text-data-sm {
+  font-family: var(--font-mono);
+  font-size: var(--text-data-sm-size);
+  font-weight: var(--text-data-sm-weight);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+
+// =============================================================================
+// CA-09 — Excepción documentada: PreLiquidaciónCard
+// Este componente usa --ref-navy-deep directamente (highlight financiero).
+// No debe adaptarse al toggle de tema.
+// =============================================================================
+// .pre-liquidacion-card {
+//   background-color: var(--ref-navy-deep); /* #0D1655 — navy-deep */
+// }
