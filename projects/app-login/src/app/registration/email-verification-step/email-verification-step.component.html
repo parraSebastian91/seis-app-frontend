@@ -1,0 +1,35 @@
+<div class="otp-step">
+  <span class="material-icons otp-step__icon" aria-hidden="true">mark_email_read</span>
+  <h2 class="otp-step__title">Verifica tu email</h2>
+  <p class="otp-step__hint">
+    Te enviamos un código a <strong>{{ email }}</strong>. Ingrésalo para activar tu cuenta.
+  </p>
+
+  @if (verifying()) {
+    <div class="otp-step__verifying" aria-live="polite">
+      <span class="material-icons otp-step__spin" aria-hidden="true">refresh</span>
+      Verificando…
+    </div>
+  } @else {
+    <app-otp-input (otpComplete)="onOtpComplete($event)" />
+  }
+
+  @if (errorMessage()) {
+    <p class="otp-step__error" role="alert">{{ errorMessage() }}</p>
+  }
+
+  <div class="otp-step__resend">
+    <button
+      type="button"
+      class="otp-step__resend-btn"
+      [disabled]="countdown() > 0"
+      (click)="onResend()"
+    >
+      @if (countdown() > 0) {
+        Reenviar en {{ countdown() }}s
+      } @else {
+        Reenviar código
+      }
+    </button>
+  </div>
+</div>

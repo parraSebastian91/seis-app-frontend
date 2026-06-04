@@ -1,0 +1,53 @@
+<div class="reg-layout">
+  <!-- Left panel — desktop only -->
+  <aside class="reg-layout__left" aria-hidden="true">
+    <div class="reg-layout__brand">
+      <span class="material-icons reg-layout__brand-icon">receipt_long</span>
+      <span class="reg-layout__brand-name">SEIS</span>
+    </div>
+    <div class="reg-layout__tagline">
+      <h2>La plataforma de factoring más ágil de Chile.</h2>
+      <p>Conectamos cedentes y financieras en tiempo real.</p>
+    </div>
+  </aside>
+
+  <!-- Right panel — form -->
+  <main class="reg-layout__right">
+    <div class="reg-layout__form-wrap">
+      <a class="reg-layout__login-link" routerLink="/">
+        ¿Ya tienes cuenta? <strong>Inicia sesión</strong>
+      </a>
+
+      <!-- Progress bar (wizard steps 1-3) -->
+      @if (isWizard()) {
+        <nav class="reg-progress" aria-label="Progreso de registro">
+          @for (step of stepLabels; track step.label; let i = $index) {
+            <div class="reg-progress__step"
+                 [class.is-active]="currentWizardStep === i"
+                 [class.is-done]="currentWizardStep > i">
+              <div class="reg-progress__indicator">
+                @if (currentWizardStep > i) {
+                  <span class="material-icons" aria-hidden="true">check</span>
+                } @else {
+                  <span>{{ i + 1 }}</span>
+                }
+              </div>
+              <span class="reg-progress__label">{{ step.label }}</span>
+            </div>
+            @if (i < stepLabels.length - 1) {
+              <div class="reg-progress__connector"></div>
+            }
+          }
+        </nav>
+      }
+
+      <!-- Step views -->
+      @switch (svc.step()) {
+        @case (0) { <app-role-selection-step /> }
+        @case (1) { <app-personal-data-step /> }
+        @case (2) { <app-credentials-step /> }
+        @case (3) { <app-email-verification-step /> }
+      }
+    </div>
+  </main>
+</div>

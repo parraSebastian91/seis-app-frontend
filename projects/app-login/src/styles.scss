@@ -1,0 +1,12 @@
+@import '../../../shared-utils/src/lib/styles/tokens';
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans, 'Plus Jakarta Sans', sans-serif);
+  background: var(--color-bg-base, #0d1117);
+  color: var(--color-text-primary, #e6edf3);
+}

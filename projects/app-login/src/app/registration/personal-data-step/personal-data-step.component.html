@@ -1,0 +1,85 @@
+<form class="step-form" [formGroup]="form" (ngSubmit)="onContinue()">
+  <h2 class="step-form__title">Tus datos personales</h2>
+
+  <div class="step-form__row">
+    <div class="step-form__field">
+      <label for="nombre" class="step-form__label">Nombre</label>
+      <input id="nombre" type="text" class="step-form__input"
+             formControlName="nombre"
+             placeholder="Juan"
+             autocomplete="given-name"
+             [attr.aria-invalid]="!!fieldError('nombre') || null"
+             [attr.aria-describedby]="fieldError('nombre') ? 'nombre-err' : null" />
+      @if (fieldError('nombre')) {
+        <span class="step-form__error" id="nombre-err" role="alert">{{ fieldError('nombre') }}</span>
+      }
+    </div>
+
+    <div class="step-form__field">
+      <label for="apellido" class="step-form__label">Apellido</label>
+      <input id="apellido" type="text" class="step-form__input"
+             formControlName="apellido"
+             placeholder="Pérez"
+             autocomplete="family-name"
+             [attr.aria-invalid]="!!fieldError('apellido') || null"
+             [attr.aria-describedby]="fieldError('apellido') ? 'apellido-err' : null" />
+      @if (fieldError('apellido')) {
+        <span class="step-form__error" id="apellido-err" role="alert">{{ fieldError('apellido') }}</span>
+      }
+    </div>
+  </div>
+
+  <div class="step-form__field">
+    <label for="rut-input" class="step-form__label">RUT personal</label>
+    <app-rut-input
+      inputId="rut-input"
+      name="rut"
+      placeholder="Ej: 12.345.678-9"
+      [value]="rutValue()"
+      (valueChange)="onRutChange($event)"
+      (validChange)="onRutValidChange($event)"
+    />
+  </div>
+
+  <div class="step-form__field">
+    <label for="email" class="step-form__label">Email</label>
+    <input id="email" type="email" class="step-form__input"
+           formControlName="email"
+           placeholder="juan@empresa.cl"
+           autocomplete="email"
+           [attr.aria-invalid]="!!fieldError('email') || null"
+           [attr.aria-describedby]="fieldError('email') ? 'email-err' : null" />
+    @if (fieldError('email')) {
+      <span class="step-form__error" id="email-err" role="alert">{{ fieldError('email') }}</span>
+    }
+  </div>
+
+  <div class="step-form__field">
+    <label for="telefono" class="step-form__label">Teléfono</label>
+    <div class="step-form__phone-row">
+      <span class="step-form__phone-prefix">+56</span>
+      <input id="telefono" type="tel" class="step-form__input step-form__input--phone"
+             formControlName="telefono"
+             placeholder="912345678"
+             inputmode="numeric"
+             maxlength="9"
+             autocomplete="tel-national"
+             [attr.aria-invalid]="!!fieldError('telefono') || null"
+             [attr.aria-describedby]="fieldError('telefono') ? 'tel-err' : null" />
+    </div>
+    @if (fieldError('telefono')) {
+      <span class="step-form__error" id="tel-err" role="alert">{{ fieldError('telefono') }}</span>
+    }
+  </div>
+
+  <div class="step-form__actions">
+    <button type="button" class="step-form__btn step-form__btn--back" (click)="onBack()">
+      <span class="material-icons" aria-hidden="true">arrow_back</span>
+      Atrás
+    </button>
+    <button type="submit" class="step-form__btn step-form__btn--primary" [disabled]="!canContinue">
+      Continuar
+      <span class="material-icons" aria-hidden="true">arrow_forward</span>
+    </button>
+  </div>
+</form>
