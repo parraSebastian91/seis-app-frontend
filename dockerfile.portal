@@ -12,8 +12,8 @@ RUN npm cache clean --force && \
 COPY . . 
 RUN rm -rf node_modules/.cache && \
     rm -rf node_modules/.vite && \
-    npm run build -- shared-utils && \
-    npx ng build seis-portal --configuration development --base-href=/portal/
+    npm run build:shared-utils && \
+    npm run ng -- build seis-portal --configuration development --base-href=/portal/
 
 # Copiar manifest de producción
 RUN cp projects/seis-portal/public/federation.manifest.prod.json dist/seis-portal/browser/federation.manifest.json

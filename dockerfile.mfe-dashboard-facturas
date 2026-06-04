@@ -12,8 +12,8 @@ RUN npm cache clean --force && \
 COPY . .
 RUN rm -rf node_modules/.cache && \
     rm -rf node_modules/.vite && \
-    npm run build -- shared-utils && \
-    npx ng build seis-mfe-dashboard-facturas --configuration development --base-href=/mfe-dashboard-facturas/
+    npm run build:shared-utils && \
+    npm run ng -- build seis-mfe-dashboard-facturas --configuration development --base-href=/mfe-dashboard-facturas/
 
 # Stage 2: Nginx
 FROM nginx:alpine
