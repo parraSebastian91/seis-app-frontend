@@ -24,6 +24,7 @@
         "build": {
           "builder": "@angular-architects/native-federation:build",
           "options": {
+            "target": "seis-portal:esbuild:production",
             "styles": [
               "@angular/material/prebuilt-themes/azure-blue.css"
             ]
@@ -115,7 +116,13 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": {
+                "scripts": true,
+                "styles": true,
+                "vendor": true
+              },
+              "namedChunks": true,
+              "outputHashing": "none"
             }
           },
           "defaultConfiguration": "production"
@@ -157,14 +164,15 @@
       "architect": {
         "build": {
           "builder": "@angular-architects/native-federation:build",
-          "options": {},
+          "options": {
+            "target": "seis-mfe-gestion-usuario:esbuild:production"
+          },
           "configurations": {
             "production": {
               "target": "seis-mfe-gestion-usuario:esbuild:production"
             },
             "development": {
-              "target": "seis-mfe-gestion-usuario:esbuild:development",
-              "dev": true
+              "target": "seis-mfe-gestion-usuario:esbuild:development"
             }
           },
           "defaultConfiguration": "production"
@@ -320,14 +328,15 @@
       "architect": {
         "build": {
           "builder": "@angular-architects/native-federation:build",
-          "options": {},
+          "options": {
+            "target": "seis-mfe-dashboard-facturas:esbuild:production"
+          },
           "configurations": {
             "production": {
               "target": "seis-mfe-dashboard-facturas:esbuild:production"
             },
             "development": {
-              "target": "seis-mfe-dashboard-facturas:esbuild:development",
-              "dev": true
+              "target": "seis-mfe-dashboard-facturas:esbuild:development"
             }
           },
           "defaultConfiguration": "production"
@@ -450,7 +459,9 @@
       "architect": {
         "build": {
           "builder": "@angular-architects/native-federation:build",
-          "options": {},
+          "options": {
+            "target": "seis-mfe-publicador-facturas:esbuild:production"
+          },
           "configurations": {
             "production": {
               "target": "seis-mfe-publicador-facturas:esbuild:production"
@@ -589,7 +600,9 @@
       "architect": {
         "build": {
           "builder": "@angular-architects/native-federation:build",
-          "options": {},
+          "options": {
+            "target": "seis-mfe-ofertador-facturas:esbuild:production"
+          },
           "configurations": {
             "production": {
               "target": "seis-mfe-ofertador-facturas:esbuild:production"

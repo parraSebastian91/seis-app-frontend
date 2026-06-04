@@ -1,19 +1,16 @@
 # Stage 1: Build
-FROM node:20-alpine AS builder
+FROM node:20 AS builder
 
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm cache clean --force && \
-    npm ci --legacy-peer-deps && \
-    rm -rf node_modules/esbuild node_modules/@esbuild && \
-    npm install esbuild --force --legacy-peer-deps
+RUN npm ci --legacy-peer-deps
 
 COPY . . 
 RUN rm -rf node_modules/.cache && \
     rm -rf node_modules/.vite && \
-    npm run build:shared-utils && \
-    npm run ng -- build seis-portal --configuration development --base-href=/portal/
+    ./node_modules/.bin/ng build shared-utils && \
+    ./node_modules/.bin/ng build seis-portal --configuration development --base-href=/portal/
 
 # Copiar manifest de producción
 RUN cp projects/seis-portal/public/federation.manifest.prod.json dist/seis-portal/browser/federation.manifest.json
