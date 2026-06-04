@@ -119,3 +119,25 @@ export interface AutorizacionPublicacionDto {
   acepto: boolean;
   correlationId?: string;
 }
+
+export enum ofertaEstado {
+  ACTIVA = 'ACTIVA',
+  ACEPTADA = 'ACEPTADA',
+  RECHAZADA = 'RECHAZADA',
+  VENCIDA = 'VENCIDA',
+}
+
+export interface OfertaDetalleType {
+  ofertaId: string;
+  assetId?: string;
+  ejecutivoNombre: string;
+  ejecutivoAvatarUrl?: string;
+  financieraNombre?: string;
+  montoAnticipo: number;
+  porcentajeAnticipo: number;
+  tasaMensual: number;
+  gastosOperacionales: number;
+  liquidoRecibir: number;
+  fechaVigencia: Date;
+  estado: ofertaEstado;
+}

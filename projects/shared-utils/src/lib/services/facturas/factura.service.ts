@@ -4,7 +4,7 @@ import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import type { ApiResponse } from '../types/api-response.model';
 import { USER_PROFILE_SERVICE_CONFIG, UserProfileServiceConfig } from '../UserProfile/userProfile.service';
 import { HttpClient } from '@angular/common/http';
-import { AutorizacionPublicacionDto, FacturaCreateRequestDto, facturaEstado, FacturaRequestDTO, FacturaResponseUpdateDTO, FacturaType, VersionTerminos } from '../types/factura.type';
+import { AutorizacionPublicacionDto, FacturaCreateRequestDto, facturaEstado, FacturaRequestDTO, FacturaResponseUpdateDTO, FacturaType, OfertaDetalleType, VersionTerminos } from '../types/factura.type';
 
 @Injectable({
   providedIn: 'root'
@@ -154,6 +154,63 @@ export class FacturasService {
       );
     } catch (err) {
       console.error('Error al registrar autorización:', err);
+      throw err;
+    }
+  }
+
+  async getFacturaById(facturaId: string): Promise<FacturaType> {
+    const apiBase = this.config?.apiBase || '';
+    const url = `${apiBase}/api/bff/facturas/${facturaId}`;
+    try {
+      const response = await firstValueFrom(
+        this.http.get<ApiResponse<FacturaType>>(url, { observe: 'response' })
+      );
+      if (!response.body?.data) {
+        throw new Error('Factura no encontrada.');
+      }
+      return response.body.data;
+    } catch (err) {
+      console.error('Error al obtener factura:', err);
+      throw err;
+    }
+  }
+
+  async getOfertasByFacturaId(facturaId: string): Promise<OfertaDetalleType[]> {
+    const apiBase = this.config?.apiBase || '';
+    const url = `${apiBase}/api/bff/facturas/${facturaId}/ofertas`;
+    try {
+      const response = await firstValueFrom(
+        this.http.get<ApiResponse<OfertaDetalleType[]>>(url, { observe: 'response' })
+      );
+      return response.body?.data ?? [];
+    } catch (err) {
+      console.error('Error al obtener ofertas:', err);
+      throw err;
+    }
+  }
+
+  async aceptarOferta(ofertaId: string): Promise<void> {
+    const apiBase = this.config?.apiBase || '';
+    const url = `${apiBase}/api/bff/ofertas/${ofertaId}/aceptar`;
+    try {
+      await firstValueFrom(
+        this.http.post<ApiResponse<void>>(url, {}, { observe: 'response' })
+      );
+    } catch (err) {
+      console.error('Error al aceptar oferta:', err);
+      throw err;
+    }
+  }
+
+  async rechazarOferta(ofertaId: string, motivo?: string): Promise<void> {
+    const apiBase = this.config?.apiBase || '';
+    const url = `${apiBase}/api/bff/ofertas/${ofertaId}/rechazar`;
+    try {
+      await firstValueFrom(
+        this.http.post<ApiResponse<void>>(url, { motivo: motivo ?? '' }, { observe: 'response' })
+      );
+    } catch (err) {
+      console.error('Error al rechazar oferta:', err);
       throw err;
     }
   }

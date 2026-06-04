@@ -11,7 +11,7 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
-import { NgClass, NgFor, NgIf, DatePipe } from '@angular/common';
+import { NgClass, NgFor, NgIf, DatePipe, UpperCasePipe } from '@angular/common';
 import { ChatMessage, ChatMessageStatus } from '../../services/types/chat.type';
 import { ChatService } from '../../services/chat/chat.service';
 import { FacturaType, OfertaDetalleType, ofertaEstado } from '../../services/types/factura.type';
@@ -23,7 +23,7 @@ import { UserStateService } from '../../services/states/userstate.service';
   templateUrl: './negotiation-chat.component.html',
   styleUrl: './negotiation-chat.component.scss',
   standalone: true,
-  imports: [NgIf, NgFor, NgClass, DatePipe],
+  imports: [NgIf, NgFor, NgClass, DatePipe, UpperCasePipe],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NegotiationChatComponent implements OnInit, OnDestroy {

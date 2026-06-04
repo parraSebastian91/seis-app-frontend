@@ -52,3 +52,7 @@ export * from './lib/components/negotiation-chat/negotiation-chat.component';
 // SearchableCardSelect (HU-35)
 export * from './lib/components/searchable-card-select/searchable-card-item.type';
 export * from './lib/components/searchable-card-select/searchable-card-select.component';
+
+// RutInput + PasswordStrengthMeter (HU-38)
+export * from './lib/components/rut-input/rut-input.component';
+export * from './lib/components/password-strength-meter/password-strength-meter.component';
