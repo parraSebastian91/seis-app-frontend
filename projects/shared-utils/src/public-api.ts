@@ -56,3 +56,7 @@ export * from './lib/components/searchable-card-select/searchable-card-select.co
 // RutInput + PasswordStrengthMeter (HU-38)
 export * from './lib/components/rut-input/rut-input.component';
 export * from './lib/components/password-strength-meter/password-strength-meter.component';
+
+// Generic Drawer
+export * from './lib/services/drawer/drawer.service';
+export * from './lib/services/drawer/drawer.types';

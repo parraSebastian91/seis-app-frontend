@@ -205,6 +205,39 @@
   text-overflow: ellipsis;
 }
 
+/* ── Botón de acción por ítem ────────────────────────────────────────── */
+.sc-item-action {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s, background 0.15s, color 0.15s;
+
+  .sc-item:hover &,
+  .sc-item--focused & {
+    opacity: 1;
+  }
+
+  &:hover {
+    background: var(--sc-primary, #1976d2);
+    color: #ffffff;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--sc-primary, #1976d2);
+    outline-offset: 2px;
+    opacity: 1;
+  }
+}
+
 /* ── Avatar circular (CA-06, EB-05) ──────────────────────────────────── */
 .sc-avatar {
   width: 36px;
@@ -231,4 +264,78 @@
   letter-spacing: 0.03em;
   text-transform: uppercase;
   user-select: none;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   RESPONSIVE — Bottom sheet (mobile ≤ 700px)
+   ══════════════════════════════════════════════════════════════════ */
+@media (max-width: 700px) {
+
+  /* Trigger: más compacto, muestra el nombre truncado */
+  .sc-trigger {
+    min-width: unset;
+    max-width: 220px;
+    padding: 0.4rem 0.65rem;
+  }
+
+  /* Backdrop semitransparente detrás del panel */
+  .sc-open::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 498;
+    animation: sc-backdrop-in 0.22s ease both;
+  }
+
+  @keyframes sc-backdrop-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* Panel → bottom sheet */
+  .sc-panel {
+    position: fixed;
+    bottom: 64px;   /* justo sobre la barra de navegación */
+    left: 0;
+    right: 0;
+    top: auto;
+    width: 100%;
+    max-width: 100%;
+    /* altura máxima: espacio entre barra inferior y margen superior seguro */
+    max-height: calc(100dvh - 64px - 2rem);
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -6px 32px rgba(0, 0, 0, 0.22);
+    z-index: 499;
+    animation: sc-sheet-up 0.26s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+
+  @keyframes sc-sheet-up {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+  }
+
+  /* Handle visual en la parte superior de la hoja */
+  .sc-search-wrap::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 36px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--sc-panel-border, #e2e8f0);
+  }
+
+  .sc-search-wrap {
+    position: relative;
+    padding-top: 1rem;
+  }
+
+  /* Ítems con mayor altura para toque más cómodo */
+  .sc-item {
+    padding: 0.85rem 0.75rem;
+  }
 }

@@ -31,6 +31,8 @@ export class SearchableCardSelectComponent implements OnDestroy {
   @Input() icon = 'business';
 
   @Output() readonly selectionChange = new EventEmitter<SearchableCardItem>();
+  /** Emitido al hacer clic en el botón de acción (→) de un ítem. */
+  @Output() readonly profileClick = new EventEmitter<SearchableCardItem>();
 
   isOpen = false;
   searchQuery = '';
@@ -104,6 +106,12 @@ export class SearchableCardSelectComponent implements OnDestroy {
       .map(w => w[0])
       .join('')
       .toUpperCase();
+  }
+
+  onProfileClick(event: MouseEvent, item: SearchableCardItem): void {
+    event.stopPropagation();
+    this.profileClick.emit(item);
+    this.close();
   }
 
   /** Cierra el panel al hacer clic fuera del componente (CA-07). */

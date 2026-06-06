@@ -12,10 +12,11 @@ CodeGraph is a **local semantic code index** that:
 ## Current Status
 
 ✅ **Initialized:** `.codegraph/` directory created
-✅ **Indexed:** 100 files, 1,049 nodes, 1,717 edges
-✅ **Database:** `.codegraph/codegraph.db` (2.3 MB)
+✅ **Indexed:** 546 files, 7,237 nodes, 12,239 edges
+✅ **Database:** `.codegraph/codegraph.db` (14.60 MB)
 ✅ **Framework:** Angular detected
 ✅ **Copilot Context:** `copilot-instructions.md` created
+✅ **Last updated:** 2026-06-05
 
 ## Usage
 
