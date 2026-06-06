@@ -10,7 +10,7 @@ export class NotificationSocketService {
     public notifications = signal<any[]>([]);
     public unreadCount = signal(0);
 
-    private readonly defaultSocketUrl = 'http://localhost:8000/notifications';
+    private readonly defaultSocketUrl = typeof window !== 'undefined' ? `${window.location.origin}/notifications` : 'http://localhost:8000/notifications';
     private readonly defaultSocketPath = '/api/bff/socket.io';
 
     constructor() {}
