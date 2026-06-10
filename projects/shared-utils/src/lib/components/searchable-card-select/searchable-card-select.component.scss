@@ -4,36 +4,48 @@
   position: relative;
 }
 
+/* ── Token defaults (DS-aware) ───────────────────────────────────────── */
+:host {
+  --sc-trigger-bg:     var(--color-bg-elevated,  #f8fafc);
+  --sc-trigger-border: var(--color-border,        rgba(255,255,255,.08));
+  --sc-trigger-color:  var(--color-text-primary,  #1f2937);
+  --sc-primary:        var(--color-brand-primary, #00BFA5);
+  --sc-icon-color:     var(--color-text-secondary,#475569);
+  --sc-panel-bg:       var(--color-bg-elevated,   #ffffff);
+  --sc-panel-border:   var(--color-border,        rgba(255,255,255,.08));
+  --sc-item-hover:     rgba(255,255,255,0.06);
+}
+
 /* ── Trigger (CA-02) ─────────────────────────────────────────────────── */
 .sc-trigger {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.45rem 0.75rem;
-  background: var(--sc-trigger-bg, #f8fafc);
-  border: 1.5px solid var(--sc-trigger-border, #d0d7e2);
+  background: var(--sc-trigger-bg);
+  border: 1.5px solid var(--sc-trigger-border);
   border-radius: 10px;
   cursor: pointer;
   font: inherit;
   font-size: 0.875rem;
-  color: var(--sc-trigger-color, #1f2937);
+  color: var(--sc-trigger-color);
   transition: border-color 0.15s, box-shadow 0.15s;
   max-width: 320px;
   min-width: 180px;
 
   &:hover {
-    border-color: var(--sc-primary, #1976d2);
+    border-color: var(--sc-primary);
   }
 
   &:focus-visible {
-    outline: 2px solid var(--sc-primary, #1976d2);
+    outline: 2px solid var(--sc-primary);
     outline-offset: 2px;
   }
 }
 
 .sc-open .sc-trigger {
-  border-color: var(--sc-primary, #1976d2);
-  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15);
+  border-color: var(--sc-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--sc-primary) 20%, transparent);
 }
 
 .sc-trigger-icon {
@@ -72,10 +84,10 @@
   min-width: 280px;
   max-width: 360px;
   width: max-content;
-  background: var(--sc-panel-bg, #ffffff);
-  border: 1.5px solid var(--sc-panel-border, #e2e8f0);
+  background: var(--sc-panel-bg);
+  border: 1.5px solid var(--sc-panel-border);
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.32);
   z-index: 500;
   overflow: hidden;
   display: flex;
@@ -91,8 +103,8 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.65rem 0.75rem;
-  background: var(--sc-panel-bg, #ffffff);
-  border-bottom: 1px solid var(--sc-panel-border, #e2e8f0);
+  background: var(--sc-panel-bg);
+  border-bottom: 1px solid var(--sc-panel-border);
   flex-shrink: 0;
 }
 
@@ -109,12 +121,12 @@
   outline: none;
   font: inherit;
   font-size: 0.875rem;
-  color: var(--sc-trigger-color, #1f2937);
+  color: var(--sc-trigger-color);
   background: transparent;
   min-width: 0;
 
   &::placeholder {
-    color: #94a3b8;
+    color: var(--sc-icon-color);
   }
 
   &:disabled {
@@ -154,30 +166,30 @@
   transition: background-color 0.12s;
 
   &:hover {
-    background-color: var(--sc-item-hover, #f1f5f9);
+    background-color: var(--sc-item-hover);
   }
 }
 
 /* Foco por teclado con pulse (CA-09) */
 .sc-item--focused {
-  background-color: var(--sc-item-hover, #f1f5f9);
+  background-color: var(--sc-item-hover);
   animation: sc-pulse 1.4s ease-in-out infinite;
 }
 
 /* Ítem seleccionado activo */
 .sc-item--selected {
-  background-color: rgba(25, 118, 210, 0.06);
+  background-color: color-mix(in srgb, var(--sc-primary) 12%, transparent);
 
   .sc-item-name {
-    color: var(--sc-primary, #1976d2);
+    color: var(--sc-primary);
     font-weight: 600;
   }
 }
 
 @keyframes sc-pulse {
   0%,
-  100% { box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.6); }
-  50%  { box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.18); }
+  100% { box-shadow: 0 0 0 2px color-mix(in srgb, var(--sc-primary) 60%, transparent); }
+  50%  { box-shadow: 0 0 0 4px color-mix(in srgb, var(--sc-primary) 18%, transparent); }
 }
 
 .sc-item-info {
@@ -191,7 +203,7 @@
 .sc-item-name {
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--sc-trigger-color, #1f2937);
+  color: var(--sc-trigger-color);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -199,7 +211,7 @@
 
 .sc-item-meta {
   font-size: 0.75rem;
-  color: #64748b;
+  color: var(--sc-icon-color);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -216,7 +228,7 @@
   border: none;
   border-radius: 6px;
   background: transparent;
-  color: #94a3b8;
+  color: var(--sc-icon-color);
   cursor: pointer;
   opacity: 0;
   transition: opacity 0.15s, background 0.15s, color 0.15s;
@@ -227,12 +239,12 @@
   }
 
   &:hover {
-    background: var(--sc-primary, #1976d2);
-    color: #ffffff;
+    background: var(--sc-primary);
+    color: var(--color-brand-on-primary, #0A0D1A);
   }
 
   &:focus-visible {
-    outline: 2px solid var(--sc-primary, #1976d2);
+    outline: 2px solid var(--sc-primary);
     outline-offset: 2px;
     opacity: 1;
   }
@@ -245,7 +257,7 @@
   border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
-  background-color: var(--sc-primary, #1976d2);
+  background-color: var(--sc-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -326,7 +338,7 @@
     width: 36px;
     height: 4px;
     border-radius: 2px;
-    background: var(--sc-panel-border, #e2e8f0);
+    background: var(--sc-panel-border);
   }
 
   .sc-search-wrap {
