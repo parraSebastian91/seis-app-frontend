@@ -27,4 +27,6 @@ export interface UserProfile {
   cargo: string;
   telefono: string;
   ubicacion: string;
+  /** Roles del sistema asignados al usuario (ej. ['ADMIN', 'OPERADOR']) */
+  roles?: string[];
 }

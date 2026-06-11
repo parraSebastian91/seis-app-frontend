@@ -33,7 +33,7 @@ export class UserStateService {
             large: DEFAULT_BANNER
         },
         sidebarMenus: [],
-        role: '',
+        roles: [],
         organizationProfile: [{
             razonSocial: '',
             uuid: ''
@@ -50,7 +50,7 @@ export class UserStateService {
     userName = computed(() => this._state().username);
     fullName = computed(() => this._state().NombreCompleto);
     email = computed(() => this._state().email);
-    role = computed(() => this._state().role);
+    roles = computed(() => this._state().roles);
     avatarSrc = computed(() => this.toImageSrc(this._state().avatarUrl, DEFAULT_AVATAR));
     bannerSrc = computed(() => this.toImageSrc(this._state().bannerUrl, DEFAULT_BANNER));
     displayName = computed(() => this._state().NombreCompleto || this._state().username || 'Usuario');
@@ -98,14 +98,14 @@ export class UserStateService {
         }));
     }
 
-    setBasicInfo(id: string, username: string, fullName: string, email: string, role: string) {
+    setBasicInfo(id: string, username: string, fullName: string, email: string, roles: string[]) {
         this._state.update(current => ({
             ...current,
             id,
             username,
             NombreCompleto: fullName,
             email,
-            role
+            roles
         }));
     }
 
@@ -140,7 +140,7 @@ export class UserStateService {
                 large: DEFAULT_BANNER
             },
             sidebarMenus: [],
-            role: '',
+            roles: [],
             organizationProfile: [{
                 razonSocial: '',
                 uuid: ''

@@ -8,8 +8,8 @@
 >
 	<div class="card__surface">
 
-		<!-- ── HEADER / TÍTULO ──────────────────────── -->
-		<header class="card__header">
+		<!-- ── HEADER / TÍTULO — visible sólo si el slot está ocupado o hay loading ── -->
+		<header class="card__header" *ngIf="hasTitle || loading">
 			<ng-container *ngIf="!loading">
 				<ng-content select="[card-title]"></ng-content>
 			</ng-container>
@@ -33,8 +33,8 @@
 			</ng-container>
 		</div>
 
-		<!-- ── FOOTER ───────────────────────────────── -->
-		<footer class="card__footer">
+		<!-- ── FOOTER — visible sólo si el slot está ocupado o hay loading ──────── -->
+		<footer class="card__footer" *ngIf="hasFooter || loading">
 			<ng-container *ngIf="!loading">
 				<ng-content select="[card-footer]"></ng-content>
 			</ng-container>

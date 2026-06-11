@@ -1,0 +1,31 @@
+<div
+  class="collab-card"
+  role="link"
+  tabindex="0"
+  (click)="onSelect()"
+  (keydown.enter)="onSelect()"
+  [attr.aria-label]="'Ver perfil de ' + colaborador.nombre + ' ' + colaborador.apellido"
+>
+  <!-- Avatar -->
+  <div class="collab-card__avatar">
+    <img
+      *ngIf="colaborador.avatarUrl"
+      [src]="colaborador.avatarUrl"
+      [alt]="colaborador.nombre + ' ' + colaborador.apellido"
+      class="collab-card__avatar-img"
+    />
+    <span *ngIf="!colaborador.avatarUrl" class="collab-card__avatar-initials" aria-hidden="true">
+      {{ getInitials(colaborador.nombre + ' ' + colaborador.apellido) }}
+    </span>
+  </div>
+
+  <!-- Info -->
+  <div class="collab-card__info">
+    <span class="collab-card__name">{{ colaborador.nombre }} {{ colaborador.apellido }}</span>
+    <span *ngIf="colaborador.cargo" class="collab-card__cargo">{{ colaborador.cargo }}</span>
+    <span *ngIf="colaborador.grupoNombre" class="collab-card__grupo">
+      <mat-icon aria-hidden="true">group</mat-icon>
+      {{ colaborador.grupoNombre }}
+    </span>
+  </div>
+</div>

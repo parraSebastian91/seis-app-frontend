@@ -63,3 +63,8 @@ export * from './lib/services/drawer/drawer.types';
 
 // Card Component
 export * from './lib/components/card/card.component';
+export { CardTitleDirective, CardFooterDirective } from './lib/components/card/card.component';
+
+// Card Colaborador
+export * from './lib/components/card-colaborador/card-colaborador.component';
+export type { CardColaboradorData } from './lib/components/card-colaborador/card-colaborador.component';
