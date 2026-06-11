@@ -1,0 +1,16 @@
+<div
+	class="card"
+	[class.is-loading]="loading"
+	[class.is-elevated]="elevated"
+	[class.has-hover-lift]="hoverLift"
+	[ngStyle]="cardStyles"
+	[attr.aria-busy]="loading"
+>
+	<div class="card__surface">
+		<ng-content></ng-content>
+	</div>
+
+	<div class="card__loading-overlay" *ngIf="loading" aria-hidden="true">
+		<span class="card__loading-shimmer"></span>
+	</div>
+</div>

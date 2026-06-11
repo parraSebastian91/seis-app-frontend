@@ -60,3 +60,6 @@ export * from './lib/components/password-strength-meter/password-strength-meter.
 // Generic Drawer
 export * from './lib/services/drawer/drawer.service';
 export * from './lib/services/drawer/drawer.types';
+
+// Card Component
+export * from './lib/components/card/card.component';
