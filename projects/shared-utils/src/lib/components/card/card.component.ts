@@ -15,7 +15,7 @@ export class CardComponent {
   @Input() hoverLift = false;
 
   @Input() width = '300px';
-  @Input() height = '200px';
+  @Input() height = 'auto';
   @Input() radius = '16px';
 
   /** Permite usar token del sistema de diseño, hex o color CSS válido. */

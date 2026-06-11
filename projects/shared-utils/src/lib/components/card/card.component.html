@@ -7,10 +7,42 @@
 	[attr.aria-busy]="loading"
 >
 	<div class="card__surface">
-		<ng-content></ng-content>
-	</div>
 
-	<div class="card__loading-overlay" *ngIf="loading" aria-hidden="true">
-		<span class="card__loading-shimmer"></span>
+		<!-- ── HEADER / TÍTULO ──────────────────────── -->
+		<header class="card__header">
+			<ng-container *ngIf="!loading">
+				<ng-content select="[card-title]"></ng-content>
+			</ng-container>
+			<ng-container *ngIf="loading">
+				<span class="card__skeleton-bar card__skeleton-bar--title"     aria-hidden="true"></span>
+				<span class="card__skeleton-bar card__skeleton-bar--subtitle"  aria-hidden="true"></span>
+			</ng-container>
+		</header>
+
+		<!-- ── BODY / CONTENIDO ─────────────────────── -->
+		<div class="card__body">
+			<ng-container *ngIf="!loading">
+				<ng-content select="[card-content]"></ng-content>
+				<ng-content></ng-content>
+			</ng-container>
+			<ng-container *ngIf="loading">
+				<span class="card__skeleton-bar"                               aria-hidden="true"></span>
+				<span class="card__skeleton-bar card__skeleton-bar--md"        aria-hidden="true"></span>
+				<span class="card__skeleton-bar"                               aria-hidden="true"></span>
+				<span class="card__skeleton-bar card__skeleton-bar--sm"        aria-hidden="true"></span>
+			</ng-container>
+		</div>
+
+		<!-- ── FOOTER ───────────────────────────────── -->
+		<footer class="card__footer">
+			<ng-container *ngIf="!loading">
+				<ng-content select="[card-footer]"></ng-content>
+			</ng-container>
+			<ng-container *ngIf="loading">
+				<span class="card__skeleton-bar card__skeleton-bar--btn"       aria-hidden="true"></span>
+				<span class="card__skeleton-bar card__skeleton-bar--btn"       aria-hidden="true"></span>
+			</ng-container>
+		</footer>
+
 	</div>
 </div>
