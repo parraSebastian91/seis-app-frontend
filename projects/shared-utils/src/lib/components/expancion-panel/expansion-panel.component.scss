@@ -125,7 +125,7 @@
 // =============================================================================
 
 .ep__header {
-  // Reset de botón
+  // Apariencia de botón sin usar el elemento <button> para permitir slots interactivos
   appearance: none;
   background: transparent;
   border: none;
@@ -134,6 +134,7 @@
   font-family: var(--font-sans, system-ui);
   color: var(--color-text-primary, #fff);
   width: 100%;
+  user-select: none;
 
   display: flex;
   align-items: center;
@@ -146,7 +147,7 @@
     color      var(--ep-duration-close) var(--ep-ease-standard);
 
   // ── Hover ────────────────────────────────────────────────────────────────
-  &:hover:not(:disabled) {
+  &:hover:not([aria-disabled="true"]) {
     background: color-mix(in srgb, var(--ep-glow-color) 6%, transparent);
   }
 

@@ -78,13 +78,17 @@ export class CardComponent implements AfterContentInit {
   }
 
   get cardStyles(): Record<string, string> {
-    const pad = this.padding === 'default' ? null : (this.padding === 'none' ? '0' : this.padding);
-    return {
+    const styles: Record<string, string> = {
       '--card-width': this.width,
       '--card-height': this.height,
       '--card-radius': this.radius,
       '--card-glow-color': this.glowColor,
-      ...(pad !== null ? { '--card-padding': pad } : {}),
     };
+    if (this.padding === 'default') {
+      styles['--card-padding'] = '18px 20px 14px'; // valores por defecto del design system
+    } else {
+      styles['--card-padding'] = this.padding === 'none' ? '0' : this.padding;
+    }
+    return styles;
   }
 }

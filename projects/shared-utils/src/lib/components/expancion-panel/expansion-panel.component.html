@@ -2,6 +2,10 @@
   ExpansionPanelComponent — Factor Design System
   Estructura: [header-trigger] + [region-content] + [footer-opcional]
   Accesibilidad: WAI-ARIA Accordion Pattern 1.1
+
+  NOTA: el header usa div[role=button] (no <button>) para permitir la inyección
+  de elementos interactivos (botones, chips) dentro del slot panel-header
+  sin producir HTML inválido (<button> anidados).
 -->
 <div
   class="ep"
@@ -14,42 +18,34 @@
   (animationend)="onAttentionEnd()"
 >
 
-  <!-- ══════════════════════════════════════════════════════
-       HEADER / TRIGGER
-       Visible siempre. Activa el toggle al hacer click.
-  ══════════════════════════════════════════════════════ -->
-  <button
-    type="button"
+  <!-- HEADER / TRIGGER -->
+  <div
     class="ep__header"
+    role="button"
     [id]="headerId"
+    [attr.tabindex]="disabled ? -1 : 0"
     [attr.aria-expanded]="expanded"
     [attr.aria-controls]="regionId"
     [attr.aria-disabled]="disabled || null"
     [attr.aria-label]="chevronLabel"
-    [disabled]="disabled || null"
     (click)="toggle()"
     (keydown.enter)="toggle()"
     (keydown.space)="$event.preventDefault(); toggle()"
   >
 
-    <!-- Slot del header — acepta cualquier contenido -->
     <div class="ep__header-slot">
       <ng-container *ngIf="!loading">
         <ng-content select="[panel-header]"></ng-content>
-        <!-- Fallback si no se inyecta nada -->
         <ng-container *ngIf="!hasHeader">
           <span class="ep__header-placeholder">Panel</span>
         </ng-container>
       </ng-container>
-
-      <!-- Skeleton del header -->
       <ng-container *ngIf="loading">
         <span class="ep__skeleton ep__skeleton--title" aria-hidden="true"></span>
         <span class="ep__skeleton ep__skeleton--subtitle" aria-hidden="true"></span>
       </ng-container>
     </div>
 
-    <!-- Chevron indicador de expansión -->
     <svg
       class="ep__chevron"
       viewBox="0 0 24 24"
@@ -67,13 +63,9 @@
       />
     </svg>
 
-  </button>
+  </div>
 
-  <!-- ══════════════════════════════════════════════════════
-       REGION EXPANDIDA
-       Controlada por aria-controls / aria-labelledby.
-       La altura se anima via CSS grid-template-rows trick.
-  ══════════════════════════════════════════════════════ -->
+  <!-- REGION EXPANDIDA -->
   <div
     class="ep__region"
     role="region"
@@ -83,13 +75,10 @@
   >
     <div class="ep__region-inner">
 
-      <!-- Cuerpo principal -->
       <div class="ep__content">
         <ng-container *ngIf="!loading">
           <ng-content select="[panel-content]"></ng-content>
         </ng-container>
-
-        <!-- Skeleton del cuerpo -->
         <ng-container *ngIf="loading">
           <span class="ep__skeleton" aria-hidden="true"></span>
           <span class="ep__skeleton ep__skeleton--md" aria-hidden="true"></span>
@@ -98,13 +87,10 @@
         </ng-container>
       </div>
 
-      <!-- Footer opcional -->
       <footer class="ep__footer" *ngIf="hasFooter || loading">
         <ng-container *ngIf="!loading">
           <ng-content select="[panel-footer]"></ng-content>
         </ng-container>
-
-        <!-- Skeleton del footer -->
         <ng-container *ngIf="loading">
           <span class="ep__skeleton ep__skeleton--btn" aria-hidden="true"></span>
           <span class="ep__skeleton ep__skeleton--btn" aria-hidden="true"></span>
