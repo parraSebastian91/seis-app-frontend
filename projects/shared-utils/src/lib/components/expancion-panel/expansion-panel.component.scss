@@ -1,0 +1,311 @@
+// =============================================================================
+// ExpansionPanelComponent — Factor Design System
+// Tokens: _tokens.scss (CA-01 → CA-09)
+// Curvas de easing:
+//   --ep-ease-standard  → cubic-bezier(0.4, 0, 0.2, 1)   (Material You)
+//   --ep-ease-decelerate → cubic-bezier(0, 0, 0.2, 1)    (entrada suave)
+// =============================================================================
+
+:host {
+  display: block;
+
+  // ── Tokens propios del componente (sobreescribibles desde el consumidor) ──
+  --ep-radius:            12px;
+  --ep-duration-open:     280ms;
+  --ep-duration-close:    220ms;
+  --ep-ease-standard:     cubic-bezier(0.4, 0, 0.2, 1);
+  --ep-ease-decelerate:   cubic-bezier(0, 0, 0.2, 1);
+  --ep-ease-attention:    cubic-bezier(0.36, 0.07, 0.19, 0.97);
+
+  --ep-glow-color:        var(--color-brand-primary, #00BFA5);
+  --ep-header-min-height: 56px;
+  --ep-content-padding:   16px 20px;
+  --ep-footer-padding:    12px 20px;
+}
+
+// =============================================================================
+// SHELL DEL PANEL
+// =============================================================================
+
+.ep {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--ep-radius);
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+  background: var(--color-bg-surface, #1A237E);
+  overflow: hidden;
+  transition:
+    border-color var(--ep-duration-open) var(--ep-ease-standard),
+    box-shadow   var(--ep-duration-open) var(--ep-ease-standard);
+}
+
+// ── Estado expandido: borde más visible ──────────────────────────────────────
+.ep.ep--expanded {
+  border-color: color-mix(in srgb, var(--ep-glow-color) 28%, transparent);
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--ep-glow-color) 10%, transparent);
+}
+
+// ── Estado disabled ──────────────────────────────────────────────────────────
+.ep.ep--disabled {
+  opacity: 0.45;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+// ── Estado loading: borde giratorio (heredado de app-card) ───────────────────
+.ep::before {
+  content: '';
+  position: absolute;
+  inset: -55%;
+  z-index: 0;
+  opacity: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    transparent 0deg,
+    transparent 220deg,
+    color-mix(in srgb, var(--ep-glow-color) 85%, white) 300deg,
+    transparent 360deg
+  );
+  transition: opacity 300ms ease;
+}
+
+.ep.ep--loading::before {
+  opacity: 1;
+  animation: ep-shine 2.8s linear infinite;
+}
+
+// Máscara interior que cubre el borde giratorio (igual que app-card)
+.ep::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  z-index: 1;
+  border-radius: calc(var(--ep-radius) - 2px);
+  background: var(--color-bg-surface, #1A237E);
+}
+
+// Surface por encima de los pseudo-elementos
+.ep > * {
+  position: relative;
+  z-index: 2;
+}
+
+// =============================================================================
+// ATTENTION-GRABBER — microinteracción perimetral no intrusiva
+// Estrategia: destello de sombra coloreada + sutil bounce vertical.
+// El animation se aplica al .ep shell para no afectar el layout interno.
+// =============================================================================
+
+.ep.ep--attention-warning {
+  animation: ep-attention-warning 600ms var(--ep-ease-attention) both;
+}
+
+.ep.ep--attention-info {
+  animation: ep-attention-info 600ms var(--ep-ease-attention) both;
+}
+
+@keyframes ep-attention-warning {
+  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-warning, #F59E0B) 0%,  transparent); transform: translateY(0); }
+  18%  { box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-warning, #F59E0B) 55%, transparent); transform: translateY(-3px); }
+  38%  { box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-warning, #F59E0B) 35%, transparent); transform: translateY(2px); }
+  58%  { box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-warning, #F59E0B) 20%, transparent); transform: translateY(-1px); }
+  100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-warning, #F59E0B) 0%,  transparent); transform: translateY(0); }
+}
+
+@keyframes ep-attention-info {
+  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-info, #3B82F6) 0%,  transparent); transform: translateY(0); }
+  18%  { box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-info, #3B82F6) 55%, transparent); transform: translateY(-3px); }
+  38%  { box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-info, #3B82F6) 35%, transparent); transform: translateY(2px); }
+  58%  { box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-info, #3B82F6) 20%, transparent); transform: translateY(-1px); }
+  100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-info, #3B82F6) 0%,  transparent); transform: translateY(0); }
+}
+
+// =============================================================================
+// HEADER / TRIGGER
+// =============================================================================
+
+.ep__header {
+  // Reset de botón
+  appearance: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-sans, system-ui);
+  color: var(--color-text-primary, #fff);
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: var(--ep-header-min-height);
+  padding: 14px 20px;
+
+  transition:
+    background var(--ep-duration-close) var(--ep-ease-standard),
+    color      var(--ep-duration-close) var(--ep-ease-standard);
+
+  // ── Hover ────────────────────────────────────────────────────────────────
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--ep-glow-color) 6%, transparent);
+  }
+
+  // ── Focus visible (navegación por teclado) ───────────────────────────────
+  &:focus-visible {
+    outline: 2px solid var(--ep-glow-color);
+    outline-offset: -2px;
+    border-radius: var(--ep-radius) var(--ep-radius) 0 0;
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+// Separador inferior cuando el panel está expandido
+.ep--expanded .ep__header {
+  border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+}
+
+// Slot del header — ocupa todo el espacio disponible
+.ep__header-slot {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ep__header-placeholder {
+  font-size: var(--text-body-size, 0.875rem);
+  font-weight: 600;
+  color: var(--color-text-secondary, rgba(255,255,255,.75));
+}
+
+// =============================================================================
+// CHEVRON — rotación 0° → 180° al expandir
+// =============================================================================
+
+.ep__chevron {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--color-text-secondary, rgba(255,255,255,.55));
+  transform: rotate(0deg);
+  transition:
+    transform  var(--ep-duration-open) var(--ep-ease-standard),
+    color      var(--ep-duration-open) var(--ep-ease-standard);
+}
+
+.ep__chevron--rotated {
+  transform: rotate(180deg);
+  color: var(--ep-glow-color);
+}
+
+// =============================================================================
+// REGIÓN EXPANDIDA
+// Técnica: grid-template-rows 0fr → 1fr (sin necesidad de JS para medir altura)
+// Soportada en Chrome 107+, Firefox 109+, Safari 16+
+// =============================================================================
+
+.ep__region {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--ep-duration-open) var(--ep-ease-decelerate);
+}
+
+.ep--expanded .ep__region {
+  grid-template-rows: 1fr;
+  transition-duration: var(--ep-duration-open);
+}
+
+// El inner debe tener overflow:hidden para que el grid-row trick funcione
+.ep__region-inner {
+  overflow: hidden;
+}
+
+// =============================================================================
+// CONTENIDO Y FOOTER
+// =============================================================================
+
+.ep__content {
+  padding: var(--ep-content-padding);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ep__footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: var(--ep-footer-padding);
+  border-top: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+}
+
+// =============================================================================
+// SKELETON BARS (alineado con app-card skeleton)
+// =============================================================================
+
+.ep__skeleton {
+  display: block;
+  border-radius: 6px;
+  height: 14px;
+  width: 100%;
+  flex-shrink: 0;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--ep-glow-color)  6%, var(--color-bg-surface, #1A237E))  0%,
+    color-mix(in srgb, var(--ep-glow-color) 16%, var(--color-bg-surface, #1A237E)) 40%,
+    color-mix(in srgb, var(--ep-glow-color)  6%, var(--color-bg-surface, #1A237E)) 80%
+  );
+  background-size: 300% 100%;
+  animation: ep-skeleton-wave 1.6s ease-in-out infinite;
+
+  &:nth-child(2) { animation-delay: 0.13s; }
+  &:nth-child(3) { animation-delay: 0.26s; }
+  &:nth-child(4) { animation-delay: 0.39s; }
+}
+
+// Header: title — más alto y ancho 55%
+.ep__skeleton--title {
+  height: 20px;
+  width: 55%;
+  border-radius: 8px;
+}
+
+// Header: subtitle — fino y 35%
+.ep__skeleton--subtitle {
+  height: 12px;
+  width: 35%;
+}
+
+// Cuerpo: línea media (78%)
+.ep__skeleton--md { width: 78%; }
+
+// Cuerpo: línea corta (48%)
+.ep__skeleton--sm { width: 48%; }
+
+// Footer: botón skeleton (píldora)
+.ep__skeleton--btn {
+  height: 34px;
+  width: 88px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+// =============================================================================
+// KEYFRAMES
+// =============================================================================
+
+@keyframes ep-shine {
+  from { transform: rotate(0deg);   }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes ep-skeleton-wave {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
