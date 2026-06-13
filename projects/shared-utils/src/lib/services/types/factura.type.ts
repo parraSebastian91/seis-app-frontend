@@ -34,16 +34,27 @@ export enum facturaEstadoDescripcion {
   DENUNCIADA = "Denunciada"
 }
 
+export interface FacturaAdjuntoType {
+  id: string;
+  asset_id: string;
+  tipo: string;         // 'FACTURA_ORIGINAL' | 'orden-compra' | etc. (media.categoria.codigo)
+  es_principal: boolean;
+  orden: number;
+  descripcion: string | null;
+  url_path: string | null;
+}
+
 export interface FacturaType {
   facturaId: string;
-  assetId: string;
-  ownerUUID: string; // cedente_org_id
+  assetId: string;      // puede llegar vacío cuando los adjuntos están en adjuntos[]
+  ownerUUID: string;    // cedente_org_id
   gestor: {
     uuid: string;
     username: string;
   };
-  nombre_cliente_cedente: string; // deudor_nombre
-  rut_cliente_cedente: string; // deudor_rut
+  adjuntos?: FacturaAdjuntoType[];
+  nombre_cliente_cedente: string;
+  rut_cliente_cedente: string;
   deudorNombre: string;
   deudorRut: string;
   facturaNumero: string;
@@ -51,13 +62,13 @@ export interface FacturaType {
   fechaVencimiento: Date;
   status: facturaEstado;
   correlationId: string;
-  total_ofertas: number;
-  ofertas_enviadas: number;
-  ofertas_revisadas: number;
-  ofertas_aceptadas: number;
-  ofertas_rechazadas: number;
+  total_ofertas: string | number;     // el backend retorna string desde la vista SQL; los componentes inicializan con 0
+  ofertas_enviadas: string | number;
+  ofertas_revisadas: string | number;
+  ofertas_aceptadas: string | number;
+  ofertas_rechazadas: string | number;
   url_factura: string | null;
-  createdBy: createdBy;
+  createdBy?: createdBy;
   notas?: string[];
 }
 
