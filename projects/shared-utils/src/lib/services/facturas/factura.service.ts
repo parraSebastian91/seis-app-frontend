@@ -19,10 +19,22 @@ export class FacturasService {
     @Optional() @Inject(USER_PROFILE_SERVICE_CONFIG) private config?: UserProfileServiceConfig
   ) { }
 
-  async getFacturas(organizacionUUID: string): Promise<FacturaType[]> {
+  async getFacturas(organizacionUUID: string, tipoFiltro?: string): Promise<FacturaType[]> {
+    let filtro = '';
+
+    switch (tipoFiltro) {
+      case 'Todas':
+        filtro = '/all';
+        break;
+      case 'Publicadas':
+        filtro = '/publicadas';
+        break;
+      default:
+        filtro = '/xorganizacion';
+    }
 
     const apiBase = this.config?.apiBase || '';
-    const getFacturasUrl = `${apiBase}/api/bff/facturas/list/${organizacionUUID}`;
+    const getFacturasUrl = `${apiBase}/api/bff/facturas/list/${organizacionUUID}${filtro}`;
 
     const facturasRequest = this.http.get<ApiResponse<FacturaType[]>>(getFacturasUrl, {
       observe: 'response'
