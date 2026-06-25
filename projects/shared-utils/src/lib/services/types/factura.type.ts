@@ -36,12 +36,12 @@ export enum facturaEstadoDescripcion {
 
 export interface FacturaAdjuntoType {
   id: string;
-  asset_id: string;
   tipo: string;         // 'FACTURA_ORIGINAL' | 'orden-compra' | etc. (media.categoria.codigo)
-  es_principal: boolean;
   orden: number;
-  descripcion: string | null;
+  asset_id: string;
   url_path: string | null;
+  descripcion: string | null;
+  es_principal: boolean;
 }
 
 export interface FacturaType {
