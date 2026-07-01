@@ -3,7 +3,7 @@ import { io, Socket } from 'socket.io-client';
 
 @Injectable({ providedIn: 'root' })
 export class NotificationSocketService {
-    
+
     private socket: Socket | undefined;
 
     // Signal para que el Shell y MFEs lean las notificaciones
@@ -29,7 +29,7 @@ export class NotificationSocketService {
     connect(userId: string, socketUrl = this.defaultSocketUrl, socketPath = this.defaultSocketPath) {
         console.log('Conectando al WebSocket');
         if (this.socket?.connected) return; // Evita duplicados
- 
+
         this.socket = io(socketUrl, {
             path: socketPath,
             query: { userId },

@@ -1,4 +1,3 @@
-import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import type { ApiResponse } from '../types/api-response.model';
@@ -13,7 +12,8 @@ export class FacturasService {
   private readonly notificationsPanelOpenSubject = new BehaviorSubject<boolean>(false);
 
   readonly notificationsPanelOpen$ = this.notificationsPanelOpenSubject.asObservable();
-
+  /** Base URL vacía — las rutas son relativas (/api/bff/...) y funcionan detrás de Kong */
+  private readonly apibase = '';
   constructor(
     private http: HttpClient,
     @Optional() @Inject(USER_PROFILE_SERVICE_CONFIG) private config?: UserProfileServiceConfig
@@ -33,8 +33,8 @@ export class FacturasService {
         filtro = '/xorganizacion';
     }
 
-    const apiBase = this.config?.apiBase || '';
-    const getFacturasUrl = `${apiBase}/api/bff/facturas/list/${organizacionUUID}${filtro}`;
+
+    const getFacturasUrl = `${this.apibase}/api/bff/facturas/list/${organizacionUUID}${filtro}`;
 
     const facturasRequest = this.http.get<ApiResponse<FacturaType[]>>(getFacturasUrl, {
       observe: 'response'
@@ -68,8 +68,8 @@ export class FacturasService {
         valor: valorCampo
       }
     }
-    const apiBase = this.config?.apiBase || '';
-    const updateFacturaUrl = `${apiBase}/api/bff/facturas`;
+
+    const updateFacturaUrl = `${this.apibase}/api/bff/facturas`;
 
     const facturasUpdateRequest = this.http.patch<ApiResponse<FacturaResponseUpdateDTO>>(updateFacturaUrl, body, {
       observe: 'response'
@@ -92,8 +92,8 @@ export class FacturasService {
   }
 
   async publicarFactura(factura: FacturaCreateRequestDto): Promise<FacturaType> {
-    const apiBase = this.config?.apiBase || '';
-    const publicarFacturaUrl = `${apiBase}/api/bff/facturas`;
+
+    const publicarFacturaUrl = `${this.apibase}/api/bff/facturas`;
     try {
       const response = await firstValueFrom(this.http.post<ApiResponse<FacturaType>>(publicarFacturaUrl, factura, {
         observe: 'response'
@@ -141,8 +141,8 @@ export class FacturasService {
   }
 
   async obtenerVersionTerminosActiva(): Promise<VersionTerminos> {
-    const apiBase = this.config?.apiBase || '';
-    const url = `${apiBase}/api/bff/terminos/activo`;
+
+    const url = `${this.apibase}/api/bff/terminos/activo`;
     try {
       const response = await firstValueFrom(
         this.http.get<ApiResponse<VersionTerminos>>(url, { observe: 'response' })
@@ -158,8 +158,8 @@ export class FacturasService {
   }
 
   async registrarAutorizacion(payload: AutorizacionPublicacionDto): Promise<void> {
-    const apiBase = this.config?.apiBase || '';
-    const url = `${apiBase}/api/bff/facturas/autorizacion`;
+
+    const url = `${this.apibase}/api/bff/facturas/autorizacion`;
     try {
       await firstValueFrom(
         this.http.post<ApiResponse<void>>(url, payload, { observe: 'response' })
@@ -171,8 +171,8 @@ export class FacturasService {
   }
 
   async getFacturaById(facturaId: string): Promise<FacturaType> {
-    const apiBase = this.config?.apiBase || '';
-    const url = `${apiBase}/api/bff/facturas/${facturaId}`;
+
+    const url = `${this.apibase}/api/bff/facturas/${facturaId}`;
     try {
       const response = await firstValueFrom(
         this.http.get<ApiResponse<FacturaType>>(url, { observe: 'response' })
@@ -188,8 +188,8 @@ export class FacturasService {
   }
 
   async getOfertasByFacturaId(facturaId: string): Promise<OfertaDetalleType[]> {
-    const apiBase = this.config?.apiBase || '';
-    const url = `${apiBase}/api/bff/facturas/${facturaId}/ofertas`;
+
+    const url = `${this.apibase}/api/bff/facturas/${facturaId}/ofertas`;
     try {
       const response = await firstValueFrom(
         this.http.get<ApiResponse<OfertaDetalleType[]>>(url, { observe: 'response' })
@@ -202,8 +202,8 @@ export class FacturasService {
   }
 
   async aceptarOferta(ofertaId: string): Promise<void> {
-    const apiBase = this.config?.apiBase || '';
-    const url = `${apiBase}/api/bff/ofertas/${ofertaId}/aceptar`;
+
+    const url = `${this.apibase}/api/bff/ofertas/${ofertaId}/aceptar`;
     try {
       await firstValueFrom(
         this.http.post<ApiResponse<void>>(url, {}, { observe: 'response' })
@@ -215,8 +215,8 @@ export class FacturasService {
   }
 
   async rechazarOferta(ofertaId: string, motivo?: string): Promise<void> {
-    const apiBase = this.config?.apiBase || '';
-    const url = `${apiBase}/api/bff/ofertas/${ofertaId}/rechazar`;
+
+    const url = `${this.apibase}/api/bff/ofertas/${ofertaId}/rechazar`;
     try {
       await firstValueFrom(
         this.http.post<ApiResponse<void>>(url, { motivo: motivo ?? '' }, { observe: 'response' })

@@ -2,6 +2,7 @@
  * Public API Surface of shared-utils
  */
 
+export * from './lib/services/SSE/sse.service';
 export * from './lib/theme/theme.service';
 export * from './lib/theme/theme.interface';
 export * from './lib/interceptors/correlation-id.interceptor';

@@ -29,32 +29,18 @@ export class UserProfileService {
     private config?: UserProfileServiceConfig
   ) { }
 
-  private joinUrl(base: string, path: string): string {
-    return `${base.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
-  }
-
-  private getDefaultBase(): string {
-    const locationRef = globalThis?.location;
-    if (!locationRef) {
-      return "";
-    }
-    return locationRef.origin || `${locationRef.protocol}//${locationRef.host}`;
-  }
-
-  private resolveApiBase(apiBase?: string): string {
-    return apiBase || this.config?.apiBase || this.getDefaultBase();
+  /** Base URL configurable — vacía por defecto (rutas relativas detrás de Kong) */
+  private resolveApiBase(): string {
+    return this.config?.apiBase || '';
   }
 
   private resolveBffPath(): string {
     return this.config?.bffPath || "";
   }
 
-  async getUserProfile(apiBase?: string): Promise<UserProfile> {
-    const base = this.resolveApiBase(apiBase);
-    const bffPath = this.resolveBffPath();
-    const profileUrl = this.joinUrl(this.joinUrl(base, bffPath), "api/bff/usuario/profile");
-
-    const userProfile = this.http.get<ApiResponse<UserProfile>>(profileUrl, {
+  async getUserProfile(): Promise<UserProfile> {
+    const url = `${this.resolveApiBase()}/api/bff/usuario/profile`;
+    const userProfile = this.http.get<ApiResponse<UserProfile>>(url, {
       observe: 'response',
       withCredentials: true
     });
@@ -74,9 +60,9 @@ export class UserProfileService {
     }
   }
 
-  async getUserImage(apiBase?: string): Promise<UserImageProfile> {
-    const base = this.resolveApiBase(apiBase);
-    const userProfile = this.http.get<ApiResponse<UserImageProfile> | UserImageProfile>(this.joinUrl(base, "api/bff/usuario/profile/img"), {
+  async getUserImage(): Promise<UserImageProfile> {
+    const url = `${this.resolveApiBase()}/api/bff/usuario/profile/img`;
+    const userProfile = this.http.get<ApiResponse<UserImageProfile> | UserImageProfile>(url, {
       observe: 'response',
       withCredentials: true
     });
@@ -98,11 +84,11 @@ export class UserProfileService {
     }
   }
 
-  async updateUserProfile(apiBase: string | undefined, profileData: Partial<UserProfile>): Promise<void> {
-    const base = this.resolveApiBase(apiBase);
+  async updateUserProfile(profileData: Partial<UserProfile>): Promise<void> {
+    const url = `${this.resolveApiBase()}/api/bff/usuario/profile`;
     console.log('Updating user profile with data:', profileData);
     try {
-      const response = await firstValueFrom(this.http.put(this.joinUrl(base, "api/bff/usuario/profile"), profileData, {
+      const response = await firstValueFrom(this.http.put(url, profileData, {
         observe: 'response',
         withCredentials: true
       }));
@@ -115,11 +101,10 @@ export class UserProfileService {
     }
   }
 
-  async getUserOrganizationProfile(apiBase?: string): Promise<userOrgProfile> {
-    const base = this.resolveApiBase(apiBase);
-    const orgProfileUrl = this.joinUrl(base, "api/bff/usuario/profile/organizacion");
+  async getUserOrganizationProfile(): Promise<userOrgProfile> {
+    const url = `${this.resolveApiBase()}/api/bff/usuario/profile/organizacion`;
     try {
-      const response = await firstValueFrom(this.http.get<ApiResponse<userOrgProfile>>(orgProfileUrl, {
+      const response = await firstValueFrom(this.http.get<ApiResponse<userOrgProfile>>(url, {
         observe: 'response',
         withCredentials: true
       }));
