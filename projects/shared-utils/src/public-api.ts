@@ -70,6 +70,10 @@ export { CardTitleDirective, CardFooterDirective } from './lib/components/card/c
 export * from './lib/components/card-colaborador/card-colaborador.component';
 export type { CardColaboradorData } from './lib/components/card-colaborador/card-colaborador.component';
 
+// Card Organizacion
+export * from './lib/components/card-organizacion/card-organizacion.component';
+export type { CardOrganizacionData } from './lib/components/card-organizacion/card-organizacion.component';
+
 // Expansion Panel (Acordeón)
 export * from './lib/components/expancion-panel/expansion-panel.component';
 export { PanelHeaderDirective, PanelContentDirective, PanelFooterDirective } from './lib/components/expancion-panel/expansion-panel.component';

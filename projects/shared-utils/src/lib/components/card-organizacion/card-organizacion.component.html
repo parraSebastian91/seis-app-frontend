@@ -1,0 +1,37 @@
+<div
+  class="organizacion-card"
+  role="link"
+  tabindex="0"
+  (click)="onSelect()"
+  (keydown.enter)="onSelect()"
+  [attr.aria-label]="'Ver perfil de ' + organizacion.razon_social"
+>
+  <!-- Avatar -->
+  <div class="organizacion-card__avatar">
+    <img
+      *ngIf="organizacion.avatarUrl"
+      [src]="organizacion.avatarUrl"
+      [alt]="organizacion.razon_social"
+      class="organizacion-card__avatar-img"
+    />
+    <span
+      *ngIf="!organizacion.avatarUrl"
+      class="organizacion-card__avatar-initials"
+      aria-hidden="true"
+    >
+      {{ getInitials(organizacion.razon_social) }}
+    </span>
+  </div>
+
+  <!-- Info -->
+  <div class="organizacion-card__info">
+    <span class="organizacion-card__name">{{ organizacion.razon_social }}</span>
+    <span *ngIf="organizacion.rut" class="organizacion-card__cargo">{{
+      organizacion.rut
+    }}</span>
+
+    <span class="badge-contador">
+      {{ organizacion.totalFacturas }}
+    </span>
+  </div>
+</div>
