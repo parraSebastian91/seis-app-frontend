@@ -1,0 +1,176 @@
+:host { display: block; }
+
+// ── Raíz ────────────────────────────────────────────────────────────────────
+.adjuntos-list-root {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+// ── Header ───────────────────────────────────────────────────────────────────
+.adj-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.adj-title {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text-primary, #e2e8f0);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.adj-title-icon { font-size: 1rem; }
+
+.adj-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.3rem;
+  background: var(--color-brand-primary, #00bfa5);
+  color: #060b19;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.adj-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.625rem;
+  background: transparent;
+  border: 1px solid var(--color-border, rgba(255,255,255,0.12));
+  border-radius: 0.375rem;
+  color: var(--color-text-secondary, #94a3b8);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+
+  &:hover {
+    background: rgba(0,191,165,0.08);
+    border-color: var(--color-brand-primary, #00bfa5);
+    color: var(--color-brand-primary, #00bfa5);
+  }
+}
+
+// ── Lista ─────────────────────────────────────────────────────────────────────
+.adj-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.adj-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem 0.625rem;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  outline: none;
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(255,255,255,0.04);
+    border-color: rgba(255,255,255,0.08);
+  }
+
+  &--active {
+    background: rgba(0,191,165,0.1);
+    border-color: rgba(0,191,165,0.3);
+  }
+
+  &--loading {
+    opacity: 0.65;
+    pointer-events: none;
+  }
+}
+
+.adj-icon-wrap {
+  width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.adj-media-icon { font-size: 1.1rem; line-height: 1; }
+
+// Spinner CSS puro
+.adj-spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255,255,255,0.15);
+  border-top-color: var(--color-brand-primary, #00bfa5);
+  border-radius: 50%;
+  animation: adj-spin 0.7s linear infinite;
+}
+
+@keyframes adj-spin {
+  to { transform: rotate(360deg); }
+}
+
+.adj-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.adj-nombre {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-primary, #e2e8f0);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.adj-meta {
+  font-size: 0.7rem;
+  color: var(--color-text-secondary, #64748b);
+}
+
+.adj-active-icon {
+  color: var(--color-brand-primary, #00bfa5);
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+// ── Estado vacío ─────────────────────────────────────────────────────────────
+.adj-empty {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px dashed rgba(255,255,255,0.1);
+  font-size: 0.8rem;
+  color: var(--color-text-secondary, #64748b);
+}
+
+// ── Hint ─────────────────────────────────────────────────────────────────────
+.adj-hint {
+  margin: 0;
+  font-size: 0.7rem;
+  color: var(--color-text-secondary, #64748b);
+}

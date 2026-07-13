@@ -1,0 +1,77 @@
+<section class="adjuntos-list-root" aria-label="Documentos adjuntos">
+
+  <!-- Header -->
+  <header class="adj-header">
+    <h4 class="adj-title">
+      <span class="adj-title-icon" aria-hidden="true">📁</span>
+      {{ titulo }}
+      @if (adjuntos.length) {
+        <span class="adj-count">{{ adjuntos.length }}</span>
+      }
+    </h4>
+    @if (canUpload) {
+      <button
+        type="button"
+        class="adj-add-btn"
+        (click)="uploadRequested.emit()"
+        title="Agregar documento adjunto"
+      >
+        <span aria-hidden="true">＋</span>
+        <span>Agregar</span>
+      </button>
+    }
+  </header>
+
+  <!-- Lista -->
+  <ul class="adj-list" role="listbox" aria-label="Documentos disponibles">
+
+    @for (adj of adjuntos; track trackById($index, adj)) {
+      <li
+        class="adj-item"
+        role="option"
+        [class.adj-item--active]="selectedId === adj.id"
+        [class.adj-item--loading]="loadingId === adj.id"
+        [attr.aria-selected]="selectedId === adj.id"
+        [attr.aria-label]="'Ver ' + adj.nombre + ' (' + adj.tipo + ')'"
+        tabindex="0"
+        (click)="adjuntoSelected.emit(adj)"
+        (keydown.enter)="adjuntoSelected.emit(adj)"
+        (keydown.space)="$event.preventDefault(); adjuntoSelected.emit(adj)"
+      >
+        <!-- Ícono / spinner -->
+        <span class="adj-icon-wrap" aria-hidden="true">
+          @if (loadingId === adj.id) {
+            <span class="adj-spinner"></span>
+          } @else {
+            <span class="adj-media-icon">{{ resolveIcon(adj.mediaIcon) }}</span>
+          }
+        </span>
+
+        <!-- Info -->
+        <div class="adj-info">
+          <span class="adj-nombre">{{ adj.nombre }}</span>
+          <span class="adj-meta">{{ adj.tipo }}</span>
+        </div>
+
+        <!-- Indicador activo -->
+        @if (selectedId === adj.id && loadingId !== adj.id) {
+          <span class="adj-active-icon" aria-hidden="true">◉</span>
+        }
+      </li>
+    }
+
+    <!-- Estado vacío -->
+    @if (!adjuntos.length) {
+      <li class="adj-empty" aria-label="Sin documentos adjuntos">
+        <span aria-hidden="true">☁</span>
+        <span>Sin adjuntos. Sube el PDF de respaldo para visualizarlo aquí.</span>
+      </li>
+    }
+  </ul>
+
+  <!-- Hint formatos -->
+  @if (canUpload) {
+    <p class="adj-hint">Formatos admitidos: PDF, JPEG, PNG, WEBP · Máx. 10 MB por archivo.</p>
+  }
+
+</section>

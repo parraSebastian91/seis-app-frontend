@@ -89,6 +89,7 @@
   min-width: 0;
   flex: 1;
   justify-content: space-between;
+  align-items: center;
   .badge-contador {
     background-color: #3a506b;
     color: #ffffff;
@@ -109,7 +110,14 @@
   text-overflow: ellipsis;
 }
 
-.organizacion-card__cargo {
+.organizacion-card__text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+
+.organizacion-card__rut {
   font-size: var(--text-body-sm-size, 0.75rem);
   color: var(--color-text-secondary, rgba(255, 255, 255, 0.55));
   line-height: 1.3;

@@ -8,27 +8,27 @@
 >
   <!-- Avatar -->
   <div class="organizacion-card__avatar">
-    <img
-      *ngIf="organizacion.avatarUrl"
-      [src]="organizacion.avatarUrl"
-      [alt]="organizacion.razon_social"
-      class="organizacion-card__avatar-img"
-    />
-    <span
-      *ngIf="!organizacion.avatarUrl"
-      class="organizacion-card__avatar-initials"
-      aria-hidden="true"
-    >
-      {{ getInitials(organizacion.razon_social) }}
-    </span>
+    @if (organizacion.avatarUrl) {
+      <img
+        [src]="organizacion.avatarUrl"
+        [alt]="organizacion.razon_social"
+        class="organizacion-card__avatar-img"
+      />
+    } @else {
+      <span class="organizacion-card__avatar-initials" aria-hidden="true">
+        {{ getInitials(organizacion.razon_social) }}
+      </span>
+    }
   </div>
 
   <!-- Info -->
   <div class="organizacion-card__info">
-    <span class="organizacion-card__name">{{ organizacion.razon_social }}</span>
-    <span *ngIf="organizacion.rut" class="organizacion-card__cargo">{{
-      organizacion.rut
-    }}</span>
+    <div class="organizacion-card__text">
+      <span class="organizacion-card__name">
+        {{ organizacion.razon_social }}
+      </span>
+      <span class="organizacion-card__rut">{{ organizacion.rut }}</span>
+    </div>
 
     <span class="badge-contador">
       {{ organizacion.totalFacturas }}

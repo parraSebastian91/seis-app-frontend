@@ -48,6 +48,10 @@ export * from './lib/components/ocr-notes-list/ocr-notes-list.component';
 // Chat (HU-26)
 export * from './lib/services/types/chat.type';
 export * from './lib/services/chat/chat.service';
+
+// Adjuntos (tipo atómico compartido entre MFEs)
+export * from './lib/types/adjunto.type';
+export * from './lib/components/adjuntos-list/adjuntos-list.component';
 export * from './lib/components/negotiation-chat/negotiation-chat.component';
 
 // SearchableCardSelect (HU-35)
