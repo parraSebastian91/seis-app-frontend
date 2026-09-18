@@ -1,0 +1,24 @@
+.loader {
+  color: currentColor;
+  animation: loader-rotate 1s linear infinite;
+}
+
+.loader__track {
+  stroke: currentColor;
+  opacity: .2;
+}
+
+.loader__arc {
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-dasharray: 90;
+  stroke-dashoffset: 60;
+}
+
+@keyframes loader-rotate {
+  100% { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader { animation: none; }
+}

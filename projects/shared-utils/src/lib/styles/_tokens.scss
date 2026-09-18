@@ -231,6 +231,50 @@
 
 
 // =============================================================================
+// CA-10 — Escala de espaciado
+// Grid de 4px. Usar SIEMPRE estos tokens en padding/margin/gap — nunca un
+// número mágico. (Antes de esto no existía ninguna escala compartida: cada
+// componente hardcodeaba sus propios px.)
+// =============================================================================
+:root {
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-12: 48px;
+}
+
+
+// =============================================================================
+// CA-11 — Escala de radios
+// Valores tomados de la escala que ya usaba org-gestor/_admin-shared.scss
+// (única escala real que existía en el repo antes de esto, ahora promovida
+// acá para que todos los proyectos la compartan).
+// =============================================================================
+:root {
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-pill: 999px; // chips, badges, pastillas
+}
+
+
+// =============================================================================
+// CA-12 — Escala de sombras
+// sm/md: mismos valores que ya usaba org-gestor/_admin-shared.scss (afinados
+// para el tema dark). lg: generalización de los `0 20px 60px rgba(0,0,0,.25)`
+// que aparecían sueltos y repetidos en overlays/modales grandes.
+// =============================================================================
+:root {
+  --shadow-sm: 0 1px 4px rgba(0, 0, 0, .25);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, .40);
+  --shadow-lg: 0 20px 60px rgba(0, 0, 0, .25);
+}
+
+
+// =============================================================================
 // CA-09 — Excepción documentada: PreLiquidaciónCard
 // Este componente usa --ref-navy-deep directamente (highlight financiero).
 // No debe adaptarse al toggle de tema.

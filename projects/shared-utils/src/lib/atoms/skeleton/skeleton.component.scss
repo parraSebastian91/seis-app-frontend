@@ -1,0 +1,39 @@
+@import '../../styles/tokens';
+
+:host(.skeleton) {
+    // Overrideable por el consumidor (ej. Card tiñe con su --card-glow-color)
+    // vía [style.--skeleton-base]/[style.--skeleton-mid] en la instancia.
+    --skeleton-base: var(--color-bg-surface);
+    --skeleton-mid: var(--color-bg-elevated);
+
+    display: block;
+    flex-shrink: 0;
+    background: linear-gradient(
+        90deg,
+        var(--skeleton-base) 25%,
+        var(--skeleton-mid) 50%,
+        var(--skeleton-base) 75%
+    );
+    background-size: 300% 100%;
+    animation: skeleton-shimmer 1.6s ease-in-out infinite;
+    border-radius: 6px;
+}
+
+:host(.skeleton--rect) {
+    border-radius: var(--radius-sm, 8px);
+}
+
+:host(.skeleton--circle) {
+    border-radius: 50%;
+}
+
+@keyframes skeleton-shimmer {
+    0%   { background-position: 200% center; }
+    100% { background-position: -200% center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :host(.skeleton) {
+        animation: none;
+    }
+}

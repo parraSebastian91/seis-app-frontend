@@ -1,0 +1,27 @@
+@import '../../styles/tokens';
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 3px var(--space-3, 10px);
+  border-radius: var(--radius-pill);
+  font-size: .72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  flex-shrink: 0;
+  line-height: 1.4;
+
+  // `--badge-color` (set inline via [color]) pisa el color del variant.
+  --badge-fg: var(--badge-color, var(--color-text-secondary));
+  background: color-mix(in srgb, var(--badge-fg) 15%, transparent);
+  color: var(--badge-fg);
+}
+
+.badge--success { --badge-fg: var(--badge-color, var(--color-success)); }
+.badge--warning { --badge-fg: var(--badge-color, var(--color-warning)); }
+.badge--error   { --badge-fg: var(--badge-color, var(--color-error)); }
+.badge--info    { --badge-fg: var(--badge-color, var(--color-info)); }
+.badge--brand   { --badge-fg: var(--badge-color, var(--color-brand-primary)); }
+.badge--neutral { --badge-fg: var(--badge-color, var(--color-text-secondary)); }

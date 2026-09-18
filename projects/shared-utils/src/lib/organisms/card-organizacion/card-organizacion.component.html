@@ -1,0 +1,24 @@
+<div
+  class="organizacion-card"
+  role="link"
+  tabindex="0"
+  (click)="onSelect()"
+  (keydown.enter)="onSelect()"
+  [attr.aria-label]="'Ver perfil de ' + organizacion.razon_social"
+>
+  <!-- Avatar (Fase 2 — antes duplicaba imagen+iniciales a mano, ver AvatarComponent) -->
+  <app-avatar [src]="organizacion.avatarUrl" [name]="organizacion.razon_social" size="md" />
+
+  <!-- Info -->
+  <div class="organizacion-card__info">
+    <div class="organizacion-card__text">
+      <span class="organizacion-card__name">
+        {{ organizacion.razon_social }}
+      </span>
+      <span class="organizacion-card__rut">{{ organizacion.rut }}</span>
+    </div>
+
+    <!-- Antes .badge-contador con color hardcodeado #3a506b -->
+    <app-badge variant="neutral">{{ organizacion.totalFacturas }}</app-badge>
+  </div>
+</div>

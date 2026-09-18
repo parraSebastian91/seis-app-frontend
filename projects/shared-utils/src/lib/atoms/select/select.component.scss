@@ -1,0 +1,54 @@
+@import '../../styles/tokens';
+
+.app-select-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.app-select {
+  width: 100%;
+  height: 2.3rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0 calc(var(--space-3) + 1.5rem) 0 var(--space-3);
+  background: var(--color-bg-elevated);
+  color: var(--color-text-primary);
+  font-size: .875rem;
+  font-family: var(--font-sans);
+  appearance: none;
+  cursor: pointer;
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-brand-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-brand-primary) 15%, transparent);
+  }
+
+  &:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+  }
+
+  option {
+    background: var(--color-bg-elevated);
+    color: var(--color-text-primary);
+  }
+}
+
+.app-select--error {
+  border-color: var(--color-error);
+
+  &:focus {
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-error) 15%, transparent);
+  }
+}
+
+.app-select__chevron {
+  position: absolute;
+  right: var(--space-2);
+  pointer-events: none;
+  color: var(--color-text-secondary);
+}

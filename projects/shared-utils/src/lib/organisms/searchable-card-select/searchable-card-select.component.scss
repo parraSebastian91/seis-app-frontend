@@ -1,0 +1,331 @@
+/* ── Host ────────────────────────────────────────────────────────────── */
+:host {
+  display: block;
+  position: relative;
+}
+
+/* ── Token defaults (DS-aware) ───────────────────────────────────────── */
+:host {
+  --sc-trigger-bg:     var(--color-bg-elevated,  #f8fafc);
+  --sc-trigger-border: var(--color-border,        rgba(255,255,255,.08));
+  --sc-trigger-color:  var(--color-text-primary,  #1f2937);
+  --sc-primary:        var(--color-brand-primary, #00BFA5);
+  --sc-icon-color:     var(--color-text-secondary,#475569);
+  --sc-panel-bg:       var(--color-bg-elevated,   #ffffff);
+  --sc-panel-border:   var(--color-border,        rgba(255,255,255,.08));
+  --sc-item-hover:     rgba(255,255,255,0.06);
+}
+
+/* ── Trigger (CA-02) ─────────────────────────────────────────────────── */
+.sc-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.75rem;
+  background: var(--sc-trigger-bg);
+  border: 1.5px solid var(--sc-trigger-border);
+  border-radius: 10px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--sc-trigger-color);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  max-width: 320px;
+  min-width: 180px;
+
+  &:hover {
+    border-color: var(--sc-primary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--sc-primary);
+    outline-offset: 2px;
+  }
+}
+
+.sc-open .sc-trigger {
+  border-color: var(--sc-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--sc-primary) 20%, transparent);
+}
+
+.sc-trigger-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--sc-icon-color, #475569);
+}
+
+.sc-trigger-label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.sc-chevron {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--sc-icon-color, #475569);
+  transition: rotate 0.2s ease;
+
+  &.sc-chevron--up {
+    rotate: 180deg;
+  }
+}
+
+/* ── Panel flotante (CA-03, CA-04) ──────────────────────────────────── */
+.sc-panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 280px;
+  max-width: 360px;
+  width: max-content;
+  background: var(--sc-panel-bg);
+  border: 1.5px solid var(--sc-panel-border);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.32);
+  z-index: 500;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: 340px;
+}
+
+/* ── Búsqueda sticky (CA-04) ────────────────────────────────────────── */
+.sc-search-wrap {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 0.75rem;
+  background: var(--sc-panel-bg);
+  border-bottom: 1px solid var(--sc-panel-border);
+  flex-shrink: 0;
+}
+
+.sc-search-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--sc-icon-color, #475569);
+}
+
+.sc-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--sc-trigger-color);
+  background: transparent;
+  min-width: 0;
+
+  &::placeholder {
+    color: var(--sc-icon-color);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+/* ── Lista (CA-05) ───────────────────────────────────────────────────── */
+.sc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.4rem 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.sc-empty {
+  padding: 1.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #94a3b8;
+  list-style: none;
+}
+
+/* ── Tarjeta (CA-06) ─────────────────────────────────────────────────── */
+.sc-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  cursor: pointer;
+  margin: 0 0.25rem;
+  border-radius: 8px;
+  list-style: none;
+  transition: background-color 0.12s;
+
+  &:hover {
+    background-color: var(--sc-item-hover);
+  }
+}
+
+/* Foco por teclado con pulse (CA-09) */
+.sc-item--focused {
+  background-color: var(--sc-item-hover);
+  animation: sc-pulse 1.4s ease-in-out infinite;
+}
+
+/* Ítem seleccionado activo */
+.sc-item--selected {
+  background-color: color-mix(in srgb, var(--sc-primary) 12%, transparent);
+
+  .sc-item-name {
+    color: var(--sc-primary);
+    font-weight: 600;
+  }
+}
+
+@keyframes sc-pulse {
+  0%,
+  100% { box-shadow: 0 0 0 2px color-mix(in srgb, var(--sc-primary) 60%, transparent); }
+  50%  { box-shadow: 0 0 0 4px color-mix(in srgb, var(--sc-primary) 18%, transparent); }
+}
+
+.sc-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.sc-item-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--sc-trigger-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sc-item-meta {
+  font-size: 0.75rem;
+  color: var(--sc-icon-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Botón de acción por ítem ────────────────────────────────────────── */
+.sc-item-action {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--sc-icon-color);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s, background 0.15s, color 0.15s;
+
+  .sc-item:hover &,
+  .sc-item--focused & {
+    opacity: 1;
+  }
+
+  &:hover {
+    background: var(--sc-primary);
+    color: var(--color-brand-on-primary, #0A0D1A);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--sc-primary);
+    outline-offset: 2px;
+    opacity: 1;
+  }
+}
+
+/* ── Avatar circular (CA-06, EB-05) ──────────────────────────────────── */
+// Avatar: estilizado por AvatarComponent (ver atoms/avatar). Antes era
+// .sc-avatar/-img/-initials, con su propio bg sólido (var(--sc-primary)) e
+// iniciales blancas — visual levemente distinto al resto de las cards que ya
+// usan AvatarComponent; se unifica a propósito.
+
+/* ══════════════════════════════════════════════════════════════════
+   RESPONSIVE — Bottom sheet (mobile ≤ 700px)
+   ══════════════════════════════════════════════════════════════════ */
+@media (max-width: 700px) {
+
+  /* Trigger: más compacto, muestra el nombre truncado */
+  .sc-trigger {
+    min-width: unset;
+    max-width: 220px;
+    padding: 0.4rem 0.65rem;
+  }
+
+  /* Backdrop semitransparente detrás del panel */
+  .sc-open::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 498;
+    animation: sc-backdrop-in 0.22s ease both;
+  }
+
+  @keyframes sc-backdrop-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* Panel → bottom sheet */
+  .sc-panel {
+    position: fixed;
+    bottom: 64px;   /* justo sobre la barra de navegación */
+    left: 0;
+    right: 0;
+    top: auto;
+    width: 100%;
+    max-width: 100%;
+    /* altura máxima: espacio entre barra inferior y margen superior seguro */
+    max-height: calc(100dvh - 64px - 2rem);
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -6px 32px rgba(0, 0, 0, 0.22);
+    z-index: 499;
+    animation: sc-sheet-up 0.26s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+
+  @keyframes sc-sheet-up {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+  }
+
+  /* Handle visual en la parte superior de la hoja */
+  .sc-search-wrap::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 36px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--sc-panel-border);
+  }
+
+  .sc-search-wrap {
+    position: relative;
+    padding-top: 1rem;
+  }
+
+  /* Ítems con mayor altura para toque más cómodo */
+  .sc-item {
+    padding: 0.85rem 0.75rem;
+  }
+}

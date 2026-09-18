@@ -1,0 +1,24 @@
+<div class="modal-backdrop" *ngIf="open" (click)="close()">
+  <section
+    class="modal-panel"
+    [style.max-width]="maxWidth"
+    (click)="$event.stopPropagation()"
+    role="dialog"
+    aria-modal="true"
+  >
+    <header class="modal-header" *ngIf="hasTitle">
+      <div class="modal-title"><ng-content select="[modal-title]" /></div>
+      <button type="button" class="modal-close" (click)="close()" aria-label="Cerrar">
+        <app-icon name="close" [size]="16" />
+      </button>
+    </header>
+
+    <div class="modal-body">
+      <ng-content />
+    </div>
+
+    <footer class="modal-actions" *ngIf="hasActions">
+      <ng-content select="[modal-actions]" />
+    </footer>
+  </section>
+</div>

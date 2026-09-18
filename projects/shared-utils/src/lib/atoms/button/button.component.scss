@@ -1,0 +1,63 @@
+@import '../../styles/tokens';
+
+// La clase (btn / btn--variant) se aplica vía host binding en el .ts
+// ([class] en `host: {}`), así que el selector tiene que ser :host(.clase) —
+// con ViewEncapsulation emulada, un `.btn { }` plano NUNCA matchea el propio
+// host, solo contenido proyectado dentro de la plantilla.
+:host {
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+  font-size: .875rem;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  transition: background 140ms ease, opacity 140ms ease;
+
+  &:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+  }
+}
+
+:host(.btn--primary) {
+  background: var(--color-brand-primary);
+  color: var(--color-brand-on-primary);
+
+  &:hover:not(:disabled) {
+    background: var(--color-brand-primary-dim);
+  }
+}
+
+:host(.btn--secondary) {
+  border: 1px solid var(--color-brand-primary);
+  background: color-mix(in srgb, var(--color-brand-primary) 12%, transparent);
+  color: var(--color-brand-primary);
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--color-brand-primary) 20%, transparent);
+  }
+}
+
+:host(.btn--light) {
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-elevated);
+  color: var(--color-text-primary);
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--color-text-primary) 8%, var(--color-bg-elevated));
+  }
+}
+
+:host(.btn--danger) {
+  background: var(--color-error);
+  color: #fff;
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--color-error) 85%, black);
+  }
+}

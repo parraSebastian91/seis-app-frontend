@@ -1,0 +1,59 @@
+@import '../../styles/tokens';
+
+.app-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.app-input {
+  width: 100%;
+  height: 2.3rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0 var(--space-3);
+  background: var(--color-bg-elevated);
+  color: var(--color-text-primary);
+  font-size: .875rem;
+  font-family: var(--font-sans);
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-brand-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-brand-primary) 15%, transparent);
+  }
+
+  &::placeholder {
+    color: var(--color-text-disabled);
+  }
+
+  &:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+  }
+}
+
+.app-input--has-suffix {
+  padding-right: calc(var(--space-3) + 1.75rem + var(--space-1));
+}
+
+.app-input__suffix {
+  position: absolute;
+  right: var(--space-2);
+  display: flex;
+  align-items: center;
+
+  &.is-empty {
+    display: none;
+  }
+}
+
+.app-input--error {
+  border-color: var(--color-error);
+
+  &:focus {
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-error) 15%, transparent);
+  }
+}

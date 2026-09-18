@@ -1,0 +1,48 @@
+<div
+	class="card"
+	[class.is-loading]="loading"
+	[class.is-elevated]="elevated"
+	[class.has-hover-lift]="hoverLift"
+	[ngStyle]="cardStyles"
+	[attr.aria-busy]="loading"
+>
+	<div class="card__surface">
+
+		<!-- ── HEADER / TÍTULO — visible sólo si el slot está ocupado o hay loading ── -->
+		<header class="card__header" *ngIf="hasTitle || loading">
+			<ng-container *ngIf="!loading">
+				<ng-content select="[card-title]"></ng-content>
+			</ng-container>
+			<ng-container *ngIf="loading">
+				<app-skeleton width="55%" height="22px" radius="8px" />
+				<app-skeleton width="35%" height="13px" />
+			</ng-container>
+		</header>
+
+		<!-- ── BODY / CONTENIDO ─────────────────────── -->
+		<div class="card__body">
+			<ng-container *ngIf="!loading">
+				<ng-content select="[card-content]"></ng-content>
+				<ng-content></ng-content>
+			</ng-container>
+			<ng-container *ngIf="loading">
+				<app-skeleton />
+				<app-skeleton width="78%" />
+				<app-skeleton />
+				<app-skeleton width="48%" />
+			</ng-container>
+		</div>
+
+		<!-- ── FOOTER — visible sólo si el slot está ocupado o hay loading ──────── -->
+		<footer class="card__footer" *ngIf="hasFooter || loading">
+			<ng-container *ngIf="!loading">
+				<ng-content select="[card-footer]"></ng-content>
+			</ng-container>
+			<ng-container *ngIf="loading">
+				<app-skeleton variant="rect" width="88px" height="34px" radius="8px" />
+				<app-skeleton variant="rect" width="88px" height="34px" radius="8px" />
+			</ng-container>
+		</footer>
+
+	</div>
+</div>

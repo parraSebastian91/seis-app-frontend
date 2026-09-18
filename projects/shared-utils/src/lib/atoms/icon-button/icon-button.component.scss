@@ -1,0 +1,56 @@
+@import '../../styles/tokens';
+
+// Mismo caso que button.component.scss: la clase se aplica vía host binding,
+// así que hace falta :host(.clase) — un `.icon-btn { }` plano no matchea el
+// host con ViewEncapsulation emulada.
+:host {
+  border: none;
+  background: var(--color-bg-elevated);
+  border-radius: var(--radius-pill);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  transition: background 140ms ease, color 140ms ease;
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--color-text-primary) 10%, var(--color-bg-elevated));
+    color: var(--color-text-primary);
+  }
+
+  &:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+  }
+
+  // Tamaño del ícono proyectado (<app-icon>, ver atoms/icon — ya no mat-icon).
+  ::ng-deep app-icon svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+}
+
+:host(.icon-btn--md) {
+  width: 2rem;
+  height: 2rem;
+}
+
+:host(.icon-btn--sm) {
+  width: 1.75rem;
+  height: 1.75rem;
+
+  ::ng-deep app-icon svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+:host(.icon-btn--lg) {
+  width: 2.5rem;
+  height: 2.5rem;
+
+  ::ng-deep app-icon svg {
+    width: 1.35rem;
+    height: 1.35rem;
+  }
+}

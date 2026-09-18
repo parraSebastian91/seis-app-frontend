@@ -1,0 +1,66 @@
+@import '../../styles/tokens';
+
+// Clase aplicada vía host binding — con ViewEncapsulation emulada hace falta
+// :host(.clase), un `.chip { }` plano no matchea el propio host.
+:host {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1;
+  max-width: 100%;
+
+  ::ng-deep app-icon svg {
+    width: 16px;
+    height: 16px;
+    opacity: 0.7;
+  }
+}
+
+:host(.chip--neutral) {
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-elevated);
+  color: var(--color-text-primary);
+}
+
+:host(.chip--brand) {
+  background: color-mix(in srgb, var(--color-brand-primary) 12%, var(--color-bg-surface));
+  color: var(--color-brand-primary);
+
+  ::ng-deep app-icon svg {
+    opacity: 1;
+  }
+}
+
+:host(.chip--clickable) {
+  cursor: pointer;
+}
+
+:host(.chip--clickable.chip--neutral):hover {
+  background: color-mix(in srgb, var(--color-brand-primary) 12%, var(--color-bg-surface));
+}
+
+:host(.chip--clickable.chip--brand):hover {
+  background: color-mix(in srgb, var(--color-brand-primary) 20%, var(--color-bg-surface));
+}
+
+.chip__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0 calc(var(--space-1) * -1) 0 0;
+  color: inherit;
+  opacity: 0.7;
+  cursor: pointer;
+  flex-shrink: 0;
+
+  &:hover {
+    opacity: 1;
+  }
+}
