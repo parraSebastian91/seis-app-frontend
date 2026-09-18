@@ -1,0 +1,41 @@
+@import '../../styles/tokens';
+
+:host {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  line-height: 0;
+  pointer-events: none;
+}
+
+.badge-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: var(--radius-pill);
+  background: var(--color-error);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  line-height: 20px;
+}
+
+.badge-dot--pulse {
+  animation: notification-badge-pulse 420ms ease-out;
+}
+
+@keyframes notification-badge-pulse {
+  0%   { transform: scale(1); }
+  45%  { transform: scale(1.24); }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .badge-dot--pulse {
+    animation: none;
+  }
+}

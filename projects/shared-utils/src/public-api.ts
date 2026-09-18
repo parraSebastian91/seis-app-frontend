@@ -140,3 +140,11 @@ export * from './lib/directives/tooltip.directive';
 // de publicador-facturas; calendario propio, popup en desktop y bottom-sheet
 // en mobile vía ViewportService)
 export * from './lib/molecules/datepicker/datepicker.component';
+
+// NotificationBadge (Fase 2 — reemplaza matBadge/matBadgeColor de top-navbar,
+// que necesitaba ::ng-deep + !important para el color de marca)
+export * from './lib/atoms/notification-badge/notification-badge.component';
+
+// Menu (Fase 2 — reemplaza <mat-menu>+matMenuTriggerFor+mat-menu-item,
+// 2 usos reales: admin-miembros, admin-grupos. Data-driven vía [items])
+export * from './lib/molecules/menu/menu.component';

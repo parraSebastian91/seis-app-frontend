@@ -1,0 +1,25 @@
+<span class="menu-trigger" (click)="toggle()">
+  <ng-content></ng-content>
+</span>
+
+@if (isOpen()) {
+  <div class="menu-click-catcher" (click)="close()"></div>
+  <div class="menu-panel" role="menu">
+    @for (item of items; track item.label) {
+      @if (item.dividerBefore) {
+        <div class="menu-divider"></div>
+      }
+      <button
+        type="button"
+        class="menu-item"
+        [class.menu-item--danger]="item.danger"
+        [disabled]="item.disabled"
+        role="menuitem"
+        (click)="select(item)"
+      >
+        <app-icon *ngIf="item.icon" [name]="item.icon" size="18" />
+        <span>{{ item.label }}</span>
+      </button>
+    }
+  </div>
+}
