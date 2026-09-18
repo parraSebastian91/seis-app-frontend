@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "projects",
@@ -106,7 +106,9 @@
                   "maximumError": "1MB"
                 },
                 {
-                  "type": "anyComponentStyle","maximumWarning": "14kB","maximumError": "20kB"
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "14kB",
+                  "maximumError": "20kB"
                 }
               ],
               "outputHashing": "all"
@@ -137,7 +139,26 @@
           },
           "defaultConfiguration": "development",
           "options": {
-            "port": 4200
+            "port": 4200,
+            "proxyConfig": "proxy.conf.json"
+          }
+        },
+        "storybook": {
+          "builder": "@storybook/angular:start-storybook",
+          "options": {
+            "configDir": ".storybook",
+            "browserTarget": "seis-portal:esbuild:development",
+            "compodoc": false,
+            "port": 6007
+          }
+        },
+        "build-storybook": {
+          "builder": "@storybook/angular:build-storybook",
+          "options": {
+            "configDir": ".storybook",
+            "browserTarget": "seis-portal:esbuild:development",
+            "compodoc": false,
+            "outputDir": "storybook-static"
           }
         }
       }
@@ -268,7 +289,8 @@
           },
           "defaultConfiguration": "development",
           "options": {
-            "port": 4201
+            "port": 4201,
+            "proxyConfig": "proxy.conf.json"
           }
         }
       }
@@ -405,7 +427,9 @@
                   "maximumError": "1MB"
                 },
                 {
-                  "type": "anyComponentStyle","maximumWarning": "14kB","maximumError": "20kB"
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "14kB",
+                  "maximumError": "20kB"
                 }
               ],
               "outputHashing": "all"
@@ -430,7 +454,8 @@
           },
           "defaultConfiguration": "development",
           "options": {
-            "port": 4202
+            "port": 4202,
+            "proxyConfig": "proxy.conf.json"
           }
         }
       }
@@ -544,7 +569,9 @@
                   "maximumError": "1MB"
                 },
                 {
-                  "type": "anyComponentStyle","maximumWarning": "14kB","maximumError": "20kB"
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "14kB",
+                  "maximumError": "20kB"
                 }
               ],
               "outputHashing": "all"
@@ -569,7 +596,8 @@
           },
           "defaultConfiguration": "development",
           "options": {
-            "port": 4203
+            "port": 4203,
+            "proxyConfig": "proxy.conf.json"
           }
         }
       }
@@ -673,7 +701,9 @@
                   "maximumError": "1MB"
                 },
                 {
-                  "type": "anyComponentStyle","maximumWarning": "14kB","maximumError": "20kB"
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "14kB",
+                  "maximumError": "20kB"
                 }
               ],
               "outputHashing": "all"
@@ -698,7 +728,8 @@
           },
           "defaultConfiguration": "development",
           "options": {
-            "port": 4204
+            "port": 4204,
+            "proxyConfig": "proxy.conf.json"
           }
         }
       }
@@ -752,7 +783,9 @@
                   "maximumError": "1MB"
                 },
                 {
-                  "type": "anyComponentStyle","maximumWarning": "14kB","maximumError": "20kB"
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "14kB",
+                  "maximumError": "20kB"
                 }
               ],
               "outputHashing": "all"

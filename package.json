@@ -3,18 +3,21 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "prestart": "../../scripts/generate-dev-env-js.sh",
     "start": "ng serve seis-portal",
     "start:mfe": "ng serve seis-mfe-gestion-usuario",
     "start:mfe:dashboard": "ng serve seis-mfe-dashboard-facturas",
     "start:mfe:publicador": "ng serve seis-mfe-publicador-facturas",
     "start:mfe:ofertador": "ng serve seis-mfe-ofertador-facturas",
-    "start:all": "ng serve seis-portal & ng serve seis-mfe-gestion-usuario & ng serve seis-mfe-dashboard-facturas & ng serve seis-mfe-publicador-facturas & ng serve seis-mfe-ofertador-facturas",
+    "start:all": "npm run prestart && ng serve seis-portal & ng serve seis-mfe-gestion-usuario & ng serve seis-mfe-dashboard-facturas & ng serve seis-mfe-publicador-facturas & ng serve seis-mfe-ofertador-facturas",
     "build": "ng build seis-portal",
     "build:shared-utils": "ng build shared-utils",
     "build:all": "npm run build:shared-utils && ng build seis-portal",
     "watch": "ng build --watch --configuration development",
     "watch:shared-utils": "ng build shared-utils --watch",
     "test": "ng test",
+    "storybook": "npm run build:shared-utils && ng run seis-portal:storybook",
+    "build-storybook": "npm run build:shared-utils && ng run seis-portal:build-storybook",
     "docker:build-portal": "docker compose -f ./../../docker-compose-app-frontend.yml build app-portal && docker compose -f ./../../docker-compose-app-frontend.yml up app-portal",
     "docker:build-usuario": "docker compose -f ./../../docker-compose-app-frontend.yml build app-mfe-gestion-usuario && docker compose -f ./../../docker-compose-app-frontend.yml up app-mfe-gestion-usuario",
     "docker:build-dashboard": "docker compose -f ./../../docker-compose-app-frontend.yml build app-mfe-dashboard-facturas && docker compose -f ./../../docker-compose-app-frontend.yml up app-mfe-dashboard-facturas",
@@ -63,6 +66,7 @@
     "@angular/build": "19.2.18",
     "@angular/cli": "19.2.18",
     "@angular/compiler-cli": "19.2.18",
+    "@storybook/angular": "^10.6.0",
     "@types/jasmine": "5.1.0",
     "jasmine-core": "5.4.0",
     "karma": "6.4.0",
@@ -71,6 +75,7 @@
     "karma-jasmine": "5.1.0",
     "karma-jasmine-html-reporter": "2.1.0",
     "ng-packagr": "19.2.2",
+    "storybook": "^10.6.0",
     "typescript": "5.6.2"
   }
 }

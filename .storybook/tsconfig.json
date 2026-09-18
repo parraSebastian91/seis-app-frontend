@@ -1,0 +1,16 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "bundler",
+    // El tsconfig raíz fija rootDir a ./projects (todo el código fuente de la
+    // app vive ahí); .storybook/ queda afuera, así que hay que relajarlo acá
+    // o tsc rechaza preview.ts con TS6059.
+    "rootDir": ".."
+  },
+  "exclude": ["../projects/**/*.spec.ts", "../projects/**/test.ts"],
+  "include": ["../projects/**/*.ts", "../projects/**/*.stories.*", "./preview.ts"],
+  "files": ["./typings.d.ts"]
+}
