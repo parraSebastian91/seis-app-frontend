@@ -1,0 +1,144 @@
+:host {
+  display: block;
+}
+
+.dv {
+  display: grid;
+  gap: var(--space-3);
+  position: relative;
+}
+
+.dv__toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.dv__viewport {
+  width: 100%;
+  min-height: 65vh;
+  overflow: hidden;
+  position: relative;
+  background: var(--color-bg-base);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.dv__stage {
+  width: 100%;
+  transform-origin: center center;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.dv__viewport.is-interactive .dv__stage {
+  touch-action: none;
+}
+
+.dv__doc {
+  display: block;
+  max-width: none;
+  width: 100%;
+  height: auto;
+  transform-origin: center center;
+  user-select: none;
+}
+
+.dv__state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 65vh;
+  background: var(--color-bg-base);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.dv__error {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  text-align: center;
+  color: var(--color-error);
+
+  p {
+    margin: 0;
+    color: var(--color-text-secondary);
+  }
+}
+
+// ── Variante lightbox ────────────────────────────────────────────────────────
+// Fondo oscuro con toolbar flotante: el documento es el foco de la pantalla.
+.dv--lightbox {
+  gap: 0;
+  background: var(--ref-ink);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  min-height: clamp(280px, 40vh, 480px);
+
+  .dv__toolbar {
+    position: absolute;
+    left: 50%;
+    bottom: var(--space-5);
+    transform: translateX(-50%);
+    z-index: 2;
+    padding: var(--space-2) var(--space-5);
+    border-radius: var(--radius-pill);
+    background: rgba(10, 13, 26, 0.85);
+    backdrop-filter: blur(6px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .dv__viewport,
+  .dv__state {
+    min-height: clamp(280px, 40vh, 480px);
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .dv__viewport {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dv__stage {
+    width: auto;
+    max-width: 90%;
+  }
+
+  .dv__doc {
+    width: auto;
+    max-width: 100%;
+    max-height: 70vh;
+    background: var(--ref-white);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+@media (max-width: 980px) {
+  .dv__viewport,
+  .dv__state {
+    min-height: 46vh;
+  }
+}
+
+@media (max-width: 700px) {
+  .dv--lightbox {
+    min-height: clamp(220px, 35vh, 360px);
+
+    .dv__viewport,
+    .dv__state {
+      min-height: clamp(220px, 35vh, 360px);
+    }
+
+    .dv__toolbar {
+      bottom: var(--space-3);
+      gap: var(--space-1);
+      padding: var(--space-1) var(--space-3);
+    }
+  }
+}

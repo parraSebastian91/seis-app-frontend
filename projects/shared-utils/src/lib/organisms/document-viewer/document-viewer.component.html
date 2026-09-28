@@ -1,0 +1,52 @@
+<section class="dv" [class.dv--lightbox]="variant === 'lightbox'">
+  <div class="dv__toolbar" role="toolbar" aria-label="Controles del documento">
+    @if (mobileMode) {
+      <button app-button variant="light" type="button" (click)="toggleInteraction()">
+        {{ interactionEnabled ? 'Bloquear gesto' : 'Activar gesto' }}
+      </button>
+    }
+    <button app-icon-button type="button" (click)="zoomOut()" aria-label="Alejar">
+      <app-icon name="zoom_out" />
+    </button>
+    <button app-icon-button type="button" (click)="reset()" aria-label="Restablecer vista">
+      <app-icon name="restart_alt" />
+    </button>
+    <button app-icon-button type="button" (click)="zoomIn()" aria-label="Acercar">
+      <app-icon name="zoom_in" />
+    </button>
+    @if (allowRotate) {
+      <button app-icon-button type="button" (click)="rotate()" aria-label="Rotar 90 grados">
+        <app-icon name="rotate_right" />
+      </button>
+    }
+  </div>
+
+  @if (loading) {
+    <div class="dv__state">
+      <app-skeleton variant="rect" width="min(420px, 90%)" height="clamp(200px, 50vh, 600px)" [radius]="12" />
+    </div>
+  } @else if (error) {
+    <div class="dv__state" role="alert">
+      <div class="dv__error">
+        <app-icon name="error_outline" size="24" aria-hidden="true" />
+        <p>{{ errorMessage }}</p>
+        <button app-button variant="light" type="button" (click)="onRetry()">Reintentar</button>
+      </div>
+    </div>
+  } @else if (src) {
+    <div class="dv__viewport" #viewport [class.is-interactive]="interactionEnabled">
+      <!-- panzoom controla el stage; la rotación va en el <img> para no pelearse
+           con el transform que la librería escribe en el contenedor. -->
+      <div class="dv__stage" #stage>
+        <img
+          class="dv__doc"
+          [src]="src"
+          [alt]="altText"
+          [style.transform]="'rotate(' + rotation + 'deg)'"
+          draggable="false"
+          (dragstart)="$event.preventDefault()"
+        />
+      </div>
+    </div>
+  }
+</section>

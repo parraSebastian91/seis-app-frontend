@@ -54,6 +54,11 @@ export * from './lib/types/adjunto.type';
 export * from './lib/organisms/adjuntos-list/adjuntos-list.component';
 export * from './lib/organisms/negotiation-chat/negotiation-chat.component';
 
+// DocumentViewer (HU-03 — unifica ImagePanzoomViewerComponent del publicador
+// y VisorDocumentalComponent del ofertador, que resolvían la misma historia
+// con dos implementaciones distintas)
+export * from './lib/organisms/document-viewer/document-viewer.component';
+
 // SearchableCardSelect (HU-35)
 export * from './lib/organisms/searchable-card-select/searchable-card-item.type';
 export * from './lib/organisms/searchable-card-select/searchable-card-select.component';
