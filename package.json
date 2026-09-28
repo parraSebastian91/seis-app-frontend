@@ -46,7 +46,6 @@
     "@angular/platform-browser": "19.2.18",
     "@angular/platform-browser-dynamic": "19.2.18",
     "@angular/router": "19.2.18",
-    "@ng-bootstrap/ng-bootstrap": "^18.0.0",
     "@panzoom/panzoom": "4.6.2",
     "@popperjs/core": "^2.11.8",
     "@softarc/native-federation-node": "2.0.28",
