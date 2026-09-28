@@ -1,0 +1,35 @@
+<app-modal [open]="open" [maxWidth]="maxWidth" (closed)="onCancel()">
+  <div modal-title>{{ title }}</div>
+
+  <div class="confirm">
+    <!-- Si el consumidor proyecta contenido, éste reemplaza a [message]. -->
+    <ng-content select="*" />
+    @if (message) {
+      <p class="confirm__message">{{ message }}</p>
+    }
+    @if (error) {
+      <div class="confirm__error" role="alert">
+        <app-icon name="error_outline" [size]="18" aria-hidden="true" />
+        <span>{{ error }}</span>
+      </div>
+    }
+  </div>
+
+  <div modal-actions>
+    <button app-button variant="light" type="button" [disabled]="loading" (click)="onCancel()">
+      {{ cancelLabel }}
+    </button>
+    <button
+      app-button
+      [variant]="danger ? 'danger' : 'primary'"
+      type="button"
+      [disabled]="loading"
+      (click)="onConfirm()"
+    >
+      @if (loading) {
+        <app-icon class="confirm__spin" name="sync" [size]="16" aria-hidden="true" />
+      }
+      <span>{{ loading ? loadingLabel : confirmLabel }}</span>
+    </button>
+  </div>
+</app-modal>

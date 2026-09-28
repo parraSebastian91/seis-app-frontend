@@ -94,6 +94,11 @@ export * from './lib/atoms/badge/badge.component';
 // Modal (Fase 2 — reemplaza .modal-backdrop/.modal-panel duplicados)
 export * from './lib/molecules/modal/modal.component';
 
+// ConfirmDialog (compone Modal — unifica offer-retire-confirm-dialog,
+// modal-confirmacion-oferta y terms-and-conditions-modal, que repetian el
+// mismo shell de confirmacion con colores propios)
+export * from './lib/molecules/confirm-dialog/confirm-dialog.component';
+
 // Button, IconButton, Input, Label (Fase 2 — analizados desde
 // publicador-facturas/component: 40 <button>, 13 <input>, 15 <label> sueltos)
 export * from './lib/atoms/button/button.component';
