@@ -65,6 +65,11 @@ export class ConfirmDialogComponent {
   @Input() loading = false;
   /** Pinta la acción principal como destructiva. */
   @Input() danger = false;
+  /**
+   * Deshabilita solo la acción principal, sin bloquear la cancelación.
+   * Para los diálogos con formulario: `[confirmDisabled]="form.invalid"`.
+   */
+  @Input() confirmDisabled = false;
   @Input() error: string | null = null;
   @Input() maxWidth = '440px';
 
@@ -72,7 +77,7 @@ export class ConfirmDialogComponent {
   @Output() readonly cancelled = new EventEmitter<void>();
 
   onConfirm(): void {
-    if (this.loading) return;
+    if (this.loading || this.confirmDisabled) return;
     this.confirmed.emit();
   }
 

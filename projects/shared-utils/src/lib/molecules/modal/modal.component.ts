@@ -48,6 +48,13 @@ export class ModalComponent {
   @Input() open = false;
   /** Ancho máximo del panel. Ej: '440px' (default, tamaño de confirmación) o '720px' (formularios). */
   @Input() maxWidth = '440px';
+  /**
+   * Bloquea las tres vías de cierre (botón ×, click en el backdrop, Escape).
+   * Para operaciones en vuelo: un submit a medias no debe quedar huérfano
+   * porque alguien apretó Escape. El × además se deshabilita de verdad, en vez
+   * de quedar habilitado y no hacer nada.
+   */
+  @Input() closeDisabled = false;
   @Output() closed = new EventEmitter<void>();
 
   @ContentChild(ModalTitleDirective) private _titleSlot?: ModalTitleDirective;
@@ -62,6 +69,7 @@ export class ModalComponent {
   }
 
   close(): void {
+    if (this.closeDisabled) return;
     this.closed.emit();
   }
 

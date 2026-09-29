@@ -1,4 +1,4 @@
-<app-modal [open]="open" [maxWidth]="maxWidth" (closed)="onCancel()">
+<app-modal [open]="open" [maxWidth]="maxWidth" [closeDisabled]="loading" (closed)="onCancel()">
   <div modal-title>{{ title }}</div>
 
   <div class="confirm">
@@ -23,7 +23,7 @@
       app-button
       [variant]="danger ? 'danger' : 'primary'"
       type="button"
-      [disabled]="loading"
+      [disabled]="loading || confirmDisabled"
       (click)="onConfirm()"
     >
       @if (loading) {

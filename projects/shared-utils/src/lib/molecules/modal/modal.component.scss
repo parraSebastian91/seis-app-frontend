@@ -45,7 +45,12 @@
   line-height: 1;
   padding: var(--space-1);
 
-  &:hover { color: var(--color-text-primary); }
+  &:hover:not(:disabled) { color: var(--color-text-primary); }
+
+  &:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+  }
 }
 
 .modal-body {
