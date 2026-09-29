@@ -8,7 +8,7 @@
       [placeholder]="placeholder"
       [disabled]="disabled"
       [value]="displayValue"
-      (click)="open()"
+      (click)="toggle()"
     />
     <button
       type="button"
@@ -16,7 +16,7 @@
       size="sm"
       class="datepicker__toggle"
       [disabled]="disabled"
-      (click)="open()"
+      (click)="toggle()"
       aria-label="Abrir calendario"
     >
       <app-icon name="calendar_today" size="16" />
@@ -25,13 +25,12 @@
 
   @if (isOpen()) {
     @if (isMobile()) {
-      <div class="datepicker__backdrop" (click)="close()"></div>
+      <div class="datepicker__backdrop" (click)="onBackdropClick($event)"></div>
       <div class="datepicker__sheet" [class.datepicker__sheet--closing]="closing()">
         <div class="datepicker__handle"></div>
         <ng-container *ngTemplateOutlet="calendar"></ng-container>
       </div>
     } @else {
-      <div class="datepicker__click-catcher" (click)="close()"></div>
       <div
         #panelEl
         class="datepicker__panel"

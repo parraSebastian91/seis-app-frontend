@@ -51,12 +51,10 @@
 }
 
 // ── Desktop popup ─────────────────────────────────────
-.datepicker__click-catcher {
-  position: fixed;
-  inset: 0;
-  z-index: 999;
-}
-
+// Sin capturador de clicks a pantalla completa: era hijo del componente y los
+// consumidores montan el datepicker dentro de un <label>, así que cualquier
+// click de la página activaba el label y reabría el panel. Cerrar fuera lo
+// resuelve un listener de `mousedown` en `document` (ver el componente).
 .datepicker__panel {
   // fixed, no absolute: siendo absolute lo recortaba cualquier ancestro con
   // overflow (pasó dentro del modal de publicación, donde .tab-content

@@ -186,6 +186,20 @@ export class DatepickerComponent implements ControlValueAccessor, OnChanges, OnD
     this.disabled = isDisabled;
   }
 
+  /**
+   * El click del propio campo. Con el catcher fuera, el input ya no queda
+   * tapado mientras el panel está abierto, así que tiene que poder cerrarlo:
+   * si no, el segundo click sobre el campo no haría nada.
+   */
+  toggle(): void {
+    if (this.disabled) return;
+    if (this.isOpen()) {
+      this.close();
+      return;
+    }
+    this.open();
+  }
+
   open(): void {
     if (this.disabled || this.isOpen()) return;
     const parsed = parseIso(this.value);
@@ -259,10 +273,46 @@ export class DatepickerComponent implements ControlValueAccessor, OnChanges, OnD
     if (this.isOpen() && !this.isMobile()) this.positionPanel();
   };
 
+  /**
+   * Cierra al apretar fuera del componente.
+   *
+   * Antes esto lo hacía un `.datepicker__click-catcher` a pantalla completa, y
+   * eso rompía dos cosas:
+   *
+   * 1. El catcher es hijo del componente, y varios consumidores montan el
+   *    datepicker dentro de un `<label>`:
+   *
+   *        <label>Fecha Emisión <app-datepicker … /></label>
+   *
+   *    Con el catcher tapando la pantalla, un click en CUALQUIER punto caía
+   *    dentro del label, y el navegador reenvía la activación del label a su
+   *    control: se disparaba un segundo `click` sobre el input que volvía a
+   *    abrir el panel recién cerrado. El calendario quedaba imposible de
+   *    cerrar y se comía todos los clicks de la página.
+   * 2. Aun sin `<label>`, el catcher se tragaba el click: hacía falta uno para
+   *    cerrar y otro más para enfocar el campo siguiente.
+   *
+   * Con un listener en `document` el click llega a su destino real, así que
+   * pasar a otro input es un solo click. Va en captura por lo mismo que el de
+   * scroll: para no depender de que nadie corte la propagación en el medio.
+   *
+   * `mousedown` y no `click`: cierra antes de que el foco se mueva, y el click
+   * posterior sigue su curso normal hacia el elemento que el usuario apuntó.
+   */
+  private readonly onOutsidePointer = (event: Event) => {
+    if (!this.isOpen() || this.isMobile()) return;
+    const target = event.target as Node | null;
+    if (target && this.host.nativeElement.contains(target)) return;
+    // Explícito: el listener se registra dentro de la zona, pero esta clase ya
+    // se quemó tres veces con estado escrito fuera de ella y nunca pintado.
+    this.zone.run(() => this.close());
+  };
+
   private listenViewport(on: boolean): void {
     if (typeof document === 'undefined') return;
     const fn = on ? 'addEventListener' : 'removeEventListener';
     document[fn]('scroll', this.reposition, true);
+    document[fn]('mousedown', this.onOutsidePointer, true);
     window[fn]('resize', this.reposition);
   }
 
@@ -283,6 +333,16 @@ export class DatepickerComponent implements ControlValueAccessor, OnChanges, OnD
       this.isOpen.set(false);
       this.closing.set(false);
     }, 220);
+  }
+
+  /**
+   * El velo de mobile sí se queda (es un elemento visual, no un truco para
+   * capturar clicks), pero también vive dentro del `<label>` del consumidor:
+   * sin `preventDefault()` el tap reabriría el sheet por activación del label.
+   */
+  onBackdropClick(event: MouseEvent): void {
+    event.preventDefault();
+    this.close();
   }
 
   @HostListener('document:keydown.escape')
