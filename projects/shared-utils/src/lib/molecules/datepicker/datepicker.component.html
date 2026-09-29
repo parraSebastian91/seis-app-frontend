@@ -32,7 +32,13 @@
       </div>
     } @else {
       <div class="datepicker__click-catcher" (click)="close()"></div>
-      <div class="datepicker__panel">
+      <div
+        #panelEl
+        class="datepicker__panel"
+        [style.top.px]="panelPos()?.top"
+        [style.left.px]="panelPos()?.left"
+        [style.visibility]="panelPos() ? 'visible' : 'hidden'"
+      >
         <ng-container *ngTemplateOutlet="calendar"></ng-container>
       </div>
     }

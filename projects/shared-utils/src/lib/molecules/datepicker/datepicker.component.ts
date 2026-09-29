@@ -1,13 +1,16 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   EventEmitter,
   HostListener,
   Input,
+  NgZone,
   OnChanges,
   OnDestroy,
   Output,
   SimpleChanges,
+  ViewChild,
   forwardRef,
   inject,
   signal,
@@ -102,13 +105,39 @@ export class DatepickerComponent implements ControlValueAccessor, OnChanges, OnD
   @Output() blurred = new EventEmitter<void>();
 
   private readonly viewport = inject(ViewportService);
+  private readonly host = inject(ElementRef<HTMLElement>);
+  /**
+   * Necesario a propósito: `requestAnimationFrame` y el callback de
+   * `ResizeObserver` NO están parcheados por zone.js, así que escribir
+   * `panelPos` desde ahí actualiza el signal pero no dispara render — el panel
+   * se quedaba sin sus estilos inline, invisible o mal ubicado. Todo lo que
+   * toque estado desde esos callbacks va dentro de `zone.run`.
+   */
+  private readonly zone = inject(NgZone);
   readonly isMobile = this.viewport.isMobileSignal;
 
   readonly isOpen = signal(false);
   readonly closing = signal(false);
   readonly viewDate = signal(new Date());
 
+  /**
+   * Posición del popup en coordenadas de viewport.
+   *
+   * El panel es `position: fixed`, no `absolute`: siendo absolute quedaba
+   * recortado por cualquier ancestro con `overflow` distinto de visible. Pasó
+   * en vivo dentro del modal de publicación de facturas, donde `.tab-content`
+   * scrollea: el calendario se abría pero solo se veía su cabecera.
+   *
+   * Nota para el futuro: `position: fixed` se resuelve contra el viewport
+   * salvo que un ancestro cree un containing block (`transform`, `filter`,
+   * `backdrop-filter`…). `app-modal` usa `backdrop-filter` en su backdrop,
+   * pero ese backdrop es `fixed; inset: 0` — o sea, exactamente el viewport —
+   * así que las coordenadas coinciden igual.
+   */
+  readonly panelPos = signal<{ top: number; left: number } | null>(null);
+
   private closeTimer: ReturnType<typeof setTimeout> | null = null;
+  private panelObserver: ResizeObserver | null = null;
 
   onChange: (value: string) => void = () => {};
   onTouched: () => void = () => {};
@@ -135,6 +164,8 @@ export class DatepickerComponent implements ControlValueAccessor, OnChanges, OnD
 
   ngOnDestroy(): void {
     if (this.closeTimer) clearTimeout(this.closeTimer);
+    this.listenViewport(false);
+    this.panelObserver?.disconnect();
   }
 
   writeValue(value: string): void {
@@ -161,6 +192,78 @@ export class DatepickerComponent implements ControlValueAccessor, OnChanges, OnD
     this.viewDate.set(parsed ?? new Date());
     this.closing.set(false);
     this.isOpen.set(true);
+    if (!this.isMobile()) {
+      this.listenViewport(true);
+      // El posicionamiento no se dispara acá: lo hace el setter de @ViewChild
+      // cuando el panel entra al DOM. Con requestAnimationFrame el elemento
+      // todavía no existía y no se posicionaba nunca.
+    }
+  }
+
+  /**
+   * Se dispara cuando el panel entra o sale del DOM, dentro del ciclo de
+   * render de Angular — no hay que adivinar el momento con timers.
+   *
+   * Se observa su tamaño porque el alto cambia solo: un mes de 6 semanas es
+   * una fila más alto que uno de 5, y si el panel está abierto hacia arriba
+   * eso lo correría de lugar.
+   */
+  @ViewChild('panelEl')
+  set panelEl(ref: ElementRef<HTMLElement> | undefined) {
+    this.panelObserver?.disconnect();
+    this.panelObserver = null;
+    if (!ref) return;
+    if (typeof ResizeObserver === 'undefined') {
+      this.positionPanel();
+      return;
+    }
+    this.panelObserver = new ResizeObserver(() => this.positionPanel());
+    this.panelObserver.observe(ref.nativeElement);
+  }
+
+  /** Coloca el panel bajo el campo, o encima si no entra abajo. */
+  private positionPanel(): void {
+    if (!this.isOpen() || this.isMobile()) return;
+    const el = this.host.nativeElement as HTMLElement;
+    const field = el.querySelector('.datepicker__field-wrap') as HTMLElement | null;
+    const panel = el.querySelector('.datepicker__panel') as HTMLElement | null;
+    if (!field || !panel) return;
+
+    const GAP = 6;
+    const MARGIN = 8;
+    const f = field.getBoundingClientRect();
+    const ph = panel.offsetHeight;
+    const pw = panel.offsetWidth;
+
+    const espacioAbajo = window.innerHeight - f.bottom;
+    const arriba = espacioAbajo < ph + GAP + MARGIN && f.top > ph + GAP + MARGIN;
+    const top = arriba ? f.top - ph - GAP : f.bottom + GAP;
+
+    // No dejar que se salga por la derecha en pantallas angostas.
+    const left = Math.max(MARGIN, Math.min(f.left, window.innerWidth - pw - MARGIN));
+
+    this.zone.run(() =>
+      this.panelPos.set({ top: Math.round(top), left: Math.round(left) }),
+    );
+  }
+
+  /**
+   * Al ser `fixed`, el panel no sigue al campo cuando algo scrollea detrás.
+   *
+   * El listener va en `document` y con `capture: true` a propósito: el evento
+   * `scroll` de un contenedor interno NO burbujea hasta `window`, así que un
+   * `@HostListener('window:scroll')` no se enteraría del caso que justamente
+   * importa — el cuerpo scrolleable de un modal.
+   */
+  private readonly reposition = () => {
+    if (this.isOpen() && !this.isMobile()) this.positionPanel();
+  };
+
+  private listenViewport(on: boolean): void {
+    if (typeof document === 'undefined') return;
+    const fn = on ? 'addEventListener' : 'removeEventListener';
+    document[fn]('scroll', this.reposition, true);
+    window[fn]('resize', this.reposition);
   }
 
   close(): void {
@@ -169,6 +272,10 @@ export class DatepickerComponent implements ControlValueAccessor, OnChanges, OnD
     this.blurred.emit();
     if (!this.isMobile()) {
       this.isOpen.set(false);
+      this.panelPos.set(null);
+      this.listenViewport(false);
+      this.panelObserver?.disconnect();
+      this.panelObserver = null;
       return;
     }
     this.closing.set(true);
