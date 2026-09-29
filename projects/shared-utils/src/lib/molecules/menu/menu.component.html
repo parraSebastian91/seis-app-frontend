@@ -3,7 +3,6 @@
 </span>
 
 @if (isOpen()) {
-  <div class="menu-click-catcher" (click)="close()"></div>
   <div class="menu-panel" role="menu">
     @for (item of items; track item.label) {
       @if (item.dividerBefore) {

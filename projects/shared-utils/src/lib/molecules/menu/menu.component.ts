@@ -1,10 +1,14 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   EventEmitter,
   HostListener,
   Input,
+  NgZone,
+  OnDestroy,
   Output,
+  inject,
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -32,7 +36,8 @@ export interface MenuItem {
  * duplicar el markup del panel.
  *
  * Sin overlay/CDK: popup posicionado con CSS (mismo criterio que Tooltip/
- * Datepicker), con click-catcher para cerrar al hacer click afuera y Escape.
+ * Datepicker). Cierra con Escape o con un `mousedown` fuera del componente —
+ * NO con un capturador de clicks a pantalla completa, ver `onOutsidePointer`.
  *
  * Uso:
  *   <app-menu [items]="[
@@ -59,7 +64,7 @@ export interface MenuItem {
     '[class]': '"menu-host menu-host--" + align',
   },
 })
-export class MenuComponent {
+export class MenuComponent implements OnDestroy {
   @Input({ required: true }) items: MenuItem[] = [];
   /** Alineación del panel respecto al trigger — 'end' (default) evita que se corte contra el borde derecho. */
   @Input() align: 'start' | 'end' = 'end';
@@ -69,6 +74,42 @@ export class MenuComponent {
 
   readonly isOpen = signal(false);
 
+  private readonly host = inject(ElementRef<HTMLElement>);
+  private readonly zone = inject(NgZone);
+
+  /**
+   * Cierra al apretar fuera del componente.
+   *
+   * Antes esto lo hacía un `.menu-click-catcher` con
+   * `position: fixed; inset: 0`, el mismo patrón que se sacó del Datepicker el
+   * 2026-09-29 por dos motivos que también aplican acá:
+   *
+   * 1. Se traga el click. Con el menú abierto, 6 de los 9 elementos
+   *    interactivos visibles de la pantalla quedaban inalcanzables —incluidos
+   *    los links del sidebar—: el primer click solo cerraba el menú y había
+   *    que volver a apretar.
+   * 2. El capturador es hijo del componente, así que hereda la semántica de
+   *    sus ancestros. Dentro de un `<label>` cualquier click de la página
+   *    activa el label y el navegador lo reenvía al control asociado, que acá
+   *    sería un botón del propio menú.
+   *
+   * En captura, para no depender de que nadie corte la propagación en el
+   * medio; y `mousedown` en vez de `click` para cerrar antes de que el foco se
+   * mueva, dejando que el click siga su curso hacia su destino real.
+   */
+  private readonly onOutsidePointer = (event: Event) => {
+    const target = event.target as Node | null;
+    if (target && this.host.nativeElement.contains(target)) return;
+    this.zone.run(() => this.close());
+  };
+
+  private listenOutside(on: boolean): void {
+    if (typeof document === 'undefined') return;
+    document[on ? 'addEventListener' : 'removeEventListener'](
+      'mousedown', this.onOutsidePointer, true,
+    );
+  }
+
   toggle(): void {
     this.isOpen() ? this.close() : this.open();
   }
@@ -76,13 +117,19 @@ export class MenuComponent {
   open(): void {
     if (this.isOpen()) return;
     this.isOpen.set(true);
+    this.listenOutside(true);
     this.opened.emit();
   }
 
   close(): void {
     if (!this.isOpen()) return;
     this.isOpen.set(false);
+    this.listenOutside(false);
     this.closed.emit();
+  }
+
+  ngOnDestroy(): void {
+    this.listenOutside(false);
   }
 
   select(item: MenuItem): void {

@@ -9,12 +9,10 @@
   display: inline-flex;
 }
 
-.menu-click-catcher {
-  position: fixed;
-  inset: 0;
-  z-index: 999;
-}
-
+// Sin capturador de clicks a pantalla completa: se tragaba el primer click de
+// toda la página (y hereda la semántica de sus ancestros, p. ej. la activación
+// de un <label>). Cerrar afuera lo resuelve un listener de `mousedown` en
+// `document` — ver el componente.
 .menu-panel {
   position: absolute;
   top: calc(100% + 6px);
