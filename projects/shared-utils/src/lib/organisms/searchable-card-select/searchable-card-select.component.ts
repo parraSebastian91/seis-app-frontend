@@ -106,6 +106,21 @@ export class SearchableCardSelectComponent implements OnDestroy {
     }
   }
 
+  /**
+   * Tap en el velo de mobile.
+   *
+   * `preventDefault()` por lo mismo que el Datepicker: si algún consumidor
+   * monta este componente dentro de un `<label>`, el navegador reenvía la
+   * activación del label a su control y el panel se reabriría en el mismo
+   * gesto.
+   */
+  onBackdropClick(event: MouseEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.close();
+    this.cdr.markForCheck();
+  }
+
   /** Navegación por teclado (CA-08). */
   @HostListener('keydown', ['$event'])
   onKeydown(event: KeyboardEvent): void {

@@ -1,5 +1,12 @@
 <div class="sc-select" [class.sc-open]="isOpen">
 
+  <!-- Velo de mobile. Era un `.sc-open::before`, y un pseudo-elemento no puede
+       tener listeners: el tap tenía como target al propio `.sc-select`, que
+       está DENTRO del host, así que `onDocumentClick` lo daba por "adentro" y
+       el panel no cerraba nunca. Tapaba la pantalla entera y no se podía
+       descartar. Ahora es un elemento con su propio (click). -->
+  <div *ngIf="isOpen" class="sc-backdrop" (click)="onBackdropClick($event)"></div>
+
   <!-- Trigger (CA-02) — siempre solo lectura -->
   <button
     type="button"

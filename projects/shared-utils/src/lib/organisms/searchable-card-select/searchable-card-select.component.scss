@@ -256,6 +256,8 @@
 // iniciales blancas — visual levemente distinto al resto de las cards que ya
 // usan AvatarComponent; se unifica a propósito.
 
+.sc-backdrop { display: none; }   // solo en mobile; ver el @media de abajo
+
 /* ══════════════════════════════════════════════════════════════════
    RESPONSIVE — Bottom sheet (mobile ≤ 700px)
    ══════════════════════════════════════════════════════════════════ */
@@ -268,9 +270,11 @@
     padding: 0.4rem 0.65rem;
   }
 
-  /* Backdrop semitransparente detrás del panel */
-  .sc-open::before {
-    content: '';
+  /* Backdrop semitransparente detrás del panel.
+     Elemento real, no `::before`: un pseudo-elemento no recibe listeners y el
+     velo quedaba imposible de tocar para cerrar (ver el template). */
+  .sc-backdrop {
+    display: block;
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.45);
