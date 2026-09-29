@@ -6,11 +6,14 @@ import {
 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { RegistrationService } from '../registration.service';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RutInputComponent } from 'shared-utils';
 
 @Component({
   selector: 'app-personal-data-step',
   templateUrl: './personal-data-step.component.html',
   styleUrl: './personal-data-step.component.scss',
+  imports: [ReactiveFormsModule, RutInputComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersonalDataStepComponent {

@@ -4,11 +4,18 @@ import {
   inject,
 } from '@angular/core';
 import { RegistrationService } from '../registration.service';
+import { RouterLink } from '@angular/router';
+import { RoleSelectionStepComponent } from '../role-selection-step/role-selection-step.component';
+import { PersonalDataStepComponent } from '../personal-data-step/personal-data-step.component';
+import { CredentialsStepComponent } from '../credentials-step/credentials-step.component';
+import { EmailVerificationStepComponent } from '../email-verification-step/email-verification-step.component';
 
 @Component({
   selector: 'app-registration-page',
   templateUrl: './registration-page.component.html',
   styleUrl: './registration-page.component.scss',
+  imports: [RouterLink, RoleSelectionStepComponent, PersonalDataStepComponent,
+    CredentialsStepComponent, EmailVerificationStepComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegistrationPageComponent {

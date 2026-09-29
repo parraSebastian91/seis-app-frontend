@@ -8,7 +8,7 @@
       class="role-card"
       [class.is-selected]="selected() === 'CEDENTE'"
       (click)="onSelect('CEDENTE')"
-      aria-pressed="{{ selected() === 'CEDENTE' }}"
+      [attr.aria-pressed]="selected() === 'CEDENTE'"
     >
       <span class="material-icons role-card__icon" aria-hidden="true">business</span>
       <strong class="role-card__title">Soy empresa cedente</strong>
@@ -20,7 +20,7 @@
       class="role-card"
       [class.is-selected]="selected() === 'EJECUTIVO'"
       (click)="onSelect('EJECUTIVO')"
-      aria-pressed="{{ selected() === 'EJECUTIVO' }}"
+      [attr.aria-pressed]="selected() === 'EJECUTIVO'"
     >
       <span class="material-icons role-card__icon" aria-hidden="true">account_balance</span>
       <strong class="role-card__title">Soy ejecutivo de financiera</strong>

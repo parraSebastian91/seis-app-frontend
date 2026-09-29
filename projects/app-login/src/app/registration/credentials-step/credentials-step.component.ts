@@ -6,11 +6,14 @@ import {
 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { RegistrationService } from '../registration.service';
+import { ReactiveFormsModule } from '@angular/forms';
+import { PasswordStrengthMeterComponent } from 'shared-utils';
 
 @Component({
   selector: 'app-credentials-step',
   templateUrl: './credentials-step.component.html',
   styleUrl: './credentials-step.component.scss',
+  imports: [ReactiveFormsModule, PasswordStrengthMeterComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CredentialsStepComponent {

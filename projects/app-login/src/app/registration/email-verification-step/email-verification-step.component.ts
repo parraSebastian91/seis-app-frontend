@@ -16,6 +16,7 @@ const RESEND_COOLDOWN = 60;
   selector: 'app-email-verification-step',
   templateUrl: './email-verification-step.component.html',
   styleUrl: './email-verification-step.component.scss',
+  imports: [OtpInputComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmailVerificationStepComponent implements OnInit, OnDestroy {
