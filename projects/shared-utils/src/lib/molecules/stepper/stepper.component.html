@@ -1,0 +1,24 @@
+<ol class="stepper" [attr.aria-label]="ariaLabel">
+  @for (paso of pasos; track paso.etiqueta; let i = $index; let ultimo = $last) {
+    <li class="stepper__paso" [class]="'stepper__paso--' + estado(i)">
+      <button
+        type="button"
+        class="stepper__boton"
+        [disabled]="!esAlcanzable(i)"
+        [attr.aria-current]="i === actual ? 'step' : null"
+        (click)="alHacerClick(i)">
+        <span class="stepper__numero" aria-hidden="true">
+          @if (estado(i) === 'hecho') {
+            <app-icon name="check" size="14" />
+          } @else {
+            {{ i + 1 }}
+          }
+        </span>
+        <span class="stepper__etiqueta">{{ paso.etiqueta }}</span>
+      </button>
+    </li>
+    @if (!ultimo) {
+      <li class="stepper__union" [class.stepper__union--hecha]="i < actual" aria-hidden="true"></li>
+    }
+  }
+</ol>

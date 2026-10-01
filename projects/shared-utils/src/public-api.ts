@@ -93,6 +93,7 @@ export type { PanelAttentionVariant } from './lib/molecules/expancion-panel/expa
 export * from './lib/atoms/badge/badge.component';
 
 // Modal (Fase 2 — reemplaza .modal-backdrop/.modal-panel duplicados)
+export * from './lib/molecules/stepper/stepper.component';
 export * from './lib/molecules/modal/modal.component';
 
 // ConfirmDialog (compone Modal — unifica offer-retire-confirm-dialog,

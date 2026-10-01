@@ -1,0 +1,79 @@
+@import '../../styles/tokens';
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stepper__paso { display: flex; }
+
+.stepper__boton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: .8125rem;
+  cursor: pointer;
+
+  &:disabled { cursor: default; }
+}
+
+.stepper__numero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  flex-shrink: 0;
+  border: 2px solid var(--color-border);
+  border-radius: 50%;
+  font-size: .75rem;
+  font-weight: 600;
+  transition: border-color 140ms ease, background 140ms ease, color 140ms ease;
+}
+
+.stepper__etiqueta { white-space: nowrap; }
+
+.stepper__paso--actual {
+  .stepper__boton { color: var(--color-text-primary); font-weight: 600; }
+  .stepper__numero {
+    border-color: var(--color-brand-primary);
+    background: color-mix(in srgb, var(--color-brand-primary) 14%, transparent);
+    color: var(--color-brand-primary);
+  }
+}
+
+.stepper__paso--hecho {
+  .stepper__numero {
+    border-color: var(--color-brand-primary);
+    background: var(--color-brand-primary);
+    color: var(--color-brand-on-primary);
+  }
+}
+
+.stepper__union {
+  flex: 1;
+  min-width: var(--space-3);
+  height: 2px;
+  background: var(--color-border);
+  transition: background 140ms ease;
+
+  &--hecha { background: var(--color-brand-primary); }
+}
+
+// En pantallas angostas las etiquetas no entran: queda la numeración, que es
+// lo que ubica. Ocultar el paso entero perdería la noción de cuántos faltan.
+@media (max-width: 560px) {
+  .stepper__paso:not(.stepper__paso--actual) .stepper__etiqueta { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stepper__numero, .stepper__union { transition: none; }
+}
