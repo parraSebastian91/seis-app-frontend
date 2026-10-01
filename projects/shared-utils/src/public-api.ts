@@ -52,6 +52,7 @@ export * from './lib/services/chat/chat.service';
 // Adjuntos (tipo atómico compartido entre MFEs)
 export * from './lib/types/adjunto.type';
 export * from './lib/organisms/adjuntos-list/adjuntos-list.component';
+export * from './lib/organisms/drawer/drawer.component';
 export * from './lib/organisms/negotiation-chat/negotiation-chat.component';
 
 // DocumentViewer (HU-03 — unifica ImagePanzoomViewerComponent del publicador

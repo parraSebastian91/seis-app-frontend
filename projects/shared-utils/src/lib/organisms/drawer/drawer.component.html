@@ -1,0 +1,42 @@
+@if (visible()) {
+  <!-- Overlay -->
+  <div
+    class="drawer-overlay"
+    [class.drawer-overlay--closing]="closing()"
+    (click)="requestClose()"
+    aria-hidden="true">
+  </div>
+
+  <!-- Panel -->
+  <aside
+    class="drawer-panel"
+    [class.drawer-panel--closing]="closing()"
+    [class.drawer-panel--bottom]="isMobile()"
+    role="complementary"
+    [attr.aria-label]="drawerService.config()!.title"
+    [style.--drawer-width]="drawerService.config()!.width ?? '480px'">
+
+    <!-- Handle (solo mobile) -->
+    @if (isMobile()) {
+      <div class="drawer-handle" aria-hidden="true"></div>
+    }
+
+    <!-- Header -->
+    <header class="drawer-header">
+      <h3 class="drawer-title">{{ drawerService.config()!.title }}</h3>
+      <button
+        class="drawer-close"
+        type="button"
+        (click)="requestClose()"
+        aria-label="Cerrar panel">
+        <app-icon name="close" />
+      </button>
+    </header>
+
+    <!-- Contenido dinámico -->
+    <div class="drawer-body">
+      <ng-container #outlet></ng-container>
+    </div>
+
+  </aside>
+}
