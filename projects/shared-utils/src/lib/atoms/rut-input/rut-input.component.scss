@@ -1,0 +1,71 @@
+@import '../../styles/tokens';
+
+// Alineado con `app-input`: antes usaba otro token de fondo (--color-bg-surface
+// en vez de --color-bg-elevated), otro tamaño de texto y sin alto explícito, así
+// que en un formulario el campo de RUT no calzaba con sus vecinos.
+//
+// Tampoco lleva fallbacks hex. Los que tenía (#fff, #111, #ccc) eran de tema
+// claro: si un token no resolvía, el campo quedaba blanco sobre fondo oscuro, y
+// el fallback disimulaba el problema en vez de delatarlo. Ver
+// docs/frontend/seis-app-frontend/findings/design-system-audit/
+
+.rut-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.rut-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.rut-input {
+  width: 100%;
+  height: 2.3rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0 calc(var(--space-3) + 1.5rem) 0 var(--space-3);
+  background: var(--color-bg-elevated);
+  color: var(--color-text-primary);
+  font-size: .875rem;
+  // Monoespaciada a propósito: en un RUT los dígitos y los puntos se leen y se
+  // corrigen mejor alineados. Es la única diferencia deliberada con app-input.
+  font-family: var(--font-mono);
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+
+  &::placeholder { color: var(--color-text-disabled); }
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-brand-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-brand-primary) 15%, transparent);
+  }
+
+  &:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+  }
+}
+
+.is-valid .rut-input { border-color: var(--color-success); }
+.is-invalid .rut-input { border-color: var(--color-error); }
+
+.rut-icon {
+  position: absolute;
+  right: var(--space-2);
+  pointer-events: none;
+}
+
+.rut-icon--valid { color: var(--color-success); }
+.rut-icon--invalid { color: var(--color-error); }
+
+.rut-error {
+  font-size: .75rem;
+  color: var(--color-error);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rut-input { transition: none; }
+}
