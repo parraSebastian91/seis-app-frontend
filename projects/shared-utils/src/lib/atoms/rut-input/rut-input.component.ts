@@ -10,6 +10,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { IconComponent } from '../icon/icon.component';
 import { FormsModule } from '@angular/forms';
 
 /** Formatea una cadena de dígitos como RUT chileno: XX.XXX.XXX-K */
@@ -50,7 +51,7 @@ type RutState = 'idle' | 'valid' | 'invalid';
   selector: 'app-rut-input',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, IconComponent],
   template: `
     <div class="rut-field" [class.is-valid]="state === 'valid'" [class.is-invalid]="state === 'invalid'">
       <div class="rut-input-wrapper">
@@ -68,11 +69,15 @@ type RutState = 'idle' | 'valid' | 'invalid';
           (input)="onInput($event)"
           class="rut-input"
         />
+        <!-- app-icon y no la fuente Material: la fuente depende de que la app
+             la cargue, y los MFE que corren standalone no lo hacen — ahí el
+             ligature se lee como la palabra "cancel" al lado del campo. El
+             registry de íconos es SVG y viaja con la librería. -->
         @if (state === 'valid') {
-          <span class="material-icons rut-icon rut-icon--valid" aria-hidden="true">check_circle</span>
+          <app-icon class="rut-icon rut-icon--valid" name="check_circle" size="18" />
         }
         @if (state === 'invalid') {
-          <span class="material-icons rut-icon rut-icon--invalid" aria-hidden="true">cancel</span>
+          <app-icon class="rut-icon rut-icon--invalid" name="cancel" size="18" />
         }
       </div>
       @if (state === 'invalid') {
