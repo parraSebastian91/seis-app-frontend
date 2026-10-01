@@ -119,9 +119,25 @@ export class DrawerComponent implements OnDestroy {
     this.cdr.markForCheck();
   }
 
+  /**
+   * Overlays que manejan su propio Escape y que, estando abiertos, deben
+   * quedarse con la tecla.
+   *
+   * Sin esto, abrir el calendario de un datepicker dentro del drawer y apretar
+   * Escape cerraba el panel ENTERO, perdiendo lo que el usuario venía cargando:
+   * los dos escuchan `document:keydown.escape` y ambos handlers corren.
+   * `stopPropagation` no sirve —son listeners sobre el mismo nodo— y
+   * `stopImmediatePropagation` dependería del orden de registro, que acá es el
+   * contrario al que haría falta: el drawer se crea antes que su contenido.
+   */
+  private static readonly OVERLAYS_INTERNOS =
+    '.datepicker__panel, .datepicker__sheet, .modal-backdrop';
+
   @HostListener('document:keydown.escape')
   onEscape(): void {
-    if (this.visible()) this.requestClose();
+    if (!this.visible()) return;
+    if (document.querySelector(DrawerComponent.OVERLAYS_INTERNOS)) return;
+    this.requestClose();
   }
 
   ngOnDestroy(): void {

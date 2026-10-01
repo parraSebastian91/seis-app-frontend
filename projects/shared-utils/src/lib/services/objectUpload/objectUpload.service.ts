@@ -1,8 +1,9 @@
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { firstValueFrom } from "rxjs";
 import { ApiResponse } from "../types/api-response.model";
 import { UserProfile } from "../types/userProfile.type";
+import { CORRELATION_ID_HEADER, nuevoCorrelationId } from '../../interceptors/correlation-id.interceptor';
 
 
 
@@ -14,7 +15,14 @@ export class ObjectUploadService {
 
     constructor(private http: HttpClient) { }
 
-    async getPresignedPutUrl(apiBase: string, typeUpload: string, fileName: string, fileType: string, userUuid: string, organization?: string, idFactura?: string): Promise<{ url: string, key: string }> {
+    /**
+     * @param correlationId identificador que va a seguir a esta operación por
+     *   todo el pipeline (BFF → orquestador → worker → ms-core) y que termina en
+     *   `factura.correlation_id`. Pasarlo es lo que permite, después, saber qué
+     *   factura nació de esta subida: sin él, el interceptor genera uno al vuelo
+     *   y quien subió el archivo nunca se entera de cuál fue.
+     */
+    async getPresignedPutUrl(apiBase: string, typeUpload: string, fileName: string, fileType: string, userUuid: string, organization?: string, idFactura?: string, correlationId?: string): Promise<{ url: string, key: string }> {
         console.log('[UPLOAD] getPresignedPutUrl - Organization recibida:', organization);
         const safeUserUuid = (userUuid || '').trim();
         const safeTypeUpload = (typeUpload || '').trim();
@@ -40,8 +48,13 @@ export class ObjectUploadService {
             params = params.set('idFactura', safeIdFactura);
         }
 
+        const headers = correlationId
+            ? new HttpHeaders({ [CORRELATION_ID_HEADER]: correlationId })
+            : undefined;
+
         const response = this.http.get<ApiResponse<{ url: string, key: string }>>(`${apiBase}/api/bff/object/presigned-url/${safeTypeUpload}`, {
             params,
+            headers,
             withCredentials: true
         });
         try {
@@ -76,7 +89,12 @@ export class ObjectUploadService {
         }
     }
 
-    async uploadFileUsingPresignedUrl(apiBase: string, typeUpload: string, file: File, useruuid: string, organization?: string, idFactura?: string): Promise<{ key: string, objectUrl: string }> {
+    /**
+     * Sube un archivo y devuelve también el `correlationId` con el que viajó,
+     * para poder reconocer después lo que el pipeline haya creado a partir de
+     * él. Si no se pasa uno, se genera y se devuelve igual.
+     */
+    async uploadFileUsingPresignedUrl(apiBase: string, typeUpload: string, file: File, useruuid: string, organization?: string, idFactura?: string, correlationId?: string): Promise<{ key: string, objectUrl: string, correlationId: string }> {
         console.log('[UPLOAD] uploadFileUsingPresignedUrl - Organization recibida:', organization);
         const safeUserUuid = (useruuid || '').trim();
         const safeTypeUpload = (typeUpload || '').trim();
@@ -87,7 +105,8 @@ export class ObjectUploadService {
             throw new Error('[UPLOAD] Cannot upload without a valid typeUpload.');
         }
 
-        const presigned = await this.getPresignedPutUrl(apiBase, safeTypeUpload, file.name, file.type, safeUserUuid, organization, idFactura);
+        const correlacion = (correlationId || '').trim() || nuevoCorrelationId();
+        const presigned = await this.getPresignedPutUrl(apiBase, safeTypeUpload, file.name, file.type, safeUserUuid, organization, idFactura, correlacion);
 
         if (!presigned?.url) {
             throw new Error('Presigned URL not received from API.');
@@ -97,7 +116,8 @@ export class ObjectUploadService {
 
         return {
             key: presigned.key,
-            objectUrl: presigned.url.split('?')[0]
+            objectUrl: presigned.url.split('?')[0],
+            correlationId: correlacion,
         };
     }
 
