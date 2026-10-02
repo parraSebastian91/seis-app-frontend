@@ -31,7 +31,7 @@ export class FormFieldErrorDirective {}
   imports: [CommonModule, LabelComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-label [text]="label" [required]="required">
+    <app-label [text]="label" [required]="required" [grupo]="grupo">
       <ng-content></ng-content>
     </app-label>
     <div class="form-field__error">
@@ -43,4 +43,10 @@ export class FormFieldErrorDirective {}
 export class FormFieldComponent {
   @Input() label = '';
   @Input() required = false;
+  /**
+   * El campo trae más de un control (un datepicker y sus atajos de plazo, por
+   * ejemplo). Ver `app-label`: sin esto el `<label>` le roba los clicks a todo
+   * lo que no sea el primer control.
+   */
+  @Input() grupo = false;
 }
