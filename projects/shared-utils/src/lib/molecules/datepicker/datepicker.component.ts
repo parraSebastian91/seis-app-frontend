@@ -128,11 +128,16 @@ export class DatepickerComponent implements ControlValueAccessor, OnChanges, OnD
    * en vivo dentro del modal de publicación de facturas, donde `.tab-content`
    * scrollea: el calendario se abría pero solo se veía su cabecera.
    *
-   * Nota para el futuro: `position: fixed` se resuelve contra el viewport
-   * salvo que un ancestro cree un containing block (`transform`, `filter`,
-   * `backdrop-filter`…). `app-modal` usa `backdrop-filter` en su backdrop,
-   * pero ese backdrop es `fixed; inset: 0` — o sea, exactamente el viewport —
-   * así que las coordenadas coinciden igual.
+   * Ojo: son coordenadas de viewport, pero `position: fixed` se resuelve
+   * contra el viewport SOLO si ningún ancestro crea un containing block
+   * (`transform`, `filter`, `backdrop-filter`, `will-change`, `contain`…).
+   * Con `app-modal` coincidía de casualidad —su backdrop es `fixed; inset: 0`,
+   * o sea exactamente el viewport— y eso escondió el problema hasta que el
+   * drawer de publicación lo destapó: `.drawer-panel` queda con un
+   * `transform` identidad de su animación de entrada, así que es el
+   * containing block, y el panel aparecía 620px a la derecha (el ancho que le
+   * sobra al drawer), medio fuera de pantalla. `origenFijo()` hace la
+   * conversión.
    */
   readonly panelPos = signal<{ top: number; left: number } | null>(null);
 
@@ -256,9 +261,57 @@ export class DatepickerComponent implements ControlValueAccessor, OnChanges, OnD
     // No dejar que se salga por la derecha en pantallas angostas.
     const left = Math.max(MARGIN, Math.min(f.left, window.innerWidth - pw - MARGIN));
 
+    // De coordenadas de viewport a las del containing block real.
+    const o = this.origenFijo(panel);
     this.zone.run(() =>
-      this.panelPos.set({ top: Math.round(top), left: Math.round(left) }),
+      this.panelPos.set({
+        top: Math.round(top - o.y),
+        left: Math.round(left - o.x),
+      }),
     );
+  }
+
+  /**
+   * Esquina superior izquierda, en coordenadas de viewport, de la caja contra
+   * la que se resuelve el `top`/`left` de un elemento `fixed`.
+   *
+   * Es el viewport salvo que algún ancestro cree un containing block; en ese
+   * caso manda el más cercano, y la referencia es su *padding box*, no su
+   * border box — de ahí el borde sumado.
+   *
+   * La lista de propiedades no es arbitraria: son las que el spec de CSS
+   * Containment/Transforms declara como creadoras de containing block para
+   * descendientes `fixed`. Vale repetirla entera antes que ir agregando casos
+   * a medida que aparecen.
+   */
+  private origenFijo(el: HTMLElement): { x: number; y: number } {
+    let padre = el.parentElement;
+    while (padre) {
+      const cs = getComputedStyle(padre);
+      const crea =
+        cs.transform !== 'none' ||
+        cs.perspective !== 'none' ||
+        cs.filter !== 'none' ||
+        (cs.backdropFilter ?? 'none') !== 'none' ||
+        cs.willChange.includes('transform') ||
+        cs.willChange.includes('filter') ||
+        cs.willChange.includes('perspective') ||
+        cs.contain.includes('paint') ||
+        cs.contain.includes('layout') ||
+        cs.contain.includes('strict') ||
+        cs.contain.includes('content') ||
+        (cs.containerType ?? 'normal') !== 'normal';
+      if (!crea) {
+        padre = padre.parentElement;
+        continue;
+      }
+      const r = padre.getBoundingClientRect();
+      return {
+        x: r.left + parseFloat(cs.borderLeftWidth || '0'),
+        y: r.top + parseFloat(cs.borderTopWidth || '0'),
+      };
+    }
+    return { x: 0, y: 0 };
   }
 
   /**

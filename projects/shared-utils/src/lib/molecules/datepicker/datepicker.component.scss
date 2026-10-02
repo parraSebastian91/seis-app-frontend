@@ -118,6 +118,20 @@
   padding: var(--space-3);
 }
 
+// En la hoja de mobile el ancho fijo no sirve: la hoja abarca todo el ancho
+// disponible y el calendario quedaba de 280px pegado a la izquierda, con el
+// resto vacío. Acá manda la hoja, con un techo para que en una tablet los
+// días no queden separados por media pantalla.
+.datepicker__sheet .datepicker__calendar {
+  // Explícito: sin esto el padding se suma al 100% y el calendario se pasaba
+  // 32px del ancho de la hoja.
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-4) var(--space-4);
+}
+
 .datepicker__cal-header {
   display: flex;
   align-items: center;
