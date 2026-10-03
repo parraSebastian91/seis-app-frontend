@@ -22,7 +22,7 @@ export class ObjectUploadService {
      *   factura nació de esta subida: sin él, el interceptor genera uno al vuelo
      *   y quien subió el archivo nunca se entera de cuál fue.
      */
-    async getPresignedPutUrl(apiBase: string, typeUpload: string, fileName: string, fileType: string, userUuid: string, organization?: string, idFactura?: string, correlationId?: string): Promise<{ url: string, key: string, assetId: string }> {
+    async getPresignedPutUrl(apiBase: string, typeUpload: string, fileName: string, fileType: string, userUuid: string, organization?: string, idFactura?: string, correlationId?: string, loteId?: string): Promise<{ url: string, key: string, assetId: string }> {
         console.log('[UPLOAD] getPresignedPutUrl - Organization recibida:', organization);
         const safeUserUuid = (userUuid || '').trim();
         const safeTypeUpload = (typeUpload || '').trim();
@@ -42,6 +42,10 @@ export class ObjectUploadService {
         const safeOrganization = (organization || '').trim();
         if (safeOrganization) {
             params = params.set('organization', safeOrganization);
+        }
+        const safeLote = (loteId || '').trim();
+        if (safeLote) {
+            params = params.set('loteId', safeLote);
         }
         const safeIdFactura = (idFactura || '').trim();
         if (safeIdFactura) {
@@ -101,7 +105,7 @@ export class ObjectUploadService {
      * cuando el worker leyó el documento, el assetId es lo único que ata el
      * archivo recién subido con la fila que está esperando en pantalla.
      */
-    async uploadFileUsingPresignedUrl(apiBase: string, typeUpload: string, file: File, useruuid: string, organization?: string, idFactura?: string, correlationId?: string): Promise<{ key: string, assetId: string, objectUrl: string, correlationId: string }> {
+    async uploadFileUsingPresignedUrl(apiBase: string, typeUpload: string, file: File, useruuid: string, organization?: string, idFactura?: string, correlationId?: string, loteId?: string): Promise<{ key: string, assetId: string, objectUrl: string, correlationId: string }> {
         console.log('[UPLOAD] uploadFileUsingPresignedUrl - Organization recibida:', organization);
         const safeUserUuid = (useruuid || '').trim();
         const safeTypeUpload = (typeUpload || '').trim();
@@ -113,7 +117,7 @@ export class ObjectUploadService {
         }
 
         const correlacion = (correlationId || '').trim() || nuevoCorrelationId();
-        const presigned = await this.getPresignedPutUrl(apiBase, safeTypeUpload, file.name, file.type, safeUserUuid, organization, idFactura, correlacion);
+        const presigned = await this.getPresignedPutUrl(apiBase, safeTypeUpload, file.name, file.type, safeUserUuid, organization, idFactura, correlacion, loteId);
 
         if (!presigned?.url) {
             throw new Error('Presigned URL not received from API.');
