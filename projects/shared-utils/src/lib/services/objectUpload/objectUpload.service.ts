@@ -22,7 +22,7 @@ export class ObjectUploadService {
      *   factura nació de esta subida: sin él, el interceptor genera uno al vuelo
      *   y quien subió el archivo nunca se entera de cuál fue.
      */
-    async getPresignedPutUrl(apiBase: string, typeUpload: string, fileName: string, fileType: string, userUuid: string, organization?: string, idFactura?: string, correlationId?: string): Promise<{ url: string, key: string }> {
+    async getPresignedPutUrl(apiBase: string, typeUpload: string, fileName: string, fileType: string, userUuid: string, organization?: string, idFactura?: string, correlationId?: string): Promise<{ url: string, key: string, assetId: string }> {
         console.log('[UPLOAD] getPresignedPutUrl - Organization recibida:', organization);
         const safeUserUuid = (userUuid || '').trim();
         const safeTypeUpload = (typeUpload || '').trim();
@@ -52,7 +52,7 @@ export class ObjectUploadService {
             ? new HttpHeaders({ [CORRELATION_ID_HEADER]: correlationId })
             : undefined;
 
-        const response = this.http.get<ApiResponse<{ url: string, key: string }>>(`${apiBase}/api/bff/object/presigned-url/${safeTypeUpload}`, {
+        const response = this.http.get<ApiResponse<{ url: string, key: string, assetId: string }>>(`${apiBase}/api/bff/object/presigned-url/${safeTypeUpload}`, {
             params,
             headers,
             withCredentials: true
@@ -94,7 +94,14 @@ export class ObjectUploadService {
      * para poder reconocer después lo que el pipeline haya creado a partir de
      * él. Si no se pasa uno, se genera y se devuelve igual.
      */
-    async uploadFileUsingPresignedUrl(apiBase: string, typeUpload: string, file: File, useruuid: string, organization?: string, idFactura?: string, correlationId?: string): Promise<{ key: string, objectUrl: string, correlationId: string }> {
+    /**
+     * Pide la URL firmada y sube el archivo directo al bucket.
+     *
+     * Devuelve el `assetId` además de la key: con una factura que nace recién
+     * cuando el worker leyó el documento, el assetId es lo único que ata el
+     * archivo recién subido con la fila que está esperando en pantalla.
+     */
+    async uploadFileUsingPresignedUrl(apiBase: string, typeUpload: string, file: File, useruuid: string, organization?: string, idFactura?: string, correlationId?: string): Promise<{ key: string, assetId: string, objectUrl: string, correlationId: string }> {
         console.log('[UPLOAD] uploadFileUsingPresignedUrl - Organization recibida:', organization);
         const safeUserUuid = (useruuid || '').trim();
         const safeTypeUpload = (typeUpload || '').trim();
@@ -116,6 +123,7 @@ export class ObjectUploadService {
 
         return {
             key: presigned.key,
+            assetId: presigned.assetId,
             objectUrl: presigned.url.split('?')[0],
             correlationId: correlacion,
         };
